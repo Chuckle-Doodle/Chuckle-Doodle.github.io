@@ -99,4 +99,5 @@ def show_index():
     context["posts"] = posts
     return flask.render_template("index.html", **context)
     '''
+    
     return "Return value of show_index function in index.py in views.  This is main page of app"
