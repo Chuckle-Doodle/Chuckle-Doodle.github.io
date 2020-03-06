@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>timelineApp</title>
+    <!-- <link href="/static/css/style.css" rel="stylesheet" type="text/css"/> -->
+</head>
+
+<body>
+    <div>
+        <p>Current topic: {{ storyname }}</p>
+    </div>
+
+    <div>
+        {% for document in documents %}
+            <p>Document {{ document.documentid }}</p>
+
+            <!-- INSERT PDF OF EACH DOC HERE-->
+            <!--<a href="{{url_for('static', filename= document.filename )}}"> picture goes here </a> -->
+
+            <object
+                data="/static/pdfs/{{ document.filename }}#page=2"
+                type="application/pdf"
+                width="85%"
+                height="600">
+                <p>Your browser does not support PDFs.
+                    <a href="https://example.com/test.pdf">Download the PDF</a>.
+                </p>
+            </object>
+
+            <form>
+                {% for question in document.questions %}
+                    <label for="{{ question }}"> {{ question }}: </label><br>
+                    <!--<input type="text" id="{{ question }}" name="{{ question }}" size="75"><br> -->
+                    <textarea id="{{ question }}" name="{{ question }}" rows="4" cols="75"> </textarea><br>
+                {% endfor %}
+                <input type="submit" value="Submit">
+            </form>
+        {% endfor %}
+    </div>
+
+    <div>
+        <a href="/{{ storyid }}/timeline/"> Continue to Timeline </a>
+    </div>
+
+    <!--
+    <ul>
+        {% for story in stories %}
+            <li><a href="/{{ story.storyid }}/">{{ story.storyname }}</a></li>
+        {% endfor %}
+    </ul> -->
+
+</body>
+</html>

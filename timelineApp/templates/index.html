@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>timelineApp</title>
+    <!-- <link href="/static/css/style.css" rel="stylesheet" type="text/css"/> -->
+</head>
+
+<body>
+    <!-- HEADER
+    <div>
+        <p class="explore_header">
+            <a href="/"><img src="/static/images/logo.png" class="logo" alt="logo"></a>
+            <a href="/explore/">explore</a>
+            ---
+            <a href={{ "/u/" ~ logname ~ "/" }}> {{logname}} </a>
+        </p>
+    </div> -->
+    <div>
+        <p>Welcome to our tool that allows students to think like historians!</p>
+        <p>Please click on a topic to continue.</p>
+    </div>
+    <ul>
+        {% for story in stories %}
+            <li><a href="/{{ story.storyid }}/">{{ story.storyname }}</a></li>
+        {% endfor %}
+    </ul>
+
+</body>
+</html>
