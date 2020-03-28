@@ -26,14 +26,3 @@ CREATE TABLE formdata(
     FOREIGN KEY(storyid) REFERENCES stories(storyid) ON DELETE CASCADE,
     FOREIGN KEY(documentid) REFERENCES documents(documentid) ON DELETE CASCADE
 );
-
-#CREATE TABLE answers(
-#    answerid      INTEGER        NOT NULL,
-#    answertext    VARCHAR(1024)  NOT NULL,
-#    questionid    INTEGER        NOT NULL,
-#    documentid    INTEGER        NOT NULL,
-
-#	PRIMARY KEY(answerid),
-#    FOREIGN KEY(questionid) REFERENCES questions(questionid) ON DELETE CASCADE,
-#    FOREIGN KEY(documentid) REFERENCES documents(documentid) ON DELETE CASCADE
-#);
