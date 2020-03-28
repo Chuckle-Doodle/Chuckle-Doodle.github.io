@@ -8,6 +8,7 @@ CREATE TABLE stories(
 CREATE TABLE documents(
     documentid   INTEGER      NOT NULL,
     filename     VARCHAR(64)  NOT NULL,
+    frontcover   VARCHAR(64)  NOT NULL,
     storyid      INTEGER      NOT NULL,
 
     PRIMARY KEY(documentid),
@@ -17,10 +18,11 @@ CREATE TABLE documents(
 CREATE TABLE formdata(
     storyid       INTEGER        NOT NULL,
     documentid    INTEGER        NOT NULL,
+    questionid    INTEGER        NOT NULL,
     questiontext  VARCHAR(1024)  NOT NULL,
     answertext    VARCHAR(1024)          ,
 
-    PRIMARY KEY(storyid, documentid, questiontext),
+    PRIMARY KEY(storyid, documentid, questionid),
     FOREIGN KEY(storyid) REFERENCES stories(storyid) ON DELETE CASCADE,
     FOREIGN KEY(documentid) REFERENCES documents(documentid) ON DELETE CASCADE
 );

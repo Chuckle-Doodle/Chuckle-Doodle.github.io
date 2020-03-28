@@ -43,18 +43,64 @@ def get_story(storyid):
     context = {}
     connection = timelineApp.model.get_db()
 
-    cursor = connection.execute("SELECT * FROM stories WHERE storyid = ?", (storyid,))
+    cursor = connection.execute("SELECT storyname FROM stories WHERE storyid = ?", (storyid,))
 
+    storyname = cursor.fetchone()['storyname']
+    context[storyname] = []
+    #context["Timeline1Dates"] = []
+    #context["Timeline2Dates"] = []
+
+
+    #get number of documents for this story
+    cursor = connection.execute("SELECT COUNT(*) FROM documents WHERE storyid = ?", (storyid,))
+    numberDocuments = cursor.fetchone()['COUNT(*)']
+
+    for i in range(numberDocuments):
+        docData = {}
+        docData["FormDataQuestions"] = []
+        docData["FormDataAnswers"] = []
+        context[storyname].append(docData)
+
+    #get filenames for each doc
+    cursor = connection.execute("SELECT filename, frontcover, documentid FROM documents WHERE storyid = ?", (storyid,))
     for row in cursor.fetchall():
-    	storyname = row['storyname']
-    	context[storyname] = []
+        docid = row['documentid']
+        context[storyname][int(docid) - 1]["Filename"] = row['filename']
+        context[storyname][int(docid) - 1]["Frontcover"] = row['frontcover']
 
+
+    #get questions and answers for each doc in this story
     cursor = connection.execute("SELECT * FROM formdata WHERE storyid = ?", (storyid,))
 
     for row in cursor.fetchall():
-    	questionText = row['questiontext']
-    	context[storyname].append(questionText)
+        questionText = row['questiontext']
+        answerText = row['answertext']
+        docid = row['documentid']
+        #context[storyname][int(docid) - 1]["FormData"][questionText] = answerText
+        context[storyname][int(docid) - 1]["FormDataQuestions"].append(questionText)
+        context[storyname][int(docid) - 1]["FormDataAnswers"].append(answerText)
 
+    # ***** Hardcode this view stuff in for now. ****** #
+    #
+    ##
+    ###
+    ####
+    context['View'] = {}
+    context['View']["Name"] = "Author View"
+    context['View']["ReferenceViews"] = []
+    view = {}
+    view["Type"] = "Timeline"
+    view["Question"] = "When occurred"
+    context['View']["ReferenceViews"].append(view)
+
+    view2 = {}
+    view2["Type"] = "Timeline"
+    view2["Question"] = "When written"
+    context['View']["ReferenceViews"].append(view2)
+
+    context['View']["Sort By:"] = "Author"
+
+    # ************************************************** #
 
     return flask.jsonify(**context)
 
@@ -164,3 +210,22 @@ def delete_question_from_story(storyid):
   	#main action of delete has been done, now just return a 204 code
     rsp = flask.Response(response="", status=204, mimetype="application/json")
     return rsp
+
+
+@timelineApp.app.route('/api/stories/<int:storyid>/<int:documentid>', methods=["GET"])
+def get_questions_and_answers_for_doc_in_story(storyid, documentid):
+    #get questions and answers for a particular document in a particular story
+
+    context = {}
+    connection = timelineApp.model.get_db()
+
+    cursor = connection.execute("SELECT questiontext, answertext FROM formdata WHERE storyid = ? and documentid = ?", (storyid, documentid))
+
+    for row in cursor.fetchall():
+        questiontext = row['questiontext']
+        answertext = row['answertext']
+        context[questiontext] = answertext
+
+
+    return flask.jsonify(**context)
+

@@ -44,6 +44,18 @@ def show_pdf(storyid):
 
         context['documents'].append(document)
 
+
+    if flask.request.method == 'POST':
+        # find out which form aka document this submission corresponds with
+        docid = int(flask.request.form['submit'][-1:])
+
+        # get number of questions associated with this document / this post request
+        cursor3 = connection.execute("SELECT COUNT(*) FROM formdata where storyid = ? and documentid = ?", (storyid, docid))
+        numberOfQuestions = cursor3.fetchone()['COUNT(*)']
+        for i in range(1, numberOfQuestions + 1):  # +1 to do 1 indexing rather than 0 indexing
+            #persist this answer to the database
+            connection.execute("UPDATE formdata SET answertext = ? WHERE storyid = ? and documentid = ? and questionid = ?", (flask.request.form[str(i)], storyid, docid, i))
+
+
     #return flask.jsonify(context)
-    #return "Return value of show_index function in index.py in views.  This is main page of app"
     return flask.render_template("pdfView.html", **context)

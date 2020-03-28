@@ -10,7 +10,9 @@ def get_root():
         "get all stories and their associated questions, sorted by storyid": "/api/stories/",
         "add or delete story from list": "/api/stories/",
         "get individual story and its questions": "/api/stories/<storyid>/",
-        "add or delete question from individual story's question list": "/api/stories/<storyid>/"
+        "add or delete question from individual story's question list": "/api/stories/<storyid>/",
+        "get questions and answers for individual document in individual story": "/api/stories/<storyid>/<documentid>",
+        "get current views for particular story": "/api/stories/<storyid>/views"
         #TODO add api endpoint to edit question list per doc in a story, instead of just per story
     }
     return flask.jsonify(**context)

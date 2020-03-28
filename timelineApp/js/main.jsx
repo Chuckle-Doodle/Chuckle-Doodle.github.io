@@ -1,8 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import TimelineView from './timelineView';
+import DataVisualization from './dataVisualization';
 
 ReactDOM.render(
-  <TimelineView url="/api/stories/3/" />,  //TODO: Don't hardcode in this 3 !
+  <DataVisualization url="/api/stories/3/" views="/api/stories/3/views" />,  //TODO: Don't hardcode in this 3 !
   document.getElementById('reactEntry'),
 );

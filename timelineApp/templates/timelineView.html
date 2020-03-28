@@ -10,6 +10,13 @@
   <!--<svg width="250" height="250">
     <rect width="250" height="250"></rect>
   </svg>-->
+
+  <div id="reactEntry">
+    Loading ...
+  </div>
+  <!-- Load JavaScript -->
+  <script type="text/javascript" src="{{ url_for('static', filename='js/bundle.js') }}"></script>
+  <!--
   <script>
     var scale = d3.scaleLinear()
       .domain([1, 5])  //data space
@@ -23,7 +30,7 @@
         //bind data
         var rects = svg.selectAll("rect").data(data);
     
-        //enter phase  --> create dom elements from data elems and give these elem their permanent characteristics that wont be updated later
+        //enter phase create dom elements from data elems and give these elem their permanent characteristics that wont be updated later
         rects.enter().append("rect")
             .attr("y", 50)
             .attr("width", 20)
@@ -44,6 +51,8 @@
     render([1, 2, 3, 4, 5], "blue");
     render([1, 2, 3, 4, 5], "blue");
     //render([1, 2], "green")
+-->
+
 
 
     
