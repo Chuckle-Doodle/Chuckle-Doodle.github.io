@@ -10,7 +10,6 @@ import timelineApp
 
 @timelineApp.app.route('/<int:storyid>/timeline/', methods=['GET', 'POST'])
 def show_timeline(storyid):
-
     #SAMPLE CODE BELOW
 
     """
