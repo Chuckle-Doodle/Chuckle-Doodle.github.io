@@ -66,7 +66,7 @@ def get_story(storyid):
     for row in cursor.fetchall():
         docid = row['documentid']
         context[storyname][int(docid) - 1]["Filename"] = row['filename']
-        context[storyname][int(docid) - 1]["Frontcover"] = row['frontcover']
+        context[storyname][int(docid) - 1]["Frontcover"] = "/static/images/" + row['frontcover']
 
 
     #get questions and answers for each doc in this story

@@ -1,3 +1,4 @@
+/*
 let authors = [];
 let docs = [];
  var doc0 = "https://i.ibb.co/rcpFq8t/out0.png";//replace with input parameters
@@ -20,22 +21,24 @@ var doc3Author = "ThomasJefferson";
 var doc4Author = "BenjaminFranklin";
     docs.push(doc4);
     authors.push(doc4Author);
-var blankImage = "https://images-wixmp-530a50041672c69d335ba4cf.wixmp.com/templates/image/b77fe464cfc445da9003a5383a3e1acf.jpg"; 
-    
+*/   
+var blankImage = "https://images-wixmp-530a50041672c69d335ba4cf.wixmp.com/templates/image/b77fe464cfc445da9003a5383a3e1acf.jpg";
+
 // let uniqueAuthors = [...new Set(authors)];
 // console.log(doc3Author);
-console.log(authors);
-console.log(uniqueAuthors);
-function cluster(dataArray)
+//console.log(authors);
+//console.log(uniqueAuthors);
+
+export function clusterDriver(dataArray, documentsArray)
 {
   let uniqueData = [... new Set(dataArray)];
-   for(i = 0; i < uniqueData.length; i++)
+   for(let i = 0; i < uniqueData.length; i++)
    {
-     for(j = 0; j < dataArray.length; j++)
+     for(let j = 0; j < dataArray.length; j++)
      {
        if(dataArray[j] == uniqueData[i])
        {
-         show_image(docs[j],137,100,"Document","data");
+         show_image(documentsArray[j]["Frontcover"],137,100,"Document","data");
        }
      }
       //push blank space here
@@ -44,7 +47,44 @@ function cluster(dataArray)
   
 }
 
-function add_documents(doc0,doc1,doc2,doc3,doc4) {
+
+//function to manipulate data so clusterDriver function has appropriate input
+export function cluster(clusterBy, documentsArray)
+{
+  let dataArray = []; //this will be array that below function uses
+
+  //different logic if clustering by docID, difference stemming from json data format
+  if (clusterBy == "docID")
+  {
+    for(let z = 0; z < documentsArray.length; z++)
+    {
+      dataArray.push(documentsArray[z]["docID"]);
+    }
+  }
+  else
+  {
+    for(let i = 0; i < documentsArray.length; i++)
+    {
+    //for each document, iterate through each question until we find the one we are clustering by
+      for(let j = 0; j < documentsArray[i]["Questions"].length; j++)
+      {
+        if (clusterBy == documentsArray[i]["Questions"][j])
+        {
+          //if the question matches, push its corresponding answer
+          dataArray.push(documentsArray[i]["Answers"][j]);
+        }
+      }
+    }
+  }
+
+
+  //now we have gone through all data so cluster it
+  clusterDriver(dataArray, documentsArray);
+}
+
+
+
+export function add_documents(doc0,doc1,doc2,doc3,doc4) {
      show_image(doc0, 137,100, "Document 1",doc0Author);
      show_image(doc1, 137,100, "Document 2",doc1Author);
      show_image(doc2, 137,100, "Document 3",doc2Author);
@@ -53,12 +93,12 @@ function add_documents(doc0,doc1,doc2,doc3,doc4) {
  }
 //Doc 0 https://i.ibb.co/rcpFq8t/out0.png
 
- function show_image(src, width, height, alt, clustertype) {
-     var img = document.createElement("img");
-     img.src = src;
-     img.width = width;
-     img.height = height;
-     img.alt = alt;
-     img.clustertype = clustertype;
-     document.body.appendChild(img);
- }
+export function show_image(src, width, height, alt, clustertype) {
+    var img = document.createElement("img");
+    img.src = src;
+    img.width = width;
+    img.height = height;
+    img.alt = alt;
+    img.clustertype = clustertype;
+    document.body.appendChild(img);
+}
