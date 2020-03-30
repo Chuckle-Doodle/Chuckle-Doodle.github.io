@@ -31,6 +31,7 @@ var blankImage = "https://images-wixmp-530a50041672c69d335ba4cf.wixmp.com/templa
 
 export function clusterDriver(dataArray, documentsArray)
 {
+  var docOrder = [];
   let uniqueData = [... new Set(dataArray)];
    for(let i = 0; i < uniqueData.length; i++)
    {
@@ -39,11 +40,23 @@ export function clusterDriver(dataArray, documentsArray)
        if(dataArray[j] == uniqueData[i])
        {
          show_image(documentsArray[j]["Frontcover"],137,100,"Document","data");
+         docOrder.push(j + 1);  //+1 because the docID's are 1 indexed
        }
      }
       //push blank space here
       show_image(blankImage,137,100,"","blank");
+      docOrder.push("space");
    }
+
+   //if last element in docOrder is "space", delete it
+   if (docOrder[docOrder.length - 1] == "space")
+   {
+     docOrder.pop();
+   }
+   console.log("printing docOrder");
+   console.log(docOrder);
+   //return docOrder array
+   return docOrder;
   
 }
 
@@ -76,10 +89,9 @@ export function cluster(clusterBy, documentsArray)
       }
     }
   }
-
-
   //now we have gone through all data so cluster it
-  clusterDriver(dataArray, documentsArray);
+  var clusteredDocOrder = clusterDriver(dataArray, documentsArray);
+  return clusteredDocOrder;
 }
 
 

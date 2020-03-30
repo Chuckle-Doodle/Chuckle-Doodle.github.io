@@ -1,7 +1,7 @@
 const path = require('path');
 
 module.exports = {
-  entry: './timelineApp/js/main.jsx',
+  entry: ['babel-regenerator-runtime', './timelineApp/js/main.jsx'],
   output: {
     path: path.join(__dirname, '/timelineApp/static/js/'),
     filename: 'bundle.js',

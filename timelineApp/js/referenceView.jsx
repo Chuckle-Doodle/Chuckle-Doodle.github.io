@@ -41,16 +41,16 @@ export default class ReferenceView extends React.Component {
 
     //find out which type of ReferenceView we have, timeline or map
     const refViewType = this.props.type;
-    var isUpper = true;
+    //var isUpper = true;
 
     return (
       <div className="ReferenceView">
         <div>
 
           {refViewType == "Timeline" ? (
-              <Timeline viewName={this.props.viewName} clusterBy={this.props.clusterBy} dataUrl={this.props.dataUrl} data={this.props.data} documents={this.props.documents} question={this.props.question} isUpper={isUpper} />
+              <Timeline viewName={this.props.viewName} clusterBy={this.props.clusterBy} dataUrl={this.props.dataUrl} data={this.props.data} documents={this.props.documents} question={this.props.question} isUpper={this.props.isUpper} />
             ) : (
-              <Map viewName={this.props.viewName} clusterBy={this.props.clusterBy} dataUrl={this.props.dataUrl} data={this.props.data} documents={this.props.documents} question={this.props.question} isUpper={isUpper} />
+              <Map viewName={this.props.viewName} clusterBy={this.props.clusterBy} dataUrl={this.props.dataUrl} data={this.props.data} documents={this.props.documents} question={this.props.question} isUpper={this.props.isUpper} />
             )
           }
         </div>
