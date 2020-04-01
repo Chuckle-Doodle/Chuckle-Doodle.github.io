@@ -1,9 +1,5 @@
 import React from 'react';
-//import PropTypes from 'prop-types';
 import fetch from 'isomorphic-fetch';
-//import moment from 'moment';
-//import Likes from './likes';
-//import Comments from './comments';
 import Timeline from './timeline.js';
 import Map from './map.js';
 
@@ -59,20 +55,3 @@ export default class ReferenceView extends React.Component {
     );
   }
 }
-
-        //<Likes url={`${this.props.url}likes/`} />
-        //<Comments url={`${this.props.url}comments/`} />
-
-            //<ul>
-              //<svg height="50" width="1000">
-                //<line x1="50" y1="50" x2="1000" y2="50"
-                //stroke="black" />
-              //</svg>
-
-              //<svg>
-                //<text x="20" y="35">1900</text>
-                //<text x="100" y="35">1925</text>
-                //<text x="180" y="35">1950</text>
-                //<text x="260" y="35">1975</text>
-              //</svg>
-            //</ul>

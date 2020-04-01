@@ -39,12 +39,12 @@ export function clusterDriver(dataArray, documentsArray)
      {
        if(dataArray[j] == uniqueData[i])
        {
-         show_image(documentsArray[j]["Frontcover"],137,100,"Document","data");
+         //show_image(documentsArray[j]["Frontcover"],137,100,"Document","data");
          docOrder.push(j + 1);  //+1 because the docID's are 1 indexed
        }
      }
       //push blank space here
-      show_image(blankImage,137,100,"","blank");
+      //show_image(blankImage,137,100,"","blank");
       docOrder.push("space");
    }
 
@@ -53,16 +53,43 @@ export function clusterDriver(dataArray, documentsArray)
    {
      docOrder.pop();
    }
-   console.log("printing docOrder");
-   console.log(docOrder);
+   //console.log("printing docOrder");
+   //console.log(docOrder);
    //return docOrder array
    return docOrder;
   
 }
 
+export function updateImageOrder(data, clusteredDocOrder)
+{
+      //update order of docs on screen each time state (aka document order) changes
+
+    //this will be the array we use to actually render the images in proper order
+    var imageOrder = [];
+    //var blankImage = "https://images-wixmp-530a50041672c69d335ba4cf.wixmp.com/templates/image/b77fe464cfc445da9003a5383a3e1acf.jpg";
+
+
+    //iterate through current docOrder
+    for (let i = 0; i < clusteredDocOrder.length; i++)
+    {
+      //console.log(this.state.documentOrder[i]);
+      //if elem is a space
+      if (clusteredDocOrder[i] == "space")
+      {
+        imageOrder.push(blankImage);
+      } 
+      else //push image to the imageOrder array
+      {
+        //console.log(data[clusteredDocOrder[i] - 1]["Frontcover"]);
+        imageOrder.push(data[clusteredDocOrder[i] - 1]["Frontcover"]);
+      }
+    }
+    return imageOrder;
+}
+
 
 //function to manipulate data so clusterDriver function has appropriate input
-export function cluster(clusterBy, documentsArray)
+export function cluster(data, clusterBy, documentsArray)
 {
   let dataArray = []; //this will be array that below function uses
 
@@ -91,11 +118,15 @@ export function cluster(clusterBy, documentsArray)
   }
   //now we have gone through all data so cluster it
   var clusteredDocOrder = clusterDriver(dataArray, documentsArray);
-  return clusteredDocOrder;
+  var updatedImageOrder = updateImageOrder(data, clusteredDocOrder);
+
+  // go from clusteredDocOrder to updated imageOrder in this function
+  return updatedImageOrder;
+
 }
 
 
-
+/*
 export function add_documents(doc0,doc1,doc2,doc3,doc4) {
      show_image(doc0, 137,100, "Document 1",doc0Author);
      show_image(doc1, 137,100, "Document 2",doc1Author);
@@ -114,3 +145,4 @@ export function show_image(src, width, height, alt, clustertype) {
     img.clustertype = clustertype;
     document.body.appendChild(img);
 }
+*/

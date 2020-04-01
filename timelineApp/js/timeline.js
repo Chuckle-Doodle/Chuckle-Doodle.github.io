@@ -1,10 +1,10 @@
 import React from 'react';
 
 //  **** UNSURE IF BELOW IMPORT OF ALL OF D3 IS NEEDED *********
-import * as d3 from 'd3';
+//import * as d3 from 'd3';
 
 //import './drawLines.js';   --> Alex's work
-import timeline from '../static/d3-timeline.js';
+//import timeline from '../static/d3-timeline.js';
 //import '../static/css/style.css';
 //import timelines from '../static/d3-timeline-2.js';
 
@@ -32,11 +32,6 @@ function setTimelineWithDates(title, isUpper) {
   var dates = gatherDatesFromJSON();
 }
 
-//draw lines from dates on timeline to corresponding document
-function drawLines() {
-
-}
-
 
 const Timeline = ({viewName, clusterBy, dataUrl, data, documents, question, isUpper}) => {
 
@@ -50,6 +45,7 @@ const Timeline = ({viewName, clusterBy, dataUrl, data, documents, question, isUp
             //<img src={"/static/images/".concat('', doc.Frontcover)} alt="Picture of Document" height="200" width="150"></img>
           //)}
   console.log("atop Timeline function in timeline.js");
+
 
   //TODO:
   // EDIT THIS. GET MVP FIRST TO SEE IF IT WORKS.  HERE IS ALL THE D3 STUFF. FOLLOW GITHUB PAGE
@@ -165,11 +161,7 @@ var svg = d3.select("#timeline1").append("svg").attr("width", 500)
   }
   else
   {
-    var customStyle = {
-      position: "relative",
-      bottom: "10000px"
-    }
-    return (<p className="timelineBottom"> Lower Timeline - {question}</p>)
+    return (<p> Lower Timeline - {question}</p>)
   }
 
 };
