@@ -3,6 +3,10 @@
 <head>
     <title>timelineApp</title>
     <link href="/static/css/style.css" rel="stylesheet" type="text/css"/>
+    <!--<script src="../../node_modules/d3/dist/d3.min.js" ></script>
+    <script src="../../node_modules/d3kit/dist/d3kit.min.js" ></script>
+    <script src="../../node_modules/labella/dist/labella.min.js" ></script>
+    <script src="../../node_modules/d3kit-timeline/dist/d3kit-timeline.min.js"></script>-->
 </head>
 <!--
 <head>
@@ -163,12 +167,15 @@
   <!--<svg width="250" height="250">
     <rect width="250" height="250"></rect>
   </svg>-->
+  <div>
+      <!--<div id="timeline1"> </div>-->
 
-  <div id="reactEntry">
-    Loading ...
-  </div>
+      <div id="reactEntry">
+        Loading ...
+      </div>
   <!-- Load JavaScript -->
-  <script type="text/javascript" src="{{ url_for('static', filename='js/bundle.js') }}"></script>
+      <script type="text/javascript" src="{{ url_for('static', filename='js/bundle.js') }}"></script>
+  </div>
 
 </body>
 
