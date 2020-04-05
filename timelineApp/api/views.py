@@ -21,12 +21,12 @@ def get_current_views(storyid):
     temp["ReferenceViews"] = []
     view = {}
     view["Type"] = "Timeline"
-    view["Question"] = "When occurred"
+    view["Question"] = "When did the event occur"
     temp["ReferenceViews"].append(view)
 
     view2 = {}
     view2["Type"] = "Timeline"
-    view2["Question"] = "When written"
+    view2["Question"] = "When was this written"
     temp["ReferenceViews"].append(view2)
 
     temp["ClusterBy"] = "Author"
@@ -40,12 +40,12 @@ def get_current_views(storyid):
     temp["ReferenceViews"] = []
     view = {}
     view["Type"] = "Timeline"
-    view["Question"] = "When occurred"
+    view["Question"] = "When did the event occur"
     temp["ReferenceViews"].append(view)
 
     view2 = {}
     view2["Type"] = "Timeline"
-    view2["Question"] = "When written"
+    view2["Question"] = "When was this written"
     temp["ReferenceViews"].append(view2)
 
     temp["ClusterBy"] = "Theory"

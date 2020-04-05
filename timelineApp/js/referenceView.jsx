@@ -1,5 +1,5 @@
 import React from 'react';
-import Timeline from './timeline.js';
+import Timeline2 from './timeline.js';
 import fetch from 'isomorphic-fetch';
 //import timelineHelper from './timelinePlugin.js';
 //import * as d3 from 'd3';
@@ -61,7 +61,7 @@ export default class ReferenceView extends React.Component {
         <div>
 
           {refViewType == "Timeline" ? (
-              <Timeline viewName={this.props.viewName} clusterBy={this.props.clusterBy} dataUrl={this.props.dataUrl} data={this.props.data} documents={this.props.documents} question={this.props.question} isUpper={this.props.isUpper} />
+              <Timeline2 viewName={this.props.viewName} clusterBy={this.props.clusterBy} dataUrl={this.props.dataUrl} data={this.props.data} documents={this.props.documents} question={this.props.question} isUpper={this.props.isUpper} />
             ) : (
               <Map viewName={this.props.viewName} clusterBy={this.props.clusterBy} dataUrl={this.props.dataUrl} data={this.props.data} documents={this.props.documents} question={this.props.question} isUpper={this.props.isUpper} />
             )

@@ -18,7 +18,7 @@ var timelineHelper = function() {
         rowSeparatorsColor = null,
         backgroundColor = null,
         tickFormat = {
-          format: d3.timeFormat("%I %p"),
+          format: d3.timeFormat("%Y"),
           tickTime: d3.timeHour,
           tickInterval: 1,
           tickSize: 6,
@@ -75,6 +75,7 @@ var timelineHelper = function() {
     };
 
     var appendTimeAxisCalendarYear = function (nav) {
+
       var calendarLabel = beginning.getFullYear();
 
       if (beginning.getFullYear() != ending.getFullYear()) {

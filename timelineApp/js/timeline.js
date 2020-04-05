@@ -1,5 +1,6 @@
 import React from 'react';
 import drawTimeline from './helpers.js'
+import drawTimeline2 from './helpers2.js';
 //import timelineHelper from './timelinePlugin.js';
 
 //  **** UNSURE IF BELOW IMPORT OF ALL OF D3 IS NEEDED *********
@@ -11,13 +12,13 @@ import drawTimeline from './helpers.js'
 //import timelines from '../static/d3-timeline-2.js';
 
 
-export default class Timeline extends React.Component {
+export default class Timeline2 extends React.Component {
   componentDidMount() {
-    drawTimeline(this.props)
+    drawTimeline2(this.props)
   }
 
   componentDidUpdate(prevProps) {
-    drawTimeline(this.props)
+    drawTimeline2(this.props)
   }
 
   render() {

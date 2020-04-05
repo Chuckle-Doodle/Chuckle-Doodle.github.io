@@ -8,31 +8,24 @@ const drawTimeline = (props) => {
 
 	var testData = [
   {label: props.question, times: [
-    {"starting_time": 1355752800000, "ending_time": 1355759900000},
-    {"starting_time": 1355767900000, "ending_time": 1355774400000}]},
-  {label: "person b", times: [
-    {"starting_time": 1355759910000, "ending_time": 1355761900000}]},
-  {label: "person c", times: [
-    {"starting_time": 1355761910000, "ending_time": 1355763910000}]}
+    {"starting_time": new Date("July 21, 1983 01:15:00").getTime(), "ending_time": new Date("July 21, 1990 01:15:00").getTime(), "id": "a1"},
+    {"starting_time": new Date("July 21, 1999 01:15:00").getTime(), "ending_time": new Date("July 21, 2000 01:15:00").getTime(), "id": "a2"}
+    ]}
   ];
 
   var rectAndCircleTestData = [
-		{times: [{"starting_time": 1355752800000, "display": "circle"},
-						 {"starting_time": 1355767900000, "ending_time": 1355774400000}]},
-		{times: [{"starting_time": 1355759910000, "display":"circle"}, ]},
-		{times: [{"starting_time": 1355761910000, "ending_time": 1355763910000}]}
+		{times: [{"starting_time": 345883500000, "ending_time": 345901500000},
+		{"starting_time": 503649900000, "ending_time": 503667900000}]}
 	];
 
     var chart = timelineHelper();
-    if (props.isUpper)
-    {
-    	var svg = d3.select("#timeline1").append("svg").attr("width", 500)
-  .datum(testData).call(chart);
-    } else 
-    {
-    	var svg = d3.select("#timeline1").append("svg").attr("width", 500)
+
+    var svg = d3.select("#timeline1").append("svg").attr("width", 500)
   .datum(rectAndCircleTestData).call(chart);
-    }
+
+
+    //i should have rects with ids a1 and a2.  edit these and see what happens
+    var doc = d3.select("#a1");
 
 }
 
