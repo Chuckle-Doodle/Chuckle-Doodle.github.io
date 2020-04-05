@@ -1,7 +1,8 @@
 import React from 'react';
 import fetch from 'isomorphic-fetch';
 //import Timeline from './timeline.js';
-import * as utils from '../../docClusterDemo/docCluster.js'; 
+import * as utils from '../../docClusterDemo/docCluster.js';
+import '../static/css/style.css'; 
 
 export default class Documents extends React.Component {
   constructor(props) {
@@ -63,10 +64,9 @@ export default class Documents extends React.Component {
       }
     }
     */
-
-    //if (!this.state.imageOrder) {
-      //return <div />
-    //}
+    if (this.props.index == 1) {
+      return null;
+    }
 
     return (
 

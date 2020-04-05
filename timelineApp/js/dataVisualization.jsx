@@ -1,7 +1,8 @@
 import React from 'react';
 import fetch from 'isomorphic-fetch';
-import Documents from './documents.jsx';
+//import Documents from './documents.jsx';
 import ReferenceView from './referenceView';
+import '../static/css/style.css';
 
 export default class DataVisualization extends React.Component {
 	constructor(props) {
@@ -60,20 +61,22 @@ export default class DataVisualization extends React.Component {
 
 
    	  return (
-        <div className="DataVisualization">
+        <div id="DataVisualization">
 
           <div>
             {this.state.viewInfo.ReferenceViews.map((view, index) =>
-              <ReferenceView viewName={this.state.viewInfo.Name} clusterBy={this.state.viewInfo.ClusterBy} dataUrl={this.props.dataUrl} data={ this.state.data } documents={ documentsArray } type={ view.Type } question={ view.Question }
+              <ReferenceView docImages={docImages} viewName={this.state.viewInfo.Name} clusterBy={this.state.viewInfo.ClusterBy} dataUrl={this.props.dataUrl} data={ this.state.data } documents={ documentsArray } type={ view.Type } question={ view.Question }
               isUpper={index == 0 ? true : false} />
             )}
           </div>
 
-          <div>
-            <Documents id="docs" data={this.state.data} docImages={docImages} clusterBy={this.state.viewInfo.ClusterBy} documents={documentsArray} />
-          </div>
 
         </div>
       );
     }
 }
+		//below component used to be rendered in this module
+
+        //<div id="DocumentsDiv">
+          //<Documents data={this.state.data} docImages={docImages} clusterBy={this.state.viewInfo.ClusterBy} documents={documentsArray} />
+        //</div>

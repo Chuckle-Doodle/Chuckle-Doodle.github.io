@@ -34,11 +34,11 @@ for (var j = 0; j < myData.length; j++) {
   myData[j].time = new Date(parseInt(myData[j].time), 0, 1); //make all dates jan 1
 }
 
+if (props.isUpper == true) {
 var chart = new Timeline('#timeline1', {
   direction: 'up',
   initialWidth: 1400,
   initialHeight: 500,
-  margin: {"bottom": 250},
   layerGap: 90,
   dotRadius: 5,
   labelBgColor: function(d, i){
@@ -57,6 +57,31 @@ var chart = new Timeline('#timeline1', {
     'font-size': "smaller"
   }
 });
+} else {  //isUpper == false
+var chart = new Timeline('#timeline2', {
+  direction: 'up',
+  initialWidth: 1400,
+  initialHeight: 500,
+  layerGap: 90,
+  dotRadius: 5,
+  labelBgColor: function(d, i){
+    return "#222";
+  },
+  dotColor: function(d, i){
+    return colors[i];
+  },
+  linkColor: function(d, i){
+    return "222";
+  },
+  textFn: function(d, i){
+    return d.name;
+  },
+  textStyle: {
+    'font-size': "smaller"
+  }
+});
+
+}
 
 //make interactive labels:
 chart.on('labelClick', function(d,i){

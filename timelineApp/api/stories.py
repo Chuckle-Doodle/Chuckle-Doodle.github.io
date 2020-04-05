@@ -165,6 +165,17 @@ def add_question_to_story(storyid):
 
     context['text'] = flask.request.get_json(force=True)['text']
 
+    #set questionID of new question to be one greater than highest questionID of that story
+    cur = connection.execute(
+        "SELECT questionid from formdata where storyid = ? and questionid = "
+        "(SELECT MAX(questionid) from formdata) ", (storyid,)
+    )
+
+
+    questionid = int(cur.fetchone()["questionid"]) + 1
+
+
+
     #get the documentIDs that correspond with this story
     docIDs = []
     cursor = connection.execute(
@@ -176,9 +187,9 @@ def add_question_to_story(storyid):
     #add question to database (for all docs within this story!)
     for docID in docIDs:
         connection.execute(
-    	    "INSERT INTO formdata(storyid, documentid, questiontext, answertext) "
-    	    "VALUES (?, ?, ?, ?) ",
-    	    (storyid, docID, context['text'], "")
+    	    "INSERT INTO formdata(storyid, documentid, questionid, questiontext, answertext) "
+    	    "VALUES (?, ?, ?, ?, ?) ",
+    	    (storyid, docID, questionid, context['text'], "")
         )
 
     return flask.jsonify(**context), 201

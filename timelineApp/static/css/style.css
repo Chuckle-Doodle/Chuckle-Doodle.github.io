@@ -1,4 +1,14 @@
-.timelineBottom {
-	position: relative;
-    bottom: 100px;
+#timelines {
+	display: flex;
+	flex-direction: column;
 }
+#timeline1 {
+	order:1;
+}
+#timeline2 {
+	order:3;
+}
+#DocumentsDiv {
+	order:2;
+}
+

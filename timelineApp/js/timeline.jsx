@@ -1,6 +1,8 @@
 import React from 'react';
 import drawTimeline from './helpers.js'
 import drawTimeline2 from './helpers2.js';
+import Documents from './documents.jsx';
+import '../static/css/style.css'; 
 //import timelineHelper from './timelinePlugin.js';
 
 //  **** UNSURE IF BELOW IMPORT OF ALL OF D3 IS NEEDED *********
@@ -24,31 +26,14 @@ export default class Timeline2 extends React.Component {
   render() {
 
     return (
-      <div id="timeline1" />
+      <div id="timelines">
+        <div id="timeline1" />
+        <div id="timeline2" />
+        <div id="DocumentsDiv">
+          <Documents index={(this.props.isUpper == true) ? 0 : 1} data={this.props.data} docImages={this.props.docImages} clusterBy={this.props.clusterBy} documents={this.props.documents} />
+        </div>
+      </div>
     )
   }
 
 }
-
-
-
-
-/*
-var isUpper = true;
-
-const Timeline = ({viewName, clusterBy, dataUrl, data, documents, question, isUpper}) => {
-
-  console.log("atop Timeline function in timeline.js");
-
-  if (isUpper == true)
-  {
-    return (<p>Upper Timeline - {question}</p>)
-  }
-  else
-  {
-    return (<p> Lower Timeline - {question}</p>)
-  }
-
-};
-
-export default Timeline; */
