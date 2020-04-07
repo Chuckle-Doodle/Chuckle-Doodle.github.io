@@ -21,5 +21,6 @@ def show_views(storyid):
     cursor0 = connection.execute("SELECT storyname from stories where storyid = ?", (storyid,))
     context['storyname'] = cursor0.fetchone()['storyname']
 
+
     #return flask.jsonify(context)
     return flask.render_template("viewCreatorView.html", **context)

@@ -1,7 +1,8 @@
 import React from 'react';
 import fetch from 'isomorphic-fetch';
 //import Timeline from './timeline.js';
-import * as utils from '../../docClusterDemo/docCluster.js';
+import * as utils from './docCluster.js';
+import Document from './document.jsx';
 import '../static/css/style.css'; 
 
 export default class Documents extends React.Component {
@@ -9,12 +10,19 @@ export default class Documents extends React.Component {
     super(props);
     //var x = this.props.clusterBy;
     //console.log("clusterBy prop in the clusterbutton comp!" + x);
+    var initialSpaceOrder = [];
+    for (var i = 0; i < this.props.documents.length; i++) {
+      initialSpaceOrder.push(this.props.documents[i].docID);
+    }
+
     this.state = {
-      imageOrder: this.props.docImages,
-      //documentOrder: [1, "space", 2, "space", 3, "space", 4],
+      imageOrder: {
+        documentOrder: this.props.docImages,
+        spaceOrder: initialSpaceOrder
+      },
       clusterBy: 'docID',
     };
-    //this.removeElement = this.removeElement.bind(this);
+
   }
 
   /*
@@ -64,17 +72,25 @@ export default class Documents extends React.Component {
       }
     }
     */
-    if (this.props.index == 1) {
-      return null;
-    }
 
     return (
 
       <div className="Documents">
 
         <div>
-          {this.state.imageOrder.map((image, index) =>
-            <img id={index} src={image} alt="Picture of Document" height="200" width="150"></img>
+          {this.state.imageOrder.documentOrder.map((imageData, index) =>
+            //instead of rendering img here, render Document component as child of Documents component.
+            //There will be one Document component per image. Each will contain:
+            //img like the current one, line connecting mid top of image to corresponding dot on both timelines
+            //props = image, this.props.dotLocations[index], this.props.dotLocations[index+4] if exists
+            //state = N/A MAKE FUNCTIONAL COMPONENT
+            //2 lines: one from mid top image to this.props.dotLocations[index]
+            //        another from mid bottom image to this.props.dotLocations[index+4]
+            //each line needs 4 points: 
+            //each dotLocation is DOMRect object. contains x and y attributes that APPEAR to be absolute positioned in browser window
+            //to get absolute position of image, do getBoundingClientRect(). this should get you upper left coordinates.
+            // first draw line from upper left to test!!
+            <Document image={imageData[0]} endOfCluster={this.state.imageOrder.spaceOrder.indexOf(imageData[1]) > -1 ? true : false} dotLocationTop={this.props.dotLocations[index]} dotLocationBottom={this.props.dotLocations[index + 4]} />
           )}
         </div>
 
@@ -95,6 +111,8 @@ export default class Documents extends React.Component {
         <div >
           Clustering by: {this.state.clusterBy}
         </div>
+  
+
 
 
       </div>

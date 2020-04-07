@@ -1,14 +1,13 @@
 #timelines {
 	display: flex;
 	flex-direction: column;
-}
-#timeline1 {
-	order:1;
+	/*
+	align-items:center;
+  	justify-content:center; */
 }
 #timeline2 {
-	order:3;
-}
-#DocumentsDiv {
 	order:2;
 }
-
+#documentsDiv {
+	order:1;
+}

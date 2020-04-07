@@ -12,6 +12,7 @@ export default class DataVisualization extends React.Component {
 		  	'ReferenceViews': []
 		  },
 		  data: null,
+		  storyName: "",
 		};
 	}
 
@@ -26,9 +27,9 @@ export default class DataVisualization extends React.Component {
 				return Promise.all([response1.json(), response2.json()])
 			})
 			.then(([response1, response2]) => {
-				console.log(response1.Black_Death);
 				this.setState({
-					data: response1.Black_Death,
+					data: response1.Documents,
+					storyName: response1.Story,  //something like storyName probably doesn't have to be in state considering it doesn't really change
 		  			viewInfo: response2.Views[0],
 		  		});
 			});
@@ -40,7 +41,6 @@ export default class DataVisualization extends React.Component {
         	return <div />
         }
 
-        var blankImage = "https://images-wixmp-530a50041672c69d335ba4cf.wixmp.com/templates/image/b77fe464cfc445da9003a5383a3e1acf.jpg";
 		var documentsArray = [];
 		var docImages = [];
 	  	var index = 1;
@@ -54,14 +54,19 @@ export default class DataVisualization extends React.Component {
 	  		doc["docID"] = i + 1;
 	  		documentsArray.push(doc);
 
-	  		docImages.push(this.state.data[i].Frontcover);
-	  		docImages.push(blankImage); //add blankImages in between each doc
+	  		docImages.push([this.state.data[i].Frontcover, i + 1]);
+	  		//docImages.push(blankImage); //add blankImages in between each doc
 	  	}
-	  	docImages.pop(); //get rid of last blankImage
-
+	  	//docImages.pop(); //get rid of last blankImage
 
    	  return (
         <div id="DataVisualization">
+          <h1>
+          	Timeline for {this.state.storyName}
+          </h1>
+          <h2>
+          	View: {this.state.viewInfo.Name}
+          </h2>
 
           <div>
             {this.state.viewInfo.ReferenceViews.map((view, index) =>

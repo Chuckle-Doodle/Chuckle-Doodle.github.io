@@ -13,27 +13,48 @@ import '../static/css/style.css';
 //import '../static/css/style.css';
 //import timelines from '../static/d3-timeline-2.js';
 
-
 export default class Timeline2 extends React.Component {
-  componentDidMount() {
-    drawTimeline2(this.props)
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      dotLocations: [],
+    };
+
+    //NOTE: IF THIS CLASS HAS NO STATE, IT CAN BE MADE A FUNCTIONAL COMPONENT INSTEAD
+
   }
 
-  componentDidUpdate(prevProps) {
-    drawTimeline2(this.props)
+  componentDidMount() {
+    var dotLocations = drawTimeline2(this.props);
+    this.setState({dotLocations: dotLocations});
   }
+
+  //componentDidUpdate(prevProps) {
+    //var dotLocations = drawTimeline2(this.props);
+  //}
 
   render() {
 
-    return (
-      <div id="timelines">
+    if (this.props.isUpper == true)
+    {
+      return (
         <div id="timeline1" />
-        <div id="timeline2" />
-        <div id="DocumentsDiv">
-          <Documents index={(this.props.isUpper == true) ? 0 : 1} data={this.props.data} docImages={this.props.docImages} clusterBy={this.props.clusterBy} documents={this.props.documents} />
-        </div>
-      </div>
-    )
-  }
+      )
+    } else //this.props.isUpper == false
+    {
+      return (
+        <div id="timelines">
 
+          <div id="timeline2" />
+
+          <div id="documentsDiv">
+            <Documents data={this.props.data} docImages={this.props.docImages} clusterBy={this.props.clusterBy} documents={this.props.documents} dotLocations={this.state.dotLocations} />
+          </div>
+
+        </div>
+      )
+    }
+
+  }
 }

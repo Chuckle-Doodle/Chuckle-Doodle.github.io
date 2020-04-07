@@ -8,16 +8,6 @@ const drawTimeline2 = (props) => {
 	//viewName={this.props.viewName} clusterBy={this.props.clusterBy} dataUrl={this.props.dataUrl} data={this.props.data} documents={this.props.documents} question={this.props.question} isUpper={this.props.isUpper}
 //console.log("inside draw function that actually creates timeline w mock data");
 
-var data = [
-  {time: new Date(1977, 4,25), episode: 4, name: 'A New Hope'},
-  {time: new Date(1980, 4,17), episode: 5, name: 'The Empire Strikes Back'},
-  {time: new Date(1984, 4,25), episode: 6, name: 'Return of the Jedi'},
-  {time: new Date(1999, 4,19), episode: 1, name: 'The Phantom Menace'},
-  {time: new Date(2002, 4,16), episode: 2, name: 'Attack of the Clones'},
-  {time: new Date(2005, 4,19), episode: 3, name: 'Revenge of the Sith'},
-  {time: new Date(2015,11,18), episode: 7, name: 'The Force Awakens'},
-];
-
 var viewName = props.viewName;
 
 var myData = [];  //take props.data and edit it to look like above data, place in this variable
@@ -59,7 +49,7 @@ var chart = new Timeline('#timeline1', {
 });
 } else {  //isUpper == false
 var chart = new Timeline('#timeline2', {
-  direction: 'up',
+  direction: 'down',
   initialWidth: 1400,
   initialHeight: 500,
   layerGap: 90,
@@ -92,8 +82,10 @@ chart.on('labelClick', function(d,i){
 
 chart.data(myData).visualize().resizeToFit();
 
-//console.log("end of fn");
-
+console.log("printing dot locations at end of drawTimeline function");
+console.log(props.isUpper);
+console.log(chart.dotLocations);
+  return chart.dotLocations;
 }
 
 export default drawTimeline2;

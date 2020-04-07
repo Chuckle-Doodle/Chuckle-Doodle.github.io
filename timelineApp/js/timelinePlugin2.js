@@ -66,12 +66,18 @@ class Timeline extends d3kit.SvgChart {
     this.on('data', this.visualize);
     this.on('options', this.visualize);
     this.on('resize', this.visualize);
+
+    //my edits
+    this.dotLocations = [];
   }
 
   resizeToFit(){
     const options = this.options();
     let maxVal;
     const nodes = this.force.nodes();
+
+    //console.log("printing out nodes");
+    //console.log(nodes);
 
     switch(options.direction){
       case 'up':
@@ -154,8 +160,13 @@ class Timeline extends d3kit.SvgChart {
     const options = this.options();
     const timePos = d => options.scale(options.timeFn(d));
 
+    //const timePosTest = options.scale(options.timeFn());
+    //console.log("printing timePos");
+    //console.log(timePos);
+
     const sUpdate = this.layers.get('main/dot').selectAll('circle.dot')
-      .data(data, options.keyFn);
+      .data(data, options.keyFn); //at this point, we have no circles but we do have the data elements.
+      //so we need to enter the data elements into the picture
 
     const field = (options.direction==='left' || options.direction==='right') ? 'cy' : 'cx';
 
@@ -177,6 +188,13 @@ class Timeline extends d3kit.SvgChart {
       .attr(field, timePos);
 
     sUpdate.exit().remove();
+
+    //domRectArray = [];
+    var elements = d3.selectAll('circle').nodes();
+    this.dotLocations = elements.map(function(elem) {
+      return elem.getBoundingClientRect();
+    })
+    //console.log(this.dotLocations);
 
     return this;
   }

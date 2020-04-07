@@ -37,21 +37,6 @@ export default class ReferenceView extends React.Component {
 
 
   render() {
-/*
-    var testData = [
-  {label: "person a", times: [
-    {"starting_time": 1355752800000, "ending_time": 1355759900000},
-    {"starting_time": 1355767900000, "ending_time": 1355774400000}]},
-  {label: "person b", times: [
-    {"starting_time": 1355759910000, "ending_time": 1355761900000}]},
-  {label: "person c", times: [
-    {"starting_time": 1355761910000, "ending_time": 1355763910000}]}
-  ];
-
-    var chart = drawTimelines();
-    var svg = d3.select("#timeline1").append("svg").attr("width", 500)
-  .datum(testData).call(chart);
-  */
 
     //find out which type of ReferenceView we have, timeline or map
     const refViewType = this.props.type;
@@ -73,6 +58,3 @@ export default class ReferenceView extends React.Component {
     );
   }
 }
-
-//<p>Jimmy is a good lawyer.</p>
-//<Timeline viewName={this.props.viewName} clusterBy={this.props.clusterBy} dataUrl={this.props.dataUrl} data={this.props.data} documents={this.props.documents} question={this.props.question} isUpper={this.props.isUpper} />

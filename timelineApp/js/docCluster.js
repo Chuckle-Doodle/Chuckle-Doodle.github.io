@@ -1,33 +1,4 @@
-/*
-let authors = [];
-let docs = [];
- var doc0 = "https://i.ibb.co/rcpFq8t/out0.png";//replace with input parameters
-     doc0Author = "BenjaminFranklin";
-     docs.push(doc0);
-    authors.push(doc0Author);
- var doc1 = "https://i.ibb.co/YPPk68Q/out1.png";//replace with input parameters
-     doc1Author = "ThomasJefferson";
-    docs.push(doc1);
-    authors.push(doc1Author);
- var doc2 = "https://i.ibb.co/jh01vfp/out2.png";//replace with input parameters
-     doc2Author = "GeorgeWashington";
-    docs.push(doc2);
-    authors.push(doc2Author);
- var doc3 = "https://i.ibb.co/Lr5hLXr/out3.png";//replace with input parameters
-var doc3Author = "ThomasJefferson";
-    docs.push(doc3);
-    authors.push(doc3Author);
- var doc4 = "https://i.ibb.co/thtyKSs/black-death-wages-economy-page-002.jpg";//replace with input parameters
-var doc4Author = "BenjaminFranklin";
-    docs.push(doc4);
-    authors.push(doc4Author);
-*/   
-var blankImage = "https://images-wixmp-530a50041672c69d335ba4cf.wixmp.com/templates/image/b77fe464cfc445da9003a5383a3e1acf.jpg";
-
-// let uniqueAuthors = [...new Set(authors)];
-// console.log(doc3Author);
-//console.log(authors);
-//console.log(uniqueAuthors);
+//var blankImage = "https://images-wixmp-530a50041672c69d335ba4cf.wixmp.com/templates/image/b77fe464cfc445da9003a5383a3e1acf.jpg";
 
 export function clusterDriver(dataArray, documentsArray)
 {
@@ -53,11 +24,8 @@ export function clusterDriver(dataArray, documentsArray)
    {
      docOrder.pop();
    }
-   //console.log("printing docOrder");
-   //console.log(docOrder);
-   //return docOrder array
+   
    return docOrder;
-  
 }
 
 export function updateImageOrder(data, clusteredDocOrder)
@@ -65,8 +33,9 @@ export function updateImageOrder(data, clusteredDocOrder)
       //update order of docs on screen each time state (aka document order) changes
 
     //this will be the array we use to actually render the images in proper order
-    var imageOrder = [];
-    //var blankImage = "https://images-wixmp-530a50041672c69d335ba4cf.wixmp.com/templates/image/b77fe464cfc445da9003a5383a3e1acf.jpg";
+    var imageOrder = {};
+    imageOrder["documentOrder"] = [];
+    imageOrder["spaceOrder"] = [];
 
 
     //iterate through current docOrder
@@ -76,14 +45,17 @@ export function updateImageOrder(data, clusteredDocOrder)
       //if elem is a space
       if (clusteredDocOrder[i] == "space")
       {
-        imageOrder.push(blankImage);
+        //imageOrder.push(blankImage);
+        imageOrder["spaceOrder"].push(clusteredDocOrder[i - 1]);
+        continue;
       } 
       else //push image to the imageOrder array
       {
         //console.log(data[clusteredDocOrder[i] - 1]["Frontcover"]);
-        imageOrder.push(data[clusteredDocOrder[i] - 1]["Frontcover"]);
+        imageOrder["documentOrder"].push([data[clusteredDocOrder[i] - 1]["Frontcover"], data[clusteredDocOrder[i] - 1]["docID"]]);
       }
     }
+
     return imageOrder;
 }
 
@@ -91,7 +63,7 @@ export function updateImageOrder(data, clusteredDocOrder)
 //function to manipulate data so clusterDriver function has appropriate input
 export function cluster(data, clusterBy, documentsArray)
 {
-  let dataArray = []; //this will be array that below function uses
+  let dataArray = []; //this will be array that above function uses
 
   //different logic if clustering by docID, difference stemming from json data format
   if (clusterBy == "docID")
@@ -124,25 +96,3 @@ export function cluster(data, clusterBy, documentsArray)
   return updatedImageOrder;
 
 }
-
-
-/*
-export function add_documents(doc0,doc1,doc2,doc3,doc4) {
-     show_image(doc0, 137,100, "Document 1",doc0Author);
-     show_image(doc1, 137,100, "Document 2",doc1Author);
-     show_image(doc2, 137,100, "Document 3",doc2Author);
-     show_image(doc3, 137,100, "Document 4",doc3Author);
-     show_image(doc4, 137,100, "Document 5",doc4Author);
- }
-//Doc 0 https://i.ibb.co/rcpFq8t/out0.png
-
-export function show_image(src, width, height, alt, clustertype) {
-    var img = document.createElement("img");
-    img.src = src;
-    img.width = width;
-    img.height = height;
-    img.alt = alt;
-    img.clustertype = clustertype;
-    document.body.appendChild(img);
-}
-*/

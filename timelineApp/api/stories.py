@@ -46,7 +46,8 @@ def get_story(storyid):
     cursor = connection.execute("SELECT storyname FROM stories WHERE storyid = ?", (storyid,))
 
     storyname = cursor.fetchone()['storyname']
-    context[storyname] = []
+    context["Story"] = storyname
+    context["Documents"] = []
     #context["Timeline1Dates"] = []
     #context["Timeline2Dates"] = []
 
@@ -59,14 +60,15 @@ def get_story(storyid):
         docData = {}
         docData["FormDataQuestions"] = []
         docData["FormDataAnswers"] = []
-        context[storyname].append(docData)
+        context["Documents"].append(docData)
 
     #get filenames for each doc
     cursor = connection.execute("SELECT filename, frontcover, documentid FROM documents WHERE storyid = ?", (storyid,))
     for row in cursor.fetchall():
         docid = row['documentid']
-        context[storyname][int(docid) - 1]["Filename"] = row['filename']
-        context[storyname][int(docid) - 1]["Frontcover"] = "/static/images/" + row['frontcover']
+        context["Documents"][int(docid) - 1]["Filename"] = row['filename']
+        context["Documents"][int(docid) - 1]["Frontcover"] = "/static/images/" + row['frontcover']
+        context["Documents"][int(docid) - 1]["docID"] = docid
 
 
     #get questions and answers for each doc in this story
@@ -77,8 +79,8 @@ def get_story(storyid):
         answerText = row['answertext']
         docid = row['documentid']
         #context[storyname][int(docid) - 1]["FormData"][questionText] = answerText
-        context[storyname][int(docid) - 1]["FormDataQuestions"].append(questionText)
-        context[storyname][int(docid) - 1]["FormDataAnswers"].append(answerText)
+        context["Documents"][int(docid) - 1]["FormDataQuestions"].append(questionText)
+        context["Documents"][int(docid) - 1]["FormDataAnswers"].append(answerText)
 
     # ***** Hardcode this view stuff in for now. ****** #
     #
