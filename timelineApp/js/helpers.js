@@ -1,4 +1,5 @@
 import * as d3 from 'd3';
+import fetch from 'isomorphic-fetch';
 import Timeline from './timelinePlugin.js';
 
 var colors = ["1E90FF", "DAA520", "DC143C", "006400", "FF1493", "2F4F4F", "0000FF", "00BFFF"];
@@ -79,7 +80,17 @@ var chart = new Timeline('#timeline2', {
 chart.on('labelClick', function(d,i){
   // do whatever you wish
   // d is the data associated with the clicked label, i is index
-  console.log("just clicked on label: " + i);
+  window.location.href = "http://localhost:8000/3/#" + (i + 1)
+});
+
+chart.on('labelMouseenter', function(d,i){
+  //display popup next to label with more info on that doc
+
+});
+
+chart.on('labelMouseleave', function(d,i){
+  //delete popup pertaining to that label
+
 });
 
 chart.data(myData).visualize().resizeToFit();
