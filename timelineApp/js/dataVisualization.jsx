@@ -40,12 +40,13 @@ export default class DataVisualization extends React.Component {
 		if (!this.state.data) {
         	return <div />
         }
+        console.log(this.state.data);
 
 		var documentsArray = [];
 		var docImages = [];
 	  	var index = 1;
 	  	for (let i = 0; i < this.state.data.length; i++) {
-	  	//console.log(this.state.data[i]);
+
 	  		var doc = {};
 	  		doc["Frontcover"] = this.state.data[i].Frontcover;
 	  		doc["Questions"] = this.state.data[i].FormDataQuestions;
@@ -55,12 +56,11 @@ export default class DataVisualization extends React.Component {
 	  		documentsArray.push(doc);
 
 	  		docImages.push([this.state.data[i].Frontcover, i + 1]);
-	  		//docImages.push(blankImage); //add blankImages in between each doc
 	  	}
-	  	//docImages.pop(); //get rid of last blankImage
 
    	  return (
         <div id="DataVisualization">
+
           <h1>
           	Timeline for {this.state.storyName}
           </h1>

@@ -1,3 +1,8 @@
+#DataVisualization {
+	position: fixed;
+	width: 100%;
+	height: 100%;
+}
 #timelines {
 	display: flex;
 	flex-direction: column;
@@ -10,4 +15,49 @@
 }
 #documentsDiv {
 	order:1;
+}
+#DocumentArray {
+	position: relative;
+}
+
+#Document1 {
+	position: relative;
+	display:inline-block
+}
+#Document2 {
+	position: relative;
+	display:inline-block
+}
+#Document3 {
+	position: relative;
+	display:inline-block
+}
+#Document4 {
+	position: relative;
+	display:inline-block
+} 
+
+#svgLine1 {
+	position: fixed;
+	top: 0;
+	left: 0;
+	z-index: -1;
+}
+#svgLine2 {
+	position: fixed;
+	top: 0;
+	left: 0;
+	z-index: -1;
+}
+#svgLine3 {
+	position: fixed;
+	top: 0;
+	left: 0;
+	z-index: -1;
+}
+#svgLine4 {
+	position: fixed;
+	top: 0;
+	left: 0;
+	z-index: -1;
 }

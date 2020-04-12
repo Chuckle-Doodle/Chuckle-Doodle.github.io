@@ -1,32 +1,91 @@
 import * as d3 from 'd3';
-import timelineHelper from './timelinePlugin.js';
+import Timeline from './timelinePlugin.js';
 
+var colors = ["1E90FF", "DAA520", "DC143C", "006400", "FF1493", "2F4F4F", "0000FF", "00BFFF"];
 
 const drawTimeline = (props) => {
 	//props are:
 	//viewName={this.props.viewName} clusterBy={this.props.clusterBy} dataUrl={this.props.dataUrl} data={this.props.data} documents={this.props.documents} question={this.props.question} isUpper={this.props.isUpper}
+//console.log("inside draw function that actually creates timeline w mock data");
 
-	var testData = [
-  {label: props.question, times: [
-    {"starting_time": new Date("July 21, 1983 01:15:00").getTime(), "ending_time": new Date("July 21, 1990 01:15:00").getTime(), "id": "a1"},
-    {"starting_time": new Date("July 21, 1999 01:15:00").getTime(), "ending_time": new Date("July 21, 2000 01:15:00").getTime(), "id": "a2"}
-    ]}
-  ];
+//var viewName = props.viewName;
 
-  var rectAndCircleTestData = [
-		{times: [{"starting_time": 345883500000, "ending_time": 345901500000},
-		{"starting_time": 503649900000, "ending_time": 503667900000}]}
-	];
+var myData = [];  //take props.data and edit it to look like above data, place in this variable
 
-    var chart = timelineHelper();
+for (var i = 0; i < props.data.length; i++) {
+  let dataPoint = {};
+  dataPoint["name"] = props.data[i]["FormDataAnswers"][props.data[i]["FormDataQuestions"].indexOf('Title')];
+  dataPoint["time"] = props.data[i]["FormDataAnswers"][props.data[i]["FormDataQuestions"].indexOf(props.question)];
+  myData.push(dataPoint);
+}
 
-    var svg = d3.select("#timeline1").append("svg").attr("width", 500)
-  .datum(rectAndCircleTestData).call(chart);
+//turn times into javascript Date objects
+for (var j = 0; j < myData.length; j++) {
+  myData[j].time = new Date(parseInt(myData[j].time), 0, 1); //make all dates jan 1
+}
 
+if (props.isUpper == true) {
+var chart = new Timeline('#timeline1', {
+  direction: 'up',
+  initialWidth: 1100,
+  initialHeight: 500,
+  layerGap: 90,
+  dotRadius: 7,
+  margin: {"bottom": 60, "right": 200},
+  labelBgColor: function(d, i){
+    return colors[i];
+  },
+  dotColor: function(d, i){
+    return colors[i];
+  },
+  linkColor: function(d, i){
+    return colors[i];
+  },
+  textFn: function(d, i){
+    return d.name;
+  },
+  textStyle: {
+    'font-size': "smaller"
+  }
+});
+} else {  //isUpper == false
+var chart = new Timeline('#timeline2', {
+  direction: 'down',
+  initialWidth: 1100,
+  initialHeight: 500,
+  layerGap: 90,
+  dotRadius: 7,
+  margin: {"top": 60, "right": 200},
+  labelBgColor: function(d, i){
+    return colors[i];
+  },
+  dotColor: function(d, i){
+    return colors[i];
+  },
+  linkColor: function(d, i){
+    return colors[i];
+  },
+  textFn: function(d, i){
+    return d.name;
+  },
+  textStyle: {
+    'font-size': "smaller"
+  }
+});
 
-    //i should have rects with ids a1 and a2.  edit these and see what happens
-    var doc = d3.select("#a1");
+}
 
+//make interactive labels:
+chart.on('labelClick', function(d,i){
+  // do whatever you wish
+  // d is the data associated with the clicked label, i is index
+  console.log("just clicked on label: " + i);
+});
+
+chart.data(myData).visualize().resizeToFit();
+
+chart.dotInfo["colors"] = colors;
+return chart.dotInfo;
 }
 
 export default drawTimeline;
