@@ -1,6 +1,7 @@
 #return json to user that displays each story with its associated questions.
 #allow user to submit post requests to edit this data to their liking
 import flask
+from flask import request
 import timelineApp
 
 
@@ -164,9 +165,10 @@ def add_question_to_story(storyid):
     """Add question to all docs in a given story."""
     connection = timelineApp.model.get_db()
     context = {}
-
+    print("got here")
+    print(request.form['text'])
     context['text'] = flask.request.get_json(force=True)['text']
-
+    ##print(flask.request.get_json(force=True))
     #set questionID of new question to be one greater than highest questionID of that story
     cur = connection.execute(
         "SELECT questionid from formdata where storyid = ? and questionid = "
