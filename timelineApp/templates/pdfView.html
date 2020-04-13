@@ -32,10 +32,10 @@
             </object>
 
             <form action="" method="post" enctype="multipart/form-data">
-                {% for question in document.questions %}
+                {% for question, answer in document.questions.items() %}
                     <label for="{{ question }}"> {{ question }}: </label><br>
                     <!--<input type="text" id="{{ question }}" name="{{ question }}" size="75"><br> -->
-                    <textarea id="{{ question }}" name="{{ loop.index }}" rows="4" cols="75"> </textarea>
+                    <textarea id="{{ question }}" name="{{ loop.index }}" rows="4" cols="75">{{answer}}</textarea>
                     <br>
                 {% endfor %}
                 <input type="submit" value="Submit Form {{ loop.index }}" name="submit">

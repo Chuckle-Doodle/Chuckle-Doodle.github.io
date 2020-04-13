@@ -81,10 +81,16 @@ chart.on('labelClick', function(d,i){
   // do whatever you wish
   // d is the data associated with the clicked label, i is index
   window.location.href = "http://localhost:8000/3/#" + (i + 1)
+  //console.log(d);
 });
 
+/*
 chart.on('labelMouseenter', function(d,i){
   //display popup next to label with more info on that doc
+  var labelElement = document.getElementById("label-g" + (i+1) + (props.isUpper == true ? "upper" : "lower"));
+  var labelLocation = labelElement.getBoundingClientRect();
+  //console.log(labelLocation);
+
 
 });
 
@@ -92,6 +98,7 @@ chart.on('labelMouseleave', function(d,i){
   //delete popup pertaining to that label
 
 });
+*/
 
 chart.data(myData).visualize().resizeToFit();
 

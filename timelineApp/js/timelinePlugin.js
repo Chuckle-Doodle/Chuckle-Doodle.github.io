@@ -237,7 +237,11 @@ class Timeline extends d3kit.SvgChart {
       .on('mouseenter', this.dispatchAs('labelMouseenter'))
       .on('mouseleave', this.dispatchAs('labelMouseleave'))
       .on('mouseout', this.dispatchAs('labelMouseout'))
-      .attr('transform', nodePos);
+      .attr('transform', nodePos)
+      //my edits to give each label an index
+      .attr("id", function(d, i) {
+        return "label-g" + (i + 1) + ((options.direction == "up") ? "upper" : "lower");
+      });
 
     sEnter
       .append('rect')
@@ -247,6 +251,10 @@ class Timeline extends d3kit.SvgChart {
       .attr('width', rectWidth)
       .attr('height', rectHeight)
       //.style('fill', d => labelBgColor(d.data));
+      //my edits to access labelIndex defined above
+      //.attr("labelIndex", function(d, i) {
+        //var j = +this.parentNode.getAttribute("labelIndex");
+      //})
       .style('fill', options.labelBgColor);
 
     sEnter.append('text')

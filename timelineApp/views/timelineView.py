@@ -44,6 +44,8 @@ def show_timeline(storyid):
         context['documents'].append(document)
 
     """
+    context = {}
+    context['storyid'] = storyid
 
     #return "here is where we want to use d3, idk about rendering template w jinja for displaying timeline"
-    return flask.render_template("timelineView.html")
+    return flask.render_template("timelineView.html", **context)
