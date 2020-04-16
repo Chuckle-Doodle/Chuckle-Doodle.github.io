@@ -33,9 +33,9 @@
             </object>
 
             <form action="/{{storyid}}/" method="post" enctype="multipart/form-data">
-                {% for question, answer in document.questions.items() %}
-                    <label for="{{ question }}"> {{ question }}: </label><br>
-                    <textarea id="{{ question }}" name="{{ loop.index }}" rows="4" cols="75">{{answer}}</textarea>
+                {% for questionAnswer in document.questions %}
+                    <label for="{{ questionAnswer[0] }}"> {{ questionAnswer[0] }}: </label><br>
+                    <textarea id="{{ questionAnswer[0] }}" name="{{ loop.index }}" rows="4" cols="75">{{questionAnswer[1]}}</textarea>
                     <!--<input type="text" id="question" name="answer{{loop.index}}" value="When did the Black death stop?"><br>-->
                     <br>
                 {% endfor %}

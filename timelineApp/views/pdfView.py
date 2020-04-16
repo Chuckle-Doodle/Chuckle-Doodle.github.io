@@ -41,19 +41,17 @@ def show_pdf(storyid):
     cursor = connection.execute("SELECT documentid, filename from documents where storyid = ?", (storyid,))
     for row in cursor.fetchall():
         document = {}
-        document['questions'] = {}
+        document['questions'] = []
         document['documentid'] = row['documentid']
         docID = row['documentid']
         document['filename'] = row['filename']
 
-        #is this query within the for loop allowed??
-        print("printing docID before inside query: ", docID)
         cursor2 = connection.execute(
             "SELECT questiontext, answertext from formdata where documentid = ?", (docID,)
         )
         for row2 in cursor2.fetchall():
-            print(row2)
-            document['questions'][row2['questiontext']] = row2['answertext']
+            #document['questions'][row2['questiontext']] = row2['answertext']
+            document['questions'].append([row2['questiontext'], row2['answertext']])
 
         context['documents'].append(document)
 
