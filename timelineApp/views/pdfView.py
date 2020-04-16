@@ -52,7 +52,6 @@ def show_pdf(storyid):
             "SELECT questiontext, answertext from formdata where documentid = ?", (docID,)
         )
         for row2 in cursor2.fetchall():
-            print("here i am once again torn into")
             print(row2)
             document['questions'][row2['questiontext']] = row2['answertext']
 

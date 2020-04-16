@@ -1,7 +1,7 @@
 import React from 'react';
 import Timeline from './timeline.jsx';
 import fetch from 'isomorphic-fetch';
-import Map from './map.js';
+//import Map from './map.js';
 import '../static/css/style.css';
 
 export default class ReferenceView extends React.Component {
