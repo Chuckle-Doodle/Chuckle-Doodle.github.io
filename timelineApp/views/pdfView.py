@@ -24,7 +24,7 @@ def show_pdf(storyid):
         for i in range(1, numberOfQuestions + 1):  # +1 to do 1 indexing rather than 0 indexing
             #persist this answer to the database
             connection.execute("UPDATE formdata SET answertext = ? WHERE storyid = ? and documentid = ? and questionid = ?", (flask.request.form[str(i)], storyid, docid, i))
-            connection.execute("COMMIT;")
+        #connection.execute("COMMIT;")
 
     context = {}
     context['storyid'] = storyid   #this shouldnt be necessary once I figure out the relative path thing
@@ -56,5 +56,5 @@ def show_pdf(storyid):
         context['documents'].append(document)
 
 
-    #return flask.jsonify(context)
+    #return flask.jsonify(**context), 201
     return flask.render_template("pdfView.html", **context)
