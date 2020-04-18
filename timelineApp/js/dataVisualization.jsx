@@ -61,12 +61,21 @@ export default class DataVisualization extends React.Component {
    	  return (
         <div id="DataVisualization">
 
-          <h1>
-          	Timeline for {this.state.storyName}
-          </h1>
-          <h2>
-          	View: {this.state.viewInfo.Name}
-          </h2>
+          <div id="timelineHeading">
+
+            <h3 id="timelineTitle">
+          	  Timeline for {this.state.storyName}
+          	</h3>
+
+          	<h3 id="timelineSubTitle">
+          	  View: {this.state.viewInfo.Name}
+          	</h3>
+
+          	<div id="timelineBackLink">
+        	  <a href={"/" + this.props.storyid + "/"} >Return to PDF form page</a>
+      		</div>
+
+          </div>
 
           <div>
             {this.state.viewInfo.ReferenceViews.map((view, index) =>
