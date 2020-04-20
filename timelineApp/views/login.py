@@ -45,6 +45,14 @@ def show_login():
             #request.form['action'] == Sign Up  should be the case if we get here
             new_user = flask.request.form['username']
             new_password = flask.request.form['password']
+
+            #ensure length between 1 and 20 characters
+            if len(new_user) < 1 or len(new_user) > 20 or len(new_password) < 1 or len(new_password) > 20:
+                # Unsuccessful sign up
+                context["unsuccessful_str"] = "Username and password must be between 1 and 20 characters each. Try again."
+                return flask.render_template("login.html", **context)
+
+
             #ensure username is unique
             rows = cursor.execute("SELECT username from users where username = ?", (new_user,)).fetchall()
             if rows:
