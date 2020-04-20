@@ -91,7 +91,7 @@ def get_story(storyid, username):
         cursor2 = connection.execute("SELECT answertext FROM formanswers WHERE questionid = ? and username = ?", (question['questionid'],username))
         answerData = cursor2.fetchone()
         if answerData:
-            answerText = cursor2.fetchone()['answertext']
+            answerText = answerData['answertext']
         else:
             answerText = ""
         context["Documents"][int(docid) - 1]["FormDataQuestions"].append(questionText)
