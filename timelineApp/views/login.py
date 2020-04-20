@@ -31,11 +31,11 @@ def show_login():
 
             password_check = "SELECT password FROM users WHERE username = '{0}';"
             rows = cursor.execute(password_check.format(given_user)).fetchone()
+            if rows:
+                if rows['password'] == given_password:
 
-            if rows['password'] == given_password:
-
-                flask.session['username'] = given_user
-                return flask.redirect(flask.url_for('show_index'))
+                    flask.session['username'] = given_user
+                    return flask.redirect(flask.url_for('show_index'))
 
             # Unsuccessful Login
             context["unsuccessful_str"] = "Username or password is incorrect. Try again."
