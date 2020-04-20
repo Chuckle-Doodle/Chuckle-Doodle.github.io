@@ -12,6 +12,9 @@ import timelineApp
 def show_pdf(storyid):
     """Display pdf view (pdf of documents + questions for this story)."""
     #things to return to pdfView.html template: pdfs for each document in story, questions pertaining to each doc
+    if "username" not in flask.session:
+        return flask.redirect(flask.url_for('show_login'))
+
     connection = timelineApp.model.get_db()
 
     if (flask.request.method == 'POST'):
@@ -19,12 +22,30 @@ def show_pdf(storyid):
         docid = int(flask.request.form['submit'][-1:])
 
         # get number of questions associated with this document / this post request
-        cursor3 = connection.execute("SELECT COUNT(*) FROM formdata where storyid = ? and documentid = ?", (storyid, docid))
-        numberOfQuestions = cursor3.fetchone()['COUNT(*)']
+        #cursor3 = connection.execute("SELECT COUNT(*) FROM formquestions where storyid = ? and documentid = ?", (storyid, docid))
+        cursor3 = connection.execute("SELECT questionid FROM formquestions where storyid = ? and documentid = ?", (storyid, docid))
+        questionIDs = cursor3.fetchall()
+        print("question IDs")
+        print(questionIDs)
+        numberOfQuestions = len(questionIDs)
         for i in range(1, numberOfQuestions + 1):  # +1 to do 1 indexing rather than 0 indexing
             #persist this answer to the database
-            connection.execute("UPDATE formdata SET answertext = ? WHERE storyid = ? and documentid = ? and questionid = ?", (flask.request.form[str(i)], storyid, docid, i))
-        #connection.execute("COMMIT;")
+            #connection.execute("UPDATE formdata SET answertext = ? WHERE storyid = ? and documentid = ? and questionid = ?", (flask.request.form[str(i)], storyid, docid, i))
+            #check if answer already exists. if so update it don't insert
+            cursor0 = connection.execute("SELECT * from formanswers where username = ? and questionid = ?", (flask.session['username'], questionIDs[i - 1]['questionid']))
+            if cursor0.fetchone():
+                #UPDATE NOT INSERT INTO IF already there !
+                connection.execute("UPDATE formanswers SET answertext = ? WHERE username = ? and questionid = ?", (flask.request.form[str(i)], flask.session['username'], questionIDs[i - 1]['questionid']))
+            else:
+                #no previous answer. so insert into table
+                connection.execute(
+                    "INSERT INTO formanswers(username, questionid, answertext) VALUES "
+                    "(?, ?, ?)", (flask.session['username'], questionIDs[i - 1]['questionid'], flask.request.form[str(i)])
+                )
+
+
+        # CAN I KEEP THIS ????
+        #connection.execute("COMMIT;");
 
     context = {}
     context['storyid'] = storyid   #this shouldnt be necessary once I figure out the relative path thing
@@ -46,14 +67,39 @@ def show_pdf(storyid):
         docID = row['documentid']
         document['filename'] = row['filename']
 
-        cursor2 = connection.execute(
-            "SELECT questiontext, answertext from formdata where documentid = ?", (docID,)
-        )
-        for row2 in cursor2.fetchall():
+        #cursor2 = connection.execute(
+         #   "SELECT questiontext, answertext from formdata where documentid = ?", (docID,)
+        #)
+        #for row2 in cursor2.fetchall():
             #document['questions'][row2['questiontext']] = row2['answertext']
-            document['questions'].append([row2['questiontext'], row2['answertext']])
+         #   document['questions'].append([row2['questiontext'], row2['answertext']])
+        cursor2 = connection.execute("SELECT questionid, questiontext from formquestions where documentid = ?", (docID,))
+        questions = cursor2.fetchall()
+
+        for question in questions:
+            answerData = connection.execute(
+                "SELECT answertext from formanswers where questionid = ? and username = ?",
+                (question['questionid'], flask.session['username'])
+            ).fetchone()
+
+            if answerData:
+                answer = answerData['answertext']
+                document['questions'].append([question['questiontext'], answer])
+            else:
+                document['questions'].append([question['questiontext'], ""])
 
         context['documents'].append(document)
+
+        #~~~~~~~~~#
+        #cursor2 = connection.execute("SELECT questionid, answertext from formanswers where username = ?", (flask.session['username'],))
+        #questionAnswers = cursor2.fetchall()
+        #for questionAnswer in questionAnswers:
+        #    questionData = connection.execute(
+        #        "SELECT questiontext from formquestions where questionid = ?", (questionAnswer['questionid'],)
+        #    ).fetchone()
+
+
+
 
 
     #return flask.jsonify(**context), 201

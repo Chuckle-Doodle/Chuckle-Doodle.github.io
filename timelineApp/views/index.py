@@ -8,11 +8,16 @@ import flask
 import timelineApp
 
 
-@timelineApp.app.route('/', methods=['GET', 'POST'])
+@timelineApp.app.route('/welcome/', methods=['GET', 'POST'])
 def show_index():
     """Display / route."""
     context = {}
     connection = timelineApp.model.get_db()
+
+    if "username" in flask.session:
+        context['user'] = flask.session['username']
+    else:
+        return flask.redirect(flask.url_for('show_login'))
 
     stories = []  #list of stories that will be returned to front page of web app (index.html)
     #each element in list is dict with keys storyid and storyname

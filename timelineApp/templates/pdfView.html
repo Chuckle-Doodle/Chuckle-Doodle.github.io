@@ -9,6 +9,7 @@
     <div id="pdfPageHeading">
         <div>Current topic: {{ storyname }}</div>
         <div id="homePageLink"><a href="/">Return to Home Page</a></div>
+        <div id="pdfScreenLogout"> <a href="/logout/">Logout</a> </div>
     </div>
 
     <div>
@@ -32,7 +33,7 @@
                 </p>
             </object>
 
-            <form action="/{{storyid}}/" method="post" enctype="multipart/form-data">
+            <form action="/{{storyid}}/" method="post" >
                 {% for questionAnswer in document.questions %}
                     <label for="{{ questionAnswer[0] }}"> {{ questionAnswer[0] }}: </label><br>
                     <textarea id="{{ questionAnswer[0] }}" name="{{ loop.index }}" rows="4" cols="75">{{questionAnswer[1]}}</textarea>

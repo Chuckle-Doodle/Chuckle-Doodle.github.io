@@ -16,7 +16,7 @@
         </p>
     </div> -->
     <div>
-        <p>Welcome to our tool that allows students to think like historians!</p>
+        <p>Welcome, {{user}}, to our tool that allows students to think like historians!</p>
         <p>Please click on a topic to continue.</p>
     </div>
     <ul>
@@ -24,6 +24,10 @@
             <li><a href="/{{ story.storyid }}/">{{ story.storyname }}</a></li>
         {% endfor %}
     </ul>
+
+    <div id="logoutButton">
+        <a href="/logout/">Logout</a>
+    </div>
 
 </body>
 </html>
