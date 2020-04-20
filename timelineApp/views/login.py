@@ -22,17 +22,17 @@ def show_login():
 
     context = {}
 
-    # If Login button pressed (i think)
     if flask.request.method == 'POST':
 
         #check if logging in or signing up
         if request.form['action'] == "Login":
             given_user = flask.request.form['username']
             given_password = flask.request.form['password']
-            password_check = "SELECT password FROM users WHERE username = '{0}';"
-            rows = cursor.execute(password_check.format(given_user)).fetchall()
 
-            if rows:
+            password_check = "SELECT password FROM users WHERE username = '{0}';"
+            rows = cursor.execute(password_check.format(given_user)).fetchone()
+
+            if rows['password'] == given_password:
 
                 flask.session['username'] = given_user
                 return flask.redirect(flask.url_for('show_index'))
