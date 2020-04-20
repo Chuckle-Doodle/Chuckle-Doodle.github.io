@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>timelineApp</title>
+    <link href="/static/css/style.css" rel="stylesheet" type="text/css"/>
+</head>
+
+<body>
+    <!-- HEADER -->
+    <div>
+        <p class="welcome_header">
+            Welcome to the tool that lets history students act like historians. Please create an account or sign up to begin.
+        </p>
+    </div>
+
+    <!--- LOGIN FORM --->
+    <div>
+        <form action="" method="post" enctype="multipart/form-data">
+            <div>
+                <label for="usr"><p>Username</p></label>
+                <input type="text" name="username" id="usr" placeholder="Enter Username"/>
+            </div>
+            <div>
+                <label for"pass"><p>Password</p></label>
+                <input type="password" name="password" id="pass" placeholder="Enter Password"/>
+            </div>
+            <div>
+                <input type="submit" name="action" value="Login"/>
+                <input type="submit" name="action" value="Sign Up"/>
+            </div>
+        </form>
+    </div>
+
+    <!-- Print unsuccessful if login failed -->
+    <div>
+        <p> {{ unsuccessful_str }} </p>
+        <p> {{ not_unique_username }} </p>
+    </div>
+
+
+
+</body>
+</html>
