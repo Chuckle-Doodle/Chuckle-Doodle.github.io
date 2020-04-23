@@ -223,7 +223,7 @@ class Timeline extends d3kit.SvgChart {
 
     const labelBgColor = d3kit.helper.functor(options.labelBgColor);
     const linkColor = d3kit.helper.functor(options.linkColor);
-    console.log("printing label link colors " + labelBgColor + linkColor);
+    //console.log("printing label link colors " + labelBgColor + linkColor);
 
     // Draw label rectangles
     const selection = this.layers.get('main/label').selectAll('g.label-g')

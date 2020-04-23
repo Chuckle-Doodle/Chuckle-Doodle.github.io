@@ -28,8 +28,8 @@ export default class Timeline extends React.Component {
   //}
 
   render() {
-    console.log("printing dotLocations");
-    console.log(this.state.dotLocations);
+    //console.log("printing dotLocations");
+    //console.log(this.state.dotLocations);
 
     if (this.props.isUpper == true)
     {

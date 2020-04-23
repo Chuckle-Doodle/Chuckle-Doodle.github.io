@@ -11,7 +11,6 @@ export default class Document extends React.Component {
     
 
     this.setImageRef = element => {
-      console.log("setting image Ref !");
       this.imageElement = element;
     };
 
@@ -26,14 +25,38 @@ export default class Document extends React.Component {
   
   componentDidMount() {
     // Runs when an instance is added to the DOM
-    var x1 = this.imageElement.getBoundingClientRect().x;
-    var y1 = this.imageElement.getBoundingClientRect().y;
+    //console.log("in compDiDMount");
+    //var x1 = this.imageElement.getBoundingClientRect().x;
+    //var y1 = this.imageElement.getBoundingClientRect().y;
+    //console.log(x1, y1);
     this.setState(
       {
-        xPos: x1,
-        yPos: y1,
+        xPos: this.imageElement.getBoundingClientRect().x,
+        yPos: this.imageElement.getBoundingClientRect().y,
       }
     );
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    //console.log("in compDiDUpdate");
+    //console.log(prevState.xPos, prevState.yPos);
+    //console.log();
+    if (prevState.xPos == null) {
+      return;
+    }
+    if (prevState.xPos != this.imageElement.getBoundingClientRect().x || prevState.yPos != this.imageElement.getBoundingClientRect().y + 310) {
+      //var x1 = this.imageElement.getBoundingClientRect().x;
+      //var y1 = this.imageElement.getBoundingClientRect().y;
+      //console.log("state is different !!!");
+      //console.log(this.imageElement.getBoundingClientRect().x);
+      //console.log(this.imageElement.getBoundingClientRect().y);
+      this.setState(
+        {
+          xPos: this.imageElement.getBoundingClientRect().x,
+          yPos: this.imageElement.getBoundingClientRect().y + 310,
+        }
+      );
+    }
   }
   
 
@@ -52,7 +75,8 @@ export default class Document extends React.Component {
       );
 
     } else {
-
+      //console.log("rendering document image and lines");
+      //console.log(this.state.xPos, this.state.yPos);
       return (
         <div id={"Document" + this.props.documentid}>
           <a href={"/3#" + this.props.documentid}>

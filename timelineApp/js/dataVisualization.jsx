@@ -75,6 +75,10 @@ export default class DataVisualization extends React.Component {
         	  <a href={"/" + this.props.storyid + "/"} >Return to PDF form page</a>
       		</div>
 
+      		<div id="timelineLogoutLink">
+      		  <a href={"/logout/"} >Logout</a>
+      		</div>
+
           </div>
 
           <div>
