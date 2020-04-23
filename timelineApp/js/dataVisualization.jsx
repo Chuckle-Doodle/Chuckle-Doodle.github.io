@@ -84,7 +84,7 @@ export default class DataVisualization extends React.Component {
           <div>
             {this.state.viewInfo.ReferenceViews.map((view, index) =>
               <ReferenceView docImages={docImages} viewName={this.state.viewInfo.Name} clusterBy={this.state.viewInfo.ClusterBy} dataUrl={this.props.dataUrl} data={ this.state.data } documents={ documentsArray } type={ view.Type } question={ view.Question }
-              isUpper={index == 0 ? true : false} />
+              isUpper={index == 0 ? true : false} storyid={this.props.storyid} />
             )}
           </div>
 
