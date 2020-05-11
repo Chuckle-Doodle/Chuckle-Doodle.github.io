@@ -5,3 +5,4 @@ from timelineApp.views.timelineView import show_timeline
 from timelineApp.views.viewCreatorView import show_views
 from timelineApp.views.login import show_login
 from timelineApp.views.logout import show_logout
+from timelineApp.views.addStory import add_story_2

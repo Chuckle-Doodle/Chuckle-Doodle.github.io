@@ -157,12 +157,12 @@ def add_story():
     return flask.jsonify(**context), 201
 
 
-@timelineApp.app.route('/api/stories/', methods=["DELETE"])
+@timelineApp.app.route('/api/stories/delete/', methods=["POST", "DELETE"])
 def delete_story():
     """Delete story from list of stories."""
     connection = timelineApp.model.get_db()
     context = {}
-    context['text'] = flask.request.get_json(force=True)['text']  #this is name of story we delete
+    context['text'] = flask.request.form['stories']
     #delete story from database
     connection.execute(
     	"DELETE FROM stories where "
@@ -171,8 +171,11 @@ def delete_story():
     )
 
   	#main action of delete has been done, now just return a 204 code
-    rsp = flask.Response(response="", status=204, mimetype="application/json")
-    return rsp
+    #rsp = flask.Response(response="", status=204, mimetype="application/json")
+    #return rsp
+
+    # reload welcome screen now without the deleted story
+    return flask.redirect(flask.url_for('show_index'))
 
 
 @timelineApp.app.route('/api/stories/<int:storyid>/', methods=["POST"])

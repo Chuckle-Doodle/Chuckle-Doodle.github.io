@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <title>timelineApp</title>
-    <!-- <link href="/static/css/style.css" rel="stylesheet" type="text/css"/> -->
+    <link href="/static/css/style.css" rel="stylesheet" type="text/css"/>
 </head>
 
 <body>
@@ -21,11 +21,42 @@
     </div>
     <ul>
         {% for story in stories %}
-            <li><a href="/{{ story.storyid }}/">{{ story.storyname }}</a></li>
+            <li>
+                <a href="/{{ story.storyid }}/">{{ story.storyname }}</a>
+            </li>
         {% endfor %}
     </ul>
 
-    <div id="logoutButton">
+    <div id="welcomeButtons">
+        
+        <div id="addStoryLink">
+            <a href="/addStory/">Add Story</a>
+        </div>
+
+        <form id="editStoryForm" action="/api/stories/edit/" method="post" >
+            <label for="stories">Edit story:</label>
+            <select id="stories" name="stories">
+                {% for story in stories %}
+                    <li>
+                        <option value="{{ story.storyname }}" name="{{ story.storyid }}">{{ story.storyname }}</option>
+                    </li>
+                {% endfor %}
+            </select>
+            <input type="submit" value="Go">
+        </form>
+
+        <form id="deleteStoryForm" action="/api/stories/delete/" method="post" >
+            <label for="stories">Delete story:</label>
+            <select id="stories" name="stories">
+                {% for story in stories %}
+                    <li>
+                        <option value="{{ story.storyname }}" name="{{ story.storyid }}">{{ story.storyname }}</option>
+                    </li>
+                {% endfor %}
+            </select>
+            <input type="submit" value="Submit">
+        </form>
+
         <a href="/logout/">Logout</a>
     </div>
 

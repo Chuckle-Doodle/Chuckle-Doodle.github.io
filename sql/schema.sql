@@ -5,19 +5,15 @@ CREATE TABLE users(
 );
 
 CREATE TABLE stories(
-    storyid    INTEGER       NOT NULL,
-    storyname  VARCHAR(64)   NOT NULL,
-    PRIMARY KEY(storyid)
-
+    storyid    INTEGER PRIMARY KEY,
+    storyname  VARCHAR(64)   NOT NULL
 );
 
 CREATE TABLE documents(
-    documentid   INTEGER      NOT NULL,
+    documentid   INTEGER PRIMARY KEY,
     filename     VARCHAR(64)  NOT NULL,
     frontcover   VARCHAR(64)  NOT NULL,
     storyid      INTEGER      NOT NULL,
-
-    PRIMARY KEY(documentid),
     FOREIGN KEY(storyid) REFERENCES stories(storyid) ON DELETE CASCADE
 );
 
@@ -35,7 +31,6 @@ CREATE TABLE formanswers(
     username      VARCHAR(20)    NOT NULL,
     questionid    INTEGER        NOT NULL,
     answertext    VARCHAR(1024)          ,
-
     PRIMARY KEY (username, questionid),
     FOREIGN KEY(username) REFERENCES users(username) ON DELETE CASCADE,
     FOREIGN KEY(questionid) REFERENCES formquestions(questionid) ON DELETE CASCADE

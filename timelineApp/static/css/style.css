@@ -94,3 +94,16 @@
 	margin-left: auto;
 	margin-right: auto;
 }
+#welcomeButtons {
+	margin-bottom: 15px;
+}
+#addStoryLink {
+	margin-top: 35px;
+	margin-bottom: inherit;
+}
+#editStoryForm {
+	margin-bottom: inherit;
+}
+#deleteStoryForm {
+	margin-bottom: inherit;
+}

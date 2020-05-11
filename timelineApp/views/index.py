@@ -14,6 +14,12 @@ def show_index():
     context = {}
     connection = timelineApp.model.get_db()
 
+    #clear flask session if no users in database
+    rows = connection.execute("SELECT * from users").fetchall()
+    if len(rows) == 0:
+        flask.session.clear()
+        return flask.redirect(flask.url_for('show_login'))
+
     if "username" in flask.session:
         context['user'] = flask.session['username']
     else:

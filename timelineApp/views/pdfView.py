@@ -12,10 +12,21 @@ import timelineApp
 def show_pdf(storyid):
     """Display pdf view (pdf of documents + questions for this story)."""
     #things to return to pdfView.html template: pdfs for each document in story, questions pertaining to each doc
-    if "username" not in flask.session:
-        return flask.redirect(flask.url_for('show_login'))
 
     connection = timelineApp.model.get_db()
+    context = {}
+
+    #clear flask session if no users in database
+    rows = connection.execute("SELECT * from users").fetchall()
+    if len(rows) == 0:
+        flask.session.clear()
+        return flask.redirect(flask.url_for('show_login'))
+
+    if "username" in flask.session:
+        context['user'] = flask.session['username']
+    else:
+        return flask.redirect(flask.url_for('show_login'))
+
 
     if (flask.request.method == 'POST'):
         # find out which form aka document this submission corresponds with

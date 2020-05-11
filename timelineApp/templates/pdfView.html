@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <title>timelineApp</title>
-    <link href="../static/css/style.css" rel="stylesheet" type="text/css"/>
+    <link href="/static/css/style.css" rel="stylesheet" type="text/css"/>
 </head>
 
 <body>
@@ -21,10 +21,12 @@
             <p id="{{ document.documentid }}" >Document {{ document.documentid }}</p>
 
             <!-- INSERT PDF OF EACH DOC HERE-->
-            <!--<a href="{{url_for('static', filename= document.filename )}}"> picture goes here </a> -->
+            <!--<a href="{{url_for('static', filename= document.filename )}}"> picture goes here </a> 
+                data="/static/pdfs/{{ document.filename }}#page=1" 
+                data="../var/uploads/{{storyname}}/{{document.filename}}#page=1" -->
 
             <object
-                data="/static/pdfs/{{ document.filename }}#page=1"
+                data="/static/arp.pdf"
                 type="application/pdf"
                 width="85%"
                 height="600">
