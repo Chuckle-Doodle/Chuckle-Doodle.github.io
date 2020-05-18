@@ -9,11 +9,15 @@ from werkzeug.utils import secure_filename
 @timelineApp.app.route('/addStory/', methods=['GET', 'POST'])
 def add_story_2():
 
+    print("initial wd of add story is: ")
+    initialPath = os.getcwd()
+    print(initialPath)
+
     context = {}
     connection = timelineApp.model.get_db()
 
     if "username" in flask.session:
-        context['user'] = flask.session['username']
+        context['username'] = flask.session['username']
     else:
         return flask.redirect(flask.url_for('show_login'))
 
@@ -42,64 +46,81 @@ def add_story_2():
 
         numberQuestions = len(questions)
 
-        #check if story already exists. if so, error. else, add it to stories table
-        row = connection.execute("SELECT storyname from stories where storyname = ?", (context['name'],)).fetchone()
-        print("row is")
-        print(row)
+        #check if story already exists for this user. if so, error. else, add it to stories table
+        row = connection.execute("SELECT storyname from stories where storyname = ? and username = ?", (context['name'], context['username'])).fetchone()
+
         if row:
-            #story already exists! can't add it
-            context['storyAlreadyExists'] = "A story with this name already exists or the story name is blank. Please try again."
+            #story already exists for this user! can't add it
+            context['storyAlreadyExists'] = "A story with this name already exists for current user or the story name is blank. Please try again."
             return flask.render_template("addStory.html", **context)
         else:
+        	#get current max storyid for this user and increment it one for new story
+        	maxStoryId = connection.execute("SELECT max(storyid) from stories where username = ?", (context['username'],)).fetchone()['max(storyid)']
+        	if maxStoryId == None:
+        		maxStoryId = 0
             #add story to database
-            connection.execute("INSERT INTO stories(storyname) VALUES (?)", (context['name'],))
+        	connection.execute("INSERT INTO stories(storyid, username, storyname) VALUES (?, ?, ?)", (maxStoryId + 1, context['username'], context['name']))
             
             #get storyid from newly inserted story
-            storyid = connection.execute("SELECT storyid from stories where storyname = ?", (context['name'],)).fetchone()['storyid']
+        	storyid = maxStoryId + 1
 
             #create folder in upload folder to store docs for this story
-            os.chdir(UPLOAD_FOLDER)
-            os.mkdir(context['name'])
+        	tempPath = os.path.join(UPLOAD_FOLDER, context['username'])
+       		tempPath = os.path.join(tempPath, 'stories')
+        	os.chdir(tempPath)
+        	os.mkdir(context['name'])
 
 
         i = 1
-        os.chdir(os.path.join(UPLOAD_FOLDER, context['name']))
-
-        docids = []
+        #os.chdir(os.path.join(UPLOAD_FOLDER, context['name']))
+        tempPath = os.path.join(UPLOAD_FOLDER, context['username'])
+        tempPath = os.path.join(tempPath, 'stories')
+        tempPath = os.path.join(tempPath, context['name'])
+        os.chdir(tempPath)
+        os.mkdir('documents')
+        os.mkdir('images')
 
         while i <= numberDocuments:
             f = flask.request.files['document' + str(i)]
             filename = secure_filename(f.filename)
-            updatedPath = os.path.join(UPLOAD_FOLDER, context['name'])
-            f.save(os.path.join(updatedPath, filename))
+            updatedPath = os.path.join(tempPath, 'documents')
+            pathToFile = os.path.join(updatedPath, filename)
+            f.save(pathToFile)
 
             #extract frontcover from pdf
-            pages = convert_from_path(filename, 500)
+            pages = convert_from_path(pathToFile, 500)
             for page in pages:
-                page.save('frontPageDoc{}.jpg'.format(str(i)), 'JPEG')
-                break
+            	os.chdir(os.path.join(tempPath, 'images'))
+            	page.save('{}.jpg'.format(str(i)), 'JPEG')
+            	break
+
+            os.chdir(tempPath)
 
             #add row to documents table
             connection.execute(
-                "INSERT INTO documents(filename, frontcover, storyid) VALUES (?, ?, ?)", (filename, 'frontPageDoc{}.jpg'.format(str(i)), storyid)
+                "INSERT INTO documents(documentid, storyid, username, filename, frontcover) VALUES (?, ?, ?, ?, ?)", (i, storyid, context['username'], filename, '{}.jpg'.format(str(i)))
             )
-            docid = connection.execute(
-                "SELECT documentid from documents where storyid = ? and filename = ?", (storyid, filename)
-            ).fetchone()['documentid']
-            docids.append(docid)
+
+            #docid = connection.execute(
+            #    "SELECT documentid from documents where storyid = ? and filename = ?", (storyid, filename)
+            #).fetchone()['documentid']
+            #docids.append(docid)
 
             i = i + 1
 
 
 
-        #TODO add questions to database
-        for docid in docids:
-            for question in questions:
+        #add questions to database
+        questionIdCounter = 1
+        docIdCounter = 1
+        while docIdCounter <= numberDocuments:
+            while questionIdCounter <= numberQuestions:
                 connection.execute(
-                    "INSERT INTO formquestions(storyid, documentid, questiontext) VALUES (?, ?, ?)", (storyid, docid, question)
+                    "INSERT INTO formquestions(questionid, documentid, storyid, username, questiontext) VALUES (?, ?, ?, ?, ?)", (questionIdCounter, docIdCounter, storyid, context['username'], questions[questionIdCounter - 1])
                 )
+                questionIdCounter += 1
+            questionIdCounter = 1
+            docIdCounter += 1
 
-
-
-    #return "Return value of show_index function in index.py in views.  This is main page of app"
+    os.chdir(initialPath)
     return flask.render_template("addStory.html", **context)

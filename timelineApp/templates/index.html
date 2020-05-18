@@ -27,6 +27,8 @@
         {% endfor %}
     </ul>
 
+    <a href="/welcome/">{{ askForStory }}</a>
+
     <div id="welcomeButtons">
         
         <div id="addStoryLink">
@@ -58,6 +60,10 @@
         </form>
 
         <a href="/logout/">Logout</a>
+
+        {% if ableToDeleteUser == True %}
+            <a href="/deleteAccount/">Delete Account</a>
+        {% endif %}
     </div>
 
 </body>

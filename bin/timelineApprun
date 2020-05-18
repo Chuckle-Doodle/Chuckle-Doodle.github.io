@@ -6,7 +6,7 @@
 set -e
 
 
-if [ ! -f var/timelineApp.sqlite3 ]; then
+if [ ! -f timelineApp/static/var/timelineApp.sqlite3 ]; then
     ( bin/timelineAppdb create )
 fi
 

@@ -23,7 +23,7 @@ def show_pdf(storyid):
         return flask.redirect(flask.url_for('show_login'))
 
     if "username" in flask.session:
-        context['user'] = flask.session['username']
+        context['username'] = flask.session['username']
     else:
         return flask.redirect(flask.url_for('show_login'))
 
@@ -34,43 +34,40 @@ def show_pdf(storyid):
 
         # get number of questions associated with this document / this post request
         #cursor3 = connection.execute("SELECT COUNT(*) FROM formquestions where storyid = ? and documentid = ?", (storyid, docid))
-        cursor3 = connection.execute("SELECT questionid FROM formquestions where storyid = ? and documentid = ?", (storyid, docid))
+        cursor3 = connection.execute("SELECT questionid FROM formquestions where username = ? and storyid = ? and documentid = ?", (context['username'], storyid, docid))
         questionIDs = cursor3.fetchall()
-        print("question IDs")
-        print(questionIDs)
         numberOfQuestions = len(questionIDs)
         for i in range(1, numberOfQuestions + 1):  # +1 to do 1 indexing rather than 0 indexing
             #persist this answer to the database
             #connection.execute("UPDATE formdata SET answertext = ? WHERE storyid = ? and documentid = ? and questionid = ?", (flask.request.form[str(i)], storyid, docid, i))
             #check if answer already exists. if so update it don't insert
-            cursor0 = connection.execute("SELECT * from formanswers where username = ? and questionid = ?", (flask.session['username'], questionIDs[i - 1]['questionid']))
+            cursor0 = connection.execute("SELECT * from formanswers where username = ? and storyid = ? and documentid = ? and questionid = ?", (flask.session['username'], storyid, docid, questionIDs[i - 1]['questionid']))
             if cursor0.fetchone():
                 #UPDATE NOT INSERT INTO IF already there !
-                connection.execute("UPDATE formanswers SET answertext = ? WHERE username = ? and questionid = ?", (flask.request.form[str(i)], flask.session['username'], questionIDs[i - 1]['questionid']))
+                connection.execute("UPDATE formanswers SET answertext = ? where username = ? and storyid = ? and documentid = ? and questionid = ?", (flask.request.form[str(i)], flask.session['username'], storyid, docid, questionIDs[i - 1]['questionid']))
             else:
                 #no previous answer. so insert into table
                 connection.execute(
-                    "INSERT INTO formanswers(username, questionid, answertext) VALUES "
-                    "(?, ?, ?)", (flask.session['username'], questionIDs[i - 1]['questionid'], flask.request.form[str(i)])
+                    "INSERT INTO formanswers(questionid, documentid, storyid, username, answertext) VALUES "
+                    "(?, ?, ?, ?, ?)", (questionIDs[i - 1]['questionid'], docid, storyid, flask.session['username'], flask.request.form[str(i)])
                 )
 
 
         # CAN I KEEP THIS ????
         #connection.execute("COMMIT;");
 
-    context = {}
     context['storyid'] = storyid   #this shouldnt be necessary once I figure out the relative path thing
     context['documents'] = []
     #connection = timelineApp.model.get_db()
 
     #get story name
-    cursor0 = connection.execute("SELECT storyname from stories where storyid = ?", (storyid,))
+    cursor0 = connection.execute("SELECT storyname from stories where storyid = ? and username = ?", (storyid, flask.session['username']))
     context['storyname'] = cursor0.fetchone()['storyname']
 
     #get pdf files for this story
     docID = ""
     filenames = []
-    cursor = connection.execute("SELECT documentid, filename from documents where storyid = ?", (storyid,))
+    cursor = connection.execute("SELECT documentid, filename from documents where storyid = ? and username = ?", (storyid, flask.session['username']))
     for row in cursor.fetchall():
         document = {}
         document['questions'] = []
@@ -84,13 +81,13 @@ def show_pdf(storyid):
         #for row2 in cursor2.fetchall():
             #document['questions'][row2['questiontext']] = row2['answertext']
          #   document['questions'].append([row2['questiontext'], row2['answertext']])
-        cursor2 = connection.execute("SELECT questionid, questiontext from formquestions where documentid = ?", (docID,))
+        cursor2 = connection.execute("SELECT questionid, questiontext from formquestions where documentid = ? and storyid = ? and username = ?", (docID, storyid, flask.session['username']))
         questions = cursor2.fetchall()
 
         for question in questions:
             answerData = connection.execute(
-                "SELECT answertext from formanswers where questionid = ? and username = ?",
-                (question['questionid'], flask.session['username'])
+                "SELECT answertext from formanswers where questionid = ? and username = ? and storyid = ? and documentid = ?",
+                (question['questionid'], flask.session['username'], storyid, docID)
             ).fetchone()
 
             if answerData:

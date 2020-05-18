@@ -2,7 +2,7 @@ import flask
 import timelineApp
 
 
-@timelineApp.app.route('/logout/', methods=['GET', 'POST'])
+@timelineApp.app.route('/logout/', methods=['GET'])
 def show_logout():
     """Logout."""
     if "username" in flask.session:

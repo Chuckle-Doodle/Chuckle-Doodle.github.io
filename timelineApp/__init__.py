@@ -3,7 +3,7 @@
 import flask
 
 # app is a single object used by all the code modules in this package
-app = flask.Flask(__name__, static_url_path='/static')  # pylint: disable=invalid-name
+app = flask.Flask(__name__)  # pylint: disable=invalid-name
 
 # Read settings from config module (timelineApp/config.py)
 app.config.from_object('timelineApp.config')

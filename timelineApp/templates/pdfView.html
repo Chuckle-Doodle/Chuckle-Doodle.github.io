@@ -7,7 +7,7 @@
 
 <body>
     <div id="pdfPageHeading">
-        <div>Current topic: {{ storyname }}</div>
+        <div>Current topic: {{ storyname }} </div>
         <div id="homePageLink"><a href="/">Return to Home Page</a></div>
         <div id="pdfScreenLogout"> <a href="/logout/">Logout</a> </div>
     </div>
@@ -23,10 +23,13 @@
             <!-- INSERT PDF OF EACH DOC HERE-->
             <!--<a href="{{url_for('static', filename= document.filename )}}"> picture goes here </a> 
                 data="/static/pdfs/{{ document.filename }}#page=1" 
-                data="../var/uploads/{{storyname}}/{{document.filename}}#page=1" -->
+                data="../var/uploads/{{storyname}}/{{document.filename}}#page=1" 
+
+            "/var/uploads/{{ storyname }}/{{ document.filename }}"
+        "/static/pdfs/{{ document.filename }}"-->
 
             <object
-                data="/static/arp.pdf"
+                data="/static/var/users/{{ username }}/stories/{{ storyname }}/documents/{{ document.filename }}"
                 type="application/pdf"
                 width="85%"
                 height="600">

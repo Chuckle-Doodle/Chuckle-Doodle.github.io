@@ -1,6 +1,10 @@
 import flask
 import timelineApp
 from flask import request
+import os
+import shutil
+import errno
+from distutils.dir_util import copy_tree
 
 
 @timelineApp.app.route('/', methods=['GET', 'POST'])
@@ -65,9 +69,30 @@ def show_login():
                     "VALUES (?, ?) ", (new_user, new_password)
                 )
 
-                print("JUST ADDED NEW USER: ", new_user, new_password)
-
                 flask.session['username'] = new_user
+
+
+                #create folder in file system for user
+                initialPath = os.getcwd()
+                #tempPath = "sql/users/test/stories/"
+                #sourcePath = os.path.join(initialPath, tempPath)
+                #print("source path is!")
+                #print(sourcePath)
+                #print("wd is :::::")
+                #print(os.getcwd())
+                newPath = "timelineApp/static/var/users/"
+                os.chdir(newPath)
+                os.mkdir(flask.session['username'])
+                os.chdir(flask.session['username'])
+                os.mkdir("stories")
+
+                os.chdir(initialPath)
+                #destinationPath = os.getcwd()
+                #destinationPath = os.path.join(destinationPath, "Black_Death")
+                #print(destinationPath)
+                    
+                #copy_tree(sourcePath, destinationPath)
+
                 return flask.redirect(flask.url_for('show_index'))
 
 

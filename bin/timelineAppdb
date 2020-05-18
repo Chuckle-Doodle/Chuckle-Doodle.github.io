@@ -20,53 +20,53 @@ fi
 # Parse argument.  $1 is the first argument
 case $1 in
   "create")
-    if [ -f var/timelineApp.sqlite3 ]; then
+    if [ -f timelineApp/static/var/timelineApp.sqlite3 ]; then
         echo "Error: database already exists"
         exit 1
     fi
-    echo "+ mkdir -p var/uploads"
-    mkdir -p var/uploads
+    echo "+ mkdir -p timelineApp/static/var/users"
+    mkdir -p timelineApp/static/var/users
 
-    echo "+ sqlite3 var/timelineApp.sqlite3 < sql/schema.sql"
-    sqlite3 var/timelineApp.sqlite3 < sql/schema.sql
+    echo "+ sqlite3 timelineApp/static/var/timelineApp.sqlite3 < sql/schema.sql"
+    sqlite3 timelineApp/static/var/timelineApp.sqlite3 < sql/schema.sql
 
-    echo "+ sqlite3 var/timelineApp.sqlite3 < sql/data.sql"
-    sqlite3 var/timelineApp.sqlite3 < sql/data.sql
+    echo "+ sqlite3 timelineApp/static/var/timelineApp.sqlite3 < sql/data.sql"
+    sqlite3 timelineApp/static/var/timelineApp.sqlite3 < sql/data.sql
 
-    echo "+ cp sql/uploads/* var/uploads/"
-    cp sql/uploads/* var/uploads/
+    echo "+ cp -r sql/users/* timelineApp/static/var/users/"
+    cp -r sql/users/* timelineApp/static/var/users/
     ;;
 
   "destroy")
-    echo "+ rm -rf var/timelineApp.sqlite3 var/uploads"
-    rm -rf var/timelineApp.sqlite3 var/uploads
+    echo "+ rm -rf timelineApp/static/var/timelineApp.sqlite3 timelineApp/static/var/users"
+    rm -rf timelineApp/static/var/timelineApp.sqlite3 timelineApp/static/var/users
     ;;
 
   "reset")
-    echo "+ rm -rf var/timelineApp.sqlite3 var/uploads"
-    rm -rf var/timelineApp.sqlite3 var/uploads
+    echo "+ rm -rf timelineApp/static/var/timelineApp.sqlite3 timelineApp/static/var/users"
+    rm -rf timelineApp/static/var/timelineApp.sqlite3 timelineApp/static/var/users
 
-    echo "+ mkdir -p var/uploads"
-    mkdir -p var/uploads
+    echo "+ mkdir -p timelineApp/static/var/users"
+    mkdir -p timelineApp/static/var/users
 
-    echo "+ sqlite3 var/timelineApp.sqlite3 < sql/schema.sql"
-    sqlite3 var/timelineApp.sqlite3 < sql/schema.sql
+    echo "+ sqlite3 timelineApp/static/var/timelineApp.sqlite3 < sql/schema.sql"
+    sqlite3 timelineApp/static/var/timelineApp.sqlite3 < sql/schema.sql
 
-    echo "+ sqlite3 var/timelineApp.sqlite3 < sql/data.sql"
-    sqlite3 var/timelineApp.sqlite3 < sql/data.sql
+    echo "+ sqlite3 timelineApp/static/var/timelineApp.sqlite3 < sql/data.sql"
+    sqlite3 timelineApp/static/var/timelineApp.sqlite3 < sql/data.sql
 
-    echo "+ cp sql/uploads/* var/uploads/"
-    cp sql/uploads/* var/uploads/
+    echo "+ cp -r sql/users/* timelineApp/static/var/users/"
+    cp -r sql/users/* timelineApp/static/var/users/
     ;;
 
   "dump")
     # Print command
     
-    sqlite3 -batch -line var/timelineApp.sqlite3 'SELECT * FROM comments'
-    sqlite3 -batch -line var/timelineApp.sqlite3 'SELECT * FROM following'
-    sqlite3 -batch -line var/timelineApp.sqlite3 'SELECT * FROM likes'
-    sqlite3 -batch -line var/timelineApp.sqlite3 'SELECT * FROM posts'
-    sqlite3 -batch -line var/timelineApp.sqlite3 'SELECT * FROM users'
+    sqlite3 -batch -line timelineApp/static/var/timelineApp.sqlite3 'SELECT * FROM comments'
+    sqlite3 -batch -line timelineApp/static/var/timelineApp.sqlite3 'SELECT * FROM following'
+    sqlite3 -batch -line timelineApp/static/var/timelineApp.sqlite3 'SELECT * FROM likes'
+    sqlite3 -batch -line timelineApp/static/var/timelineApp.sqlite3 'SELECT * FROM posts'
+    sqlite3 -batch -line timelineApp/static/var/timelineApp.sqlite3 'SELECT * FROM users'
     ;;
 
   *)

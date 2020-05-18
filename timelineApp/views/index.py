@@ -28,14 +28,22 @@ def show_index():
     stories = []  #list of stories that will be returned to front page of web app (index.html)
     #each element in list is dict with keys storyid and storyname
 
-    cursor = connection.execute("SELECT * from stories")
+
+    cursor = connection.execute("SELECT * from stories where username = ?", (flask.session['username'],))
     for row in cursor.fetchall():
         story = {}
         story['storyid'] = row['storyid']
         story['storyname'] = row['storyname']
         stories.append(story)
 
+
     context['stories'] = stories   #key = stories string. val = list of stories
+
+    #option to delete account if this isn't the default user
+    if flask.session['username'] != "test":
+        context['ableToDeleteUser'] = True
+    else:
+        context['ableToDeleteUser'] = False
 
     #return "Return value of show_index function in index.py in views.  This is main page of app"
     return flask.render_template("index.html", **context)
