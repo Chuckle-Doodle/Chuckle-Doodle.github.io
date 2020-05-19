@@ -9,7 +9,7 @@ from werkzeug.utils import secure_filename
 @timelineApp.app.route('/addStory/', methods=['GET', 'POST'])
 def add_story_2():
 
-	context = {}
+    context = {}
 	#ensure user is signed in before proceeding. else return user to login screen.
     if "username" in flask.session:
         context['username'] = flask.session['username']
