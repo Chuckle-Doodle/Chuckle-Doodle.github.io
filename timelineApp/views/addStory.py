@@ -10,7 +10,7 @@ from werkzeug.utils import secure_filename
 def add_story_2():
 
 	#ensure user is signed in before proceeding. else return user to login screen.
-	if "username" in flask.session:
+    if "username" in flask.session:
         context['username'] = flask.session['username']
     else:
         return flask.redirect(flask.url_for('show_login'))
