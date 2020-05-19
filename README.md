@@ -6,9 +6,8 @@ steps for displaying timeline application
 3. pip install -e .
 4. ./bin/timelineAppdb create
 5. ./bin/timelineApprun
-6. pip install nodeenv
-7. nodeenv --python-virtualenv
-8. deactivate
-9. source env/bin/activate
-10. npm install .
+6. nodeenv --python-virtualenv
+7. deactivate
+8. source env/bin/activate
+9. npm install .
 
