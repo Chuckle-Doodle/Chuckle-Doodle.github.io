@@ -1,6 +1,7 @@
 # Chuckle-Doodle.github.io
 steps for displaying timeline application
-**cd into root directory of project after cloning
+*navigate to where you want to clone this repository
+**clone this project then cd into the root directory of the project
 1. python3 -m venv env
 2. source env/bin/activate
 3. pip install -e .
