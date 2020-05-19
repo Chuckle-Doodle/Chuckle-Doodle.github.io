@@ -17,7 +17,6 @@ setup(
         'nodeenv==1.3.5',
         'requests==2.21.0',
         'sh==1.12.14',
-        'pillow=7.1.1',
-        'pdf2image=1.12.1'
+        'pdf2image'
     ],
 )
