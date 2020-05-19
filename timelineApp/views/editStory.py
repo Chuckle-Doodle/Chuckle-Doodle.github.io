@@ -147,4 +147,4 @@ def edit_story():
     #upon finishing, revert current working directory back to what it was initially
     os.chdir(initialPath)
 
-    return flask.render_template("addStory.html", **context)
+    return flask.render_template("editStory.html", **context)

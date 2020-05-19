@@ -9,6 +9,7 @@ from werkzeug.utils import secure_filename
 @timelineApp.app.route('/addStory/', methods=['GET', 'POST'])
 def add_story_2():
 
+	context = {}
 	#ensure user is signed in before proceeding. else return user to login screen.
     if "username" in flask.session:
         context['username'] = flask.session['username']
@@ -18,8 +19,7 @@ def add_story_2():
 	#store current working directory initially to return to it at end to prevent error
     initialPath = os.getcwd()
 
-    #set up dict to populate later and set up database connection
-    context = {}
+    #set up database connection
     connection = timelineApp.model.get_db()
 
     if (flask.request.method == 'POST'):
