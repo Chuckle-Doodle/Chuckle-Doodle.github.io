@@ -35,9 +35,9 @@
             <a href="/addStory/">Add Story</a>
         </div>
 
-        <form id="editStoryForm" action="/api/stories/edit/" method="post" >
-            <label for="stories">Edit story:</label>
-            <select id="stories" name="stories">
+        <form id="editStoryForm" action="/editStory/" method="post" >
+            <label for="storyToEdit">Edit story:</label>
+            <select id="storyToEdit" name="storyToEdit">
                 {% for story in stories %}
                     <li>
                         <option value="{{ story.storyname }}" name="{{ story.storyid }}">{{ story.storyname }}</option>
@@ -45,6 +45,18 @@
                 {% endfor %}
             </select>
             <input type="submit" value="Go">
+        </form>
+
+        <form id="exportStoryForm" action="///////////////" method="post" >
+            <label for="stories">Export story:</label>
+            <select id="stories" name="stories">
+                {% for story in stories %}
+                    <li>
+                        <option value="{{ story.storyname }}" name="{{ story.storyid }}">{{ story.storyname }}</option>
+                    </li>
+                {% endfor %}
+            </select>
+            <input type="submit" value="Export">
         </form>
 
         <form id="deleteStoryForm" action="/api/stories/delete/" method="post" >
@@ -57,6 +69,18 @@
                 {% endfor %}
             </select>
             <input type="submit" value="Submit">
+        </form>
+
+        <form id="importStoryForm" action="///////////////" method="post" >
+            <label for="stories">Import story:</label>
+            <select id="stories" name="stories">
+                {% for story in stories %}
+                    <li>
+                        <option value="{{ story.storyname }}" name="{{ story.storyid }}">{{ story.storyname }}</option>
+                    </li>
+                {% endfor %}
+            </select>
+            <input type="submit" value="Import">
         </form>
 
         <a href="/logout/">Logout</a>

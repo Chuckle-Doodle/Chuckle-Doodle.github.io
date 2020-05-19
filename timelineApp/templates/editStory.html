@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>timelineApp</title>
+    <link href="/static/css/style.css" rel="stylesheet" type="text/css"/>
+</head>
+
+<body>
+    <script type='text/javascript'>
+    </script>
+
+    <div>
+        <p>Hi, {{username}}!</p>
+        <p>
+            Edit the title, documents, and/or questions of your story.
+        </p>
+
+        <form id="editStoryForm" method="post" enctype="multipart/form-data">
+            <label for="stories">Story title:</label>
+            <input type="text" id="title" name="title"> {{storyAlreadyExists}}<br><br>
+            <label for="document1">Document 1:</label>
+            <input type="file" id="document1" name="document1" accept="application/pdf"><br>
+            <label for="document1">Document 2:</label>
+            <input type="file" id="document2" name="document2" accept="application/pdf"><br>
+            <label for="document1">Document 3:</label>
+            <input type="file" id="document3" name="document3" accept="application/pdf"><br>
+            <label for="document1">Document 4:</label>
+            <input type="file" id="document4" name="document4" accept="application/pdf"><br>
+            <button onclick="addDocument()" >Add document</button>
+            <button>Remove document</button><br><br>
+            <label for="question1">Question:</label>
+            <input type="text" id="question1" name="question1"><br>
+            <label for="question2">Question:</label>
+            <input type="text" id="question2" name="question2"><br>
+            <label for="question3">Question:</label>
+            <input type="text" id="question3" name="question3"><br>
+            <label for="question4">Question:</label>
+            <input type="text" id="question4" name="question4"><br>
+            <button>Add question</button>
+            <button>Remove question</button><br><br>
+            <input type="submit" value="Submit">
+        </form>
+
+        <a href="/"> Back </a>
+
+    </div>
+
+
+</body>
+</html>

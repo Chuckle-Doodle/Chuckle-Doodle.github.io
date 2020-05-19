@@ -9,17 +9,18 @@ from werkzeug.utils import secure_filename
 @timelineApp.app.route('/addStory/', methods=['GET', 'POST'])
 def add_story_2():
 
-    print("initial wd of add story is: ")
-    initialPath = os.getcwd()
-    print(initialPath)
-
-    context = {}
-    connection = timelineApp.model.get_db()
-
-    if "username" in flask.session:
+	#ensure user is signed in before proceeding. else return user to login screen.
+	if "username" in flask.session:
         context['username'] = flask.session['username']
     else:
         return flask.redirect(flask.url_for('show_login'))
+
+	#store current working directory initially to return to it at end to prevent error
+    initialPath = os.getcwd()
+
+    #set up dict to populate later and set up database connection
+    context = {}
+    connection = timelineApp.model.get_db()
 
     if (flask.request.method == 'POST'):
 
@@ -36,7 +37,6 @@ def add_story_2():
 
         #extract question data from form for later
         questions = []
-        print(flask.request.form)
         for key, val in flask.request.form.items():
             if key == 'title':
                 context['name'] = val
@@ -71,8 +71,8 @@ def add_story_2():
         	os.mkdir(context['name'])
 
 
+        #set up file system structure to store documents for this story
         i = 1
-        #os.chdir(os.path.join(UPLOAD_FOLDER, context['name']))
         tempPath = os.path.join(UPLOAD_FOLDER, context['username'])
         tempPath = os.path.join(tempPath, 'stories')
         tempPath = os.path.join(tempPath, context['name'])
@@ -80,6 +80,7 @@ def add_story_2():
         os.mkdir('documents')
         os.mkdir('images')
 
+        #save uploaded documents for this new story into the file system at the appropriate place
         while i <= numberDocuments:
             f = flask.request.files['document' + str(i)]
             filename = secure_filename(f.filename)
@@ -101,11 +102,6 @@ def add_story_2():
                 "INSERT INTO documents(documentid, storyid, username, filename, frontcover) VALUES (?, ?, ?, ?, ?)", (i, storyid, context['username'], filename, '{}.jpg'.format(str(i)))
             )
 
-            #docid = connection.execute(
-            #    "SELECT documentid from documents where storyid = ? and filename = ?", (storyid, filename)
-            #).fetchone()['documentid']
-            #docids.append(docid)
-
             i = i + 1
 
 
@@ -122,5 +118,6 @@ def add_story_2():
             questionIdCounter = 1
             docIdCounter += 1
 
+    #revert current working directory back to what it was initially before returning
     os.chdir(initialPath)
     return flask.render_template("addStory.html", **context)
