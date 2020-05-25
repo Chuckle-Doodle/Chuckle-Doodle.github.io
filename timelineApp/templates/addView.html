@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>timelineApp</title>
+    <link href="/static/css/style.css" rel="stylesheet" type="text/css"/>
+</head>
+
+<body>
+    <script type='text/javascript'>
+    </script>
+    <div>
+        <p>Hi, {{username}}! Add a new view to your story, {{storyname}}, here!</p>
+
+        <form id="addViewForm" method="post" enctype="multipart/form-data">
+            <label for="title">View title:</label>
+            <input type="text" id="title" name="title"> {{storyAlreadyExists}}<br><br>
+
+            Reference View #1:
+            <br><br>
+            <label for="question">Question:</label>
+            <input type="text" id="question" name="question"><br>
+            <label for="type">Type (Either "Timeline" or "Map"):</label>
+            <input type="text" id="type" name="text"><br><br>
+
+            Reference View #2:
+            <br><br>
+            <label for="question">Question:</label>
+            <input type="text" id="question" name="question"><br>
+            <label for="type">Type (Either "Timeline" or "Map"):</label>
+            <input type="text" id="type" name="text"><br><br>
+
+            <label for="clusterBy">Cluster By:</label>
+            <input type="text" id="clusterBy" name="clusterBy"><br><br>
+
+            <label for="active">Active ("True" or "False"):</label>
+            <input type="text" id="active" name="active"><br><br>
+
+            <input type="submit" value="Submit"> <!-- clicking this should: update config.json for this story for this user. then re-render this "add view" screen.-->
+        </form>
+
+        <a href="/{{storyid}}/views/"> Back </a>
+
+    </div>
+
+
+</body>
+</html>

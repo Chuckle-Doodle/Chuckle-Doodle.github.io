@@ -1,0 +1,34 @@
+{
+  "Views": [
+    {
+      "Active": true, 
+      "ClusterBy": "Author", 
+      "Name": "Author View", 
+      "ReferenceViews": [
+        {
+          "Question": "When did the event occur", 
+          "Type": "Timeline"
+        }, 
+        {
+          "Question": "When was this written", 
+          "Type": "Timeline"
+        }
+      ]
+    }, 
+    {
+      "Active": false, 
+      "ClusterBy": "Where did the event occur", 
+      "Name": "Location of Event View", 
+      "ReferenceViews": [
+        {
+          "Question": "When did the event occur", 
+          "Type": "Timeline"
+        }, 
+        {
+          "Question": "Where did the event occur", 
+          "Type": "Map"
+        }
+      ]
+    }
+  ]
+}
