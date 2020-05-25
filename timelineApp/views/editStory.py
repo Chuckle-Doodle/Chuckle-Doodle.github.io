@@ -10,6 +10,7 @@ from werkzeug.utils import secure_filename
 def edit_story():
 
     #check if user is signed in. if not go back to login screen
+    context = {}
     if "username" in flask.session:
         context['username'] = flask.session['username']
     else:
@@ -27,6 +28,7 @@ def edit_story():
 
     #get which story is to be edited.
     originalStoryName = flask.request.form['storyToEdit']
+    context['originalStoryName'] = originalStoryName
 
     if (flask.request.method == 'POST'):
 
@@ -51,77 +53,64 @@ def edit_story():
 
         numberQuestions = len(questions)
 
-        #check if story already exists for this user. if so, error. else, add it to stories table
-        row = connection.execute("SELECT storyname from stories where storyname = ? and username = ? and storyname != ?", (context['storyName'], context['username'], originalStoryName)).fetchone()
-
-        if row:
-            #story already exists for this user! can't add it
-            context['storyAlreadyExists'] = "A story with this name already exists for current user or the story name is blank. Please try again."
-            return flask.render_template("addStory.html", **context)
-        else:
-
-            #update storyname in database
-            connection.execute("UPDATE stories SET storyname = ? WHERE username = ? and storyname = ?", (flask.session['username'], originalStoryName))
-
-            #get storyid from newly inserted story
-        	#storyid = maxStoryId + 1
-
+    
 
         i = 1
-        tempPath = os.path.join(UPLOAD_FOLDER, context['username'])
-        tempPath = os.path.join(tempPath, 'stories')
-        tempPath = os.path.join(tempPath, context['name'])
-        os.chdir(tempPath)
+        context['username'] = "test"
+        #tempPath = os.path.join(UPLOAD_FOLDER, context['username'])
+        #tempPath = os.path.join(tempPath, 'stories')
+        #tempPath = os.path.join(tempPath, context['storyName'])
+        #os.chdir(tempPath)
         #os.mkdir('documents')
         #os.mkdir('images')
 
         #save uploaded documents for this story into proper directory in file system
-        while i <= numberDocuments:
-            f = flask.request.files['document' + str(i)]
-            filename = secure_filename(f.filename)
-            updatedPath = os.path.join(tempPath, 'documents')
-            pathToFile = os.path.join(updatedPath, filename)
-            f.save(pathToFile)
+        #while i <= numberDocuments:
+         #   f = flask.request.files['document' + str(i)]
+          #  filename = secure_filename(f.filename)
+           # updatedPath = os.path.join(tempPath, 'documents')
+            #pathToFile = os.path.join(updatedPath, filename)
+            #f.save(pathToFile)
 
-            #extract frontcover from pdf
-            pages = convert_from_path(pathToFile, 500)
-            for page in pages:
-            	os.chdir(os.path.join(tempPath, 'images'))
-            	page.save('{}.jpg'.format(str(i)), 'JPEG')
-            	break
+            ##extract frontcover from pdf
+            #pages = convert_from_path(pathToFile, 500)
+            #for page in pages:
+            #	os.chdir(os.path.join(tempPath, 'images'))
+            #	page.save('{}.jpg'.format(str(i)), 'JPEG')
+            #	break
 
-            os.chdir(tempPath)
+            #os.chdir(tempPath)
 
             #update record in documents table
             #connection.execute(
             #    "INSERT INTO documents(documentid, storyid, username, filename, frontcover) VALUES (?, ?, ?, ?, ?)", (i, storyid, context['username'], filename, '{}.jpg'.format(str(i)))
             #)
-            connection.execute("UPDATE documents SET //// where ////")
+            #connection.execute("UPDATE documents SET //// where ////")
 
 
-            i = i + 1
+        i = i + 1
 
 
 
         #update questions in database with new questions for this story
-        questionIdCounter = 1
-        docIdCounter = 1
-        while docIdCounter <= numberDocuments:
-            while questionIdCounter <= numberQuestions:
+        #questionIdCounter = 1
+        #docIdCounter = 1
+        #while docIdCounter <= numberDocuments:
+         #   while questionIdCounter <= numberQuestions:
                 #connection.execute(
                 #    "INSERT INTO formquestions(questionid, documentid, storyid, username, questiontext) VALUES (?, ?, ?, ?, ?)", (questionIdCounter, docIdCounter, storyid, context['username'], questions[questionIdCounter - 1])
                 #)
-                connection.execute("UPDATE formquestions SET ")
+          #      connection.execute("UPDATE formquestions SET ")
 
-                questionIdCounter += 1
-            questionIdCounter = 1
-            docIdCounter += 1
+           #     questionIdCounter += 1
+            #questionIdCounter = 1
+            #docIdCounter += 1
 
 
     ############  do below code if get request (also if post request? ...)  #################
 
     #get storyid in database for this particular story, for use in below queries
-    storyId = connection.execute("SELECT storyid FROM stories where username = ? and storyname = ?", (flask.session['username'], context['storyName'])).fetchone()['storyid']
+    storyId = connection.execute("SELECT storyid FROM stories where username = ? and storyname = ?", (flask.session['username'], context['originalStoryName'])).fetchone()['storyid']
 
     #ensure storyId is a number, otherwise there's a problem
     if storyId == None:
@@ -141,6 +130,8 @@ def edit_story():
     questions = connection.execute("SELECT questiontext FROM formquestions where username = ? and storyid = ?", (flask.session['username'], storyId)).fetchall()
     for q in questions:
         context['storyQuestions'].append(q['questiontext'])
+        print(q['questiontext'])
+       
 
 
 
