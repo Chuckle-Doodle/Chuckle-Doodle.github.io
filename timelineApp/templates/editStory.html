@@ -15,9 +15,20 @@
             Edit the title, documents, and/or questions of your story.
         </p>
 
+        <p>
+            Documents currently in story:
+        </p>
+
+        <div>
+            {% for doc in storyDocuments %}
+                <p id="{{doc}}" >{{doc}}<button onclick="deleteDocument()" >Delete document</button>
+            {% endfor %}
+        </div>
+
+
         <form id="editStoryForm" method="post" enctype="multipart/form-data">
-            <label for="stories">Story title:</label>
-            <input type="text" id="title" name="title"> {{storyAlreadyExists}}<br><br>
+            <label for="stories">Story title:</label> 
+            <input type="text" value = "{{originalStoryName}}" id="title" name="title"> {{storyAlreadyExists}}<br><br>
             <label for="document1">Document 1:</label>
             <input type="file" id="document1" name="document1" accept="application/pdf"><br>
             <label for="document1">Document 2:</label>
@@ -28,14 +39,20 @@
             <input type="file" id="document4" name="document4" accept="application/pdf"><br>
             <button onclick="addDocument()" >Add document</button>
             <button>Remove document</button><br><br>
-            <label for="question1">Question:</label>
-            <input type="text" id="question1" name="question1"><br>
-            <label for="question2">Question:</label>
-            <input type="text" id="question2" name="question2"><br>
-            <label for="question3">Question:</label>
-            <input type="text" id="question3" name="question3"><br>
-            <label for="question4">Question:</label>
-            <input type="text" id="question4" name="question4"><br>
+
+
+
+
+            <div>
+                {% for q in storyQuestions %}
+
+                <label for="question1">Question:</label>
+                <input type="text" id="question1" name="question1" value = "{{q}}"><br>
+                
+                {% endfor %}
+                <br>
+            </div>
+
             <button>Add question</button>
             <button>Remove question</button><br><br>
             <input type="submit" value="Submit">
