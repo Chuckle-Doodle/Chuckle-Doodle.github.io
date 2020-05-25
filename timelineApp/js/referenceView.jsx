@@ -1,5 +1,6 @@
 import React from 'react';
 import Timeline from './timeline.jsx';
+import Map from './map.jsx'
 import fetch from 'isomorphic-fetch';
 //import Map from './map.js';
 import '../static/css/style.css';
@@ -40,13 +41,13 @@ export default class ReferenceView extends React.Component {
     const refViewType = this.props.type;
 
     return (
-      <div >
+      <div>
         <div>
 
           {refViewType == "Timeline" ? (
               <Timeline docImages={this.props.docImages} viewName={this.props.viewName} clusterBy={this.props.clusterBy} dataUrl={this.props.dataUrl} data={this.props.data} documents={this.props.documents} question={this.props.question} isUpper={this.props.isUpper} storyid={this.props.storyid} />
             ) : (
-              <Map viewName={this.props.viewName} clusterBy={this.props.clusterBy} dataUrl={this.props.dataUrl} data={this.props.data} documents={this.props.documents} question={this.props.question} isUpper={this.props.isUpper} />
+              <Map docImages={this.props.docImages} viewName={this.props.viewName} clusterBy={this.props.clusterBy} dataUrl={this.props.dataUrl} data={this.props.data} documents={this.props.documents} question={this.props.question} isUpper={this.props.isUpper} />
             )
           }
         </div>
