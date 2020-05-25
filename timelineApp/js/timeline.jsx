@@ -44,7 +44,7 @@ export default class Timeline extends React.Component {
           <div id="timeline2" />
 
           <div id="documentsDiv">
-            <Documents data={this.props.data} docImages={this.props.docImages} clusterBy={this.props.clusterBy} documents={this.props.documents} dotLocations={this.state.dotLocations} dotColors={this.state.dotColors} />
+            <Documents data={this.props.data} docImages={this.props.docImages} clusterBy={this.props.clusterBy} documents={this.props.documents} dotLocations={this.state.dotLocations} dotColors={this.state.dotColors} storyid={this.props.storyid} />
           </div>
 
         </div>
