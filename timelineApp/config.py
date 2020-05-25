@@ -17,8 +17,9 @@ SESSION_COOKIE_NAME = 'login'
 # File Upload to timelineApp/static/var/
 UPLOAD_FOLDER = os.path.join(
     os.path.dirname(os.path.dirname(os.path.realpath(__file__))),
-    APPLICATION_NAME, 'static', 'var', 'users'
+    APPLICATION_NAME, 'static', 'var'
 )
+
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif', 'pdf'])
 MAX_CONTENT_LENGTH = 16 * 1024 * 1024
 

@@ -65,7 +65,8 @@ def add_story_2():
         	storyid = maxStoryId + 1
 
             #create folder in upload folder to store docs for this story
-        	tempPath = os.path.join(UPLOAD_FOLDER, context['username'])
+        	tempPath = os.path.join(UPLOAD_FOLDER, 'users')
+        	tempPath = os.path.join(tempPath, context['username'])
        		tempPath = os.path.join(tempPath, 'stories')
         	os.chdir(tempPath)
         	os.mkdir(context['name'])
@@ -73,7 +74,8 @@ def add_story_2():
 
         #set up file system structure to store documents for this story
         i = 1
-        tempPath = os.path.join(UPLOAD_FOLDER, context['username'])
+        tempPath = os.path.join(UPLOAD_FOLDER, 'users')
+        tempPath = os.path.join(tempPath, context['username'])
         tempPath = os.path.join(tempPath, 'stories')
         tempPath = os.path.join(tempPath, context['name'])
         os.chdir(tempPath)

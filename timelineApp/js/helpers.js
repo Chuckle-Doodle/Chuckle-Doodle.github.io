@@ -4,7 +4,7 @@ import Timeline from './timelinePlugin.js';
 
 var colors = ["1E90FF", "DAA520", "DC143C", "006400", "FF1493", "2F4F4F", "0000FF", "00BFFF"];
 
-var url = "http://ec2-3-86-184-180.compute-1.amazonaws.com/"
+//var url = "http://ec2-3-86-184-180.compute-1.amazonaws.com/"
 
 const drawTimeline = (props) => {
 	//props are:
@@ -82,9 +82,7 @@ var chart = new Timeline('#timeline2', {
 chart.on('labelClick', function(d,i){
   // do whatever you wish
   // d is the data associated with the clicked label, i is index
-  //window.location.href = "http://localhost:8000/3/#" + (i + 1)
-  window.location.href = url + props.storyid + "/#" + (i + 1);
-  //console.log(d);
+  window.location.href = window.location.origin + "/" + props.storyid + "/#" + (i + 1);
 });
 
 /*

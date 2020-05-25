@@ -79,7 +79,7 @@ export default class Document extends React.Component {
       //console.log(this.state.xPos, this.state.yPos);
       return (
         <div id={"Document" + this.props.documentid}>
-          <a href={"/3#" + this.props.documentid}>
+          <a href={"/" + this.props.storyid + "#" + this.props.documentid}>
             <img id={this.props.imageName} src={this.props.image} style={{marginRight: margin + 'px'}} alt="Picture of Document" height="200" width="150" ref={this.setImageRef} ></img>
           </a>
           <svg id={"svgLine" + this.props.documentid} width="4000" height="4000">

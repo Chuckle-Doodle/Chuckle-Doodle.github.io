@@ -30,13 +30,14 @@ def get_current_views(storyid):
     temp["ReferenceViews"].append(view2)
 
     temp["ClusterBy"] = "Author"
+    temp["Active"] = True
 
     context['Views'].append(temp)
 
 
     temp = {}
 
-    temp["Name"] = "Theory View"
+    temp["Name"] = "Location of Event View"
     temp["ReferenceViews"] = []
     view = {}
     view["Type"] = "Timeline"
@@ -44,11 +45,12 @@ def get_current_views(storyid):
     temp["ReferenceViews"].append(view)
 
     view2 = {}
-    view2["Type"] = "Timeline"
-    view2["Question"] = "When was this written"
+    view2["Type"] = "Map"
+    view2["Question"] = "Where did the event occur"
     temp["ReferenceViews"].append(view2)
 
-    temp["ClusterBy"] = "Theory"
+    temp["ClusterBy"] = "Where did the event occur"
+    temp["Active"] = False
 
     context['Views'].append(temp)
 

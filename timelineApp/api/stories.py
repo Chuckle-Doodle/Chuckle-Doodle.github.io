@@ -1,8 +1,11 @@
+import timelineApp
+from timelineApp.config import UPLOAD_FOLDER
 import flask
 from flask import request
-import timelineApp
 import os
-import shutil
+from distutils.dir_util import copy_tree
+import json
+import datetime
 
 
 @timelineApp.app.route('/api/stories/', methods=["GET"])
@@ -260,3 +263,135 @@ def get_questions_and_answers_for_doc_in_story(storyid, documentid):
 
     return flask.jsonify(**context)
 
+
+#TODO FINISH EXPORT FUNCTION THEN DO IMPORT !!!!!!
+@timelineApp.app.route('/api/stories/export/', methods=["POST"])
+def export_story():
+    """Export all data for this particular story as JSON file."""
+    if "username" not in flask.session:
+        return "No user signed in. Unable to export story." 
+    username = flask.session['username']
+
+    storyname = flask.request.form['stories']
+    if storyname == None:
+        return "ERROR: Select a valid story to export."
+
+    connection = timelineApp.model.get_db()
+    context = {}
+    context['Title'] = storyname
+    context['Questions'] = []
+    context['Documents'] = {}
+    context['Documents']['Files'] = []
+    context['Documents']['Images'] = []
+    context['ExportedBy'] = username
+    context['ExportedTime'] = str(datetime.datetime.now())
+
+    #get storyid for this story
+    storyid = connection.execute("SELECT storyid FROM stories WHERE username = ? and storyname = ?", (flask.session['username'], storyname)).fetchone()['storyid']
+
+    #we have username and storyname, so query database to get all data for this story to then export it as json
+
+    #need full paths to both documents and images
+    fullPathToDocs = os.path.join(UPLOAD_FOLDER, 'users', username, 'stories', storyname, 'documents')
+    fullPathToImages = os.path.join(UPLOAD_FOLDER, 'users', username, 'stories', storyname, 'images')
+
+    docs = connection.execute("SELECT * FROM documents WHERE username = ? and storyid = ?", (flask.session['username'], storyid)).fetchall()
+    for doc in docs:
+        docPath = os.path.join(fullPathToDocs, doc['filename'])
+        imagePath = os.path.join(fullPathToImages, doc['frontcover'])
+        context['Documents']['Files'].append(docPath)
+        context['Documents']['Images'].append(imagePath)
+        #only need this documentid variable to store docid of last document in this list
+        documentid = doc['documentid']
+
+    questions = connection.execute("SELECT questiontext FROM formquestions WHERE username = ? and storyid = ? and documentid = ?", (flask.session['username'], storyid, documentid)).fetchall()
+    for q in questions:
+        context['Questions'].append(q['questiontext'])
+
+
+    #save context dictionary to disk as json file (with friendly print style) to then be exported
+    ##save to UPLOAD_FOLDER/exportedStories/ directory
+
+    #store current working directory to return to this at end of function
+    initialPath = os.getcwd()
+
+    tempPath = os.path.join(UPLOAD_FOLDER, 'exportedStories')
+    os.chdir(tempPath)   
+
+    fileName = storyname + '.json'
+    with open(fileName, 'w') as file:
+        json_string = json.dumps(context, default=lambda o: o.__dict__, sort_keys=True, indent=2)
+        file.write(json_string)
+
+
+    os.chdir(initialPath)
+    # after exporting story, return back to the welcome screen
+    return flask.redirect(flask.url_for('show_index'))
+
+
+#TODO FINISH THIS FUNCTION !!!!!! 5/20
+
+@timelineApp.app.route('/api/stories/import/', methods=["POST"])
+def import_story():
+
+    if "username" not in flask.session:
+        return "No user signed in. Unable to import story."
+
+    #get storyname to be imported
+    storyname = flask.request.form['importableStories']
+    if storyname == None:
+        return "ERROR: Select a valid story to import."
+
+    initialPath = os.getcwd()
+    #go to UPLOAD_FOLDER/exportedStories/<storyname> to retrieve data for the story we're importing
+    filePath = os.path.join(UPLOAD_FOLDER, 'exportedStories')
+    os.chdir(filePath)
+    fileName = storyname + '.json'
+    with open(fileName) as json_file:
+        data = json.load(json_file)
+
+    # storyTitle = data['Title']
+    storyQuestions = data['Questions']
+    storyFiles = data['Documents']['Files']
+    storyImages = data['Documents']['Images']
+    numberDocuments = len(storyFiles)
+
+    connection = timelineApp.model.get_db()
+
+    #get max storyid in database currently for this user. make new story one greater than this.
+    storyid = connection.execute("SELECT MAX(storyid) from stories WHERE username = ?", (flask.session['username'],)).fetchone()['MAX(storyid)']
+    if storyid == None:
+        storyid = 1
+    else:
+        storyid = storyid + 1
+
+    #populate database with this new story for this user
+    #title
+    connection.execute("INSERT INTO stories(storyid, username, storyname) VALUES (?, ?, ?)", (storyid, flask.session['username'], storyname))
+
+    #documents
+    index = 1
+    for file, image in zip(storyFiles, storyImages):
+        filename = file.rsplit("/", 1)[-1]
+        frontcover = image.rsplit("/", 1)[-1]
+        connection.execute("INSERT INTO documents(documentid, storyid, username, filename, frontcover) VALUES (?, ?, ?, ?, ?)", (index, storyid, flask.session['username'], filename, frontcover))
+        index = index + 1
+
+    #questions
+    #did i handle questionid correctly here??? 
+    for docid in range(1, numberDocuments + 1):
+        for idx, question in enumerate(storyQuestions):
+            connection.execute("INSERT INTO formquestions(questionid, documentid, storyid, username, questiontext) VALUES(?, ?, ?, ?, ?)", (idx + 1, docid, storyid, flask.session['username'], question))
+
+
+    #add story to the file system under this user's directory
+    ## example: copy entire "Black_Death" directory from user: test to current user
+    #TODO: NEED TO EDIT PATH OF DIRECTORY WHERE FILE IS BEING COPIED TO CAPTURE STORY NAME! RIGHT NOW THERES AN ISSUE
+    sourceDirectory = storyFiles[0].rsplit("/", 2)[0]
+    destinationDirectory = os.path.join(UPLOAD_FOLDER, 'users', flask.session['username'], 'stories', storyname)
+    os.mkdir(destinationDirectory)
+    copy_tree(sourceDirectory, destinationDirectory)
+
+    os.chdir(initialPath)
+    # after importing story, return back to the welcome screen with this story as an available option to study
+    return flask.redirect(flask.url_for('show_index'))

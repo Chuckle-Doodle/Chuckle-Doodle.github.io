@@ -34,7 +34,7 @@ export default class Documents extends React.Component {
 
         <div id="DocumentArray">
           {this.state.imageOrder.documentOrder.map((imageData, index) =>
-            <Document image={imageData[0]} documentid={imageData[1]} imageName={"image" + imageData[1]} endOfCluster={this.state.imageOrder.spaceOrder.indexOf(imageData[1]) > -1 ? true : false} dotLocationTop={this.props.dotLocations[imageData[1] - 1]} dotLocationBottom={this.props.dotLocations[imageData[1] - 1 + 4]} lineColor={this.props.dotColors[imageData[1] - 1]} />
+            <Document image={imageData[0]} documentid={imageData[1]} imageName={"image" + imageData[1]} endOfCluster={this.state.imageOrder.spaceOrder.indexOf(imageData[1]) > -1 ? true : false} dotLocationTop={this.props.dotLocations[imageData[1] - 1]} dotLocationBottom={this.props.dotLocations[imageData[1] - 1 + 4]} lineColor={this.props.dotColors[imageData[1] - 1]} storyid={this.props.storyid} />
           )}
         </div>
 
