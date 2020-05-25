@@ -52,10 +52,6 @@ def show_pdf(storyid):
                     "(?, ?, ?, ?, ?)", (questionIDs[i - 1]['questionid'], docid, storyid, flask.session['username'], flask.request.form[str(i)])
                 )
 
-
-        # CAN I KEEP THIS ????
-        #connection.execute("COMMIT;");
-
     context['storyid'] = storyid   #this shouldnt be necessary once I figure out the relative path thing
     context['documents'] = []
     #connection = timelineApp.model.get_db()
@@ -75,12 +71,7 @@ def show_pdf(storyid):
         docID = row['documentid']
         document['filename'] = row['filename']
 
-        #cursor2 = connection.execute(
-         #   "SELECT questiontext, answertext from formdata where documentid = ?", (docID,)
-        #)
-        #for row2 in cursor2.fetchall():
-            #document['questions'][row2['questiontext']] = row2['answertext']
-         #   document['questions'].append([row2['questiontext'], row2['answertext']])
+
         cursor2 = connection.execute("SELECT questionid, questiontext from formquestions where documentid = ? and storyid = ? and username = ?", (docID, storyid, flask.session['username']))
         questions = cursor2.fetchall()
 
@@ -97,18 +88,6 @@ def show_pdf(storyid):
                 document['questions'].append([question['questiontext'], ""])
 
         context['documents'].append(document)
-
-        #~~~~~~~~~#
-        #cursor2 = connection.execute("SELECT questionid, answertext from formanswers where username = ?", (flask.session['username'],))
-        #questionAnswers = cursor2.fetchall()
-        #for questionAnswer in questionAnswers:
-        #    questionData = connection.execute(
-        #        "SELECT questiontext from formquestions where questionid = ?", (questionAnswer['questionid'],)
-        #    ).fetchone()
-
-
-
-
 
     #return flask.jsonify(**context), 201
     return flask.render_template("pdfView.html", **context)

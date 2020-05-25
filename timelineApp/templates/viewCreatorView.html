@@ -7,15 +7,34 @@
 
 <body>
     <div>
-        <p>By default there are views associated with your story of: {{ storyname }}.</p>
-        <p>View 1: author view: /// t1 - written /// t2 - event /// cluster: author</p>
-        <p>View 2: regional view: /// t1 - written /// m1 - where written /// cluster: north south</p>
+        <p>{{username}}, by default there are views associated with your story of: {{ storyname }}.</p>
         <p>Here you can edit, create, or delete views to customize behavior to your needs.</p>
-          <form method = "post" action="/api/stories/3/">
-            <label for="question">Question:</label><br>
-            <input type="text" id="question" name="text" value="When did the Black death stop?"><br>
-            <input type="submit" value="Submit">
-          </form> 
+
+        <h2>Current Views</h2>
+
+        {% for view in views.Views %}
+            <div>
+                <h3>View {{loop.index}}: <button>Edit view</button></h3>
+                <p>Name: {{view.Name}}</p>
+                <p>
+                    Reference Views:
+                    <ol>
+                        {% for refView in view.ReferenceViews %}
+                            <li>
+                                <p>Question: {{refView.Question}}</p>
+                                <p>Type: {{refView.Type}} </p>
+                            </li>
+                        {% endfor %}
+                    </ol>
+                </p>
+                <p>Cluster By: {{view.ClusterBy}}</p>
+                <p>Active: {{view.Active}}</p>
+            </div>
+        {% endfor %}
+
+        <button>Add view</button>
+        <button>Delete view</button>
+
     </div>
 
     
