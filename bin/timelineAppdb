@@ -27,6 +27,9 @@ case $1 in
     echo "+ mkdir -p timelineApp/static/var/users"
     mkdir -p timelineApp/static/var/users
 
+    echo "+ mkdir -p timelineApp/static/var/exportedStories"
+    mkdir -p timelineApp/static/var/exportedStories
+
     echo "+ sqlite3 timelineApp/static/var/timelineApp.sqlite3 < sql/schema.sql"
     sqlite3 timelineApp/static/var/timelineApp.sqlite3 < sql/schema.sql
 
@@ -43,11 +46,14 @@ case $1 in
     ;;
 
   "reset")
-    echo "+ rm -rf timelineApp/static/var/timelineApp.sqlite3 timelineApp/static/var/users"
-    rm -rf timelineApp/static/var/timelineApp.sqlite3 timelineApp/static/var/users
+    echo "+ rm -rf timelineApp/static/var/timelineApp.sqlite3 timelineApp/static/var/users timelineApp/static/var/exportedStories"
+    rm -rf timelineApp/static/var/timelineApp.sqlite3 timelineApp/static/var/users timelineApp/static/var/exportedStories
 
     echo "+ mkdir -p timelineApp/static/var/users"
     mkdir -p timelineApp/static/var/users
+
+    echo "+ mkdir -p timelineApp/static/var/exportedStories"
+    mkdir -p timelineApp/static/var/exportedStories
 
     echo "+ sqlite3 timelineApp/static/var/timelineApp.sqlite3 < sql/schema.sql"
     sqlite3 timelineApp/static/var/timelineApp.sqlite3 < sql/schema.sql
@@ -60,7 +66,7 @@ case $1 in
     ;;
 
   "dump")
-    # Print command
+    # Print command   ### THIS IS CURRENTLY NOT USED ANYWHERE  ###
     
     sqlite3 -batch -line timelineApp/static/var/timelineApp.sqlite3 'SELECT * FROM comments'
     sqlite3 -batch -line timelineApp/static/var/timelineApp.sqlite3 'SELECT * FROM following'

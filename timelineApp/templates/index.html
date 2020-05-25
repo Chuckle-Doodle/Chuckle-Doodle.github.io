@@ -17,7 +17,7 @@
     </div> -->
     <div>
         <p>Welcome, {{user}}, to our tool that allows students to think like historians!</p>
-        <p>Please click on a topic to continue.</p>
+        <p>Please click on a story to continue.</p>
     </div>
     <ul>
         {% for story in stories %}
@@ -47,7 +47,7 @@
             <input type="submit" value="Go">
         </form>
 
-        <form id="exportStoryForm" action="///////////////" method="post" >
+        <form id="exportStoryForm" action="/api/stories/export/" method="post" >
             <label for="stories">Export story:</label>
             <select id="stories" name="stories">
                 {% for story in stories %}
@@ -71,12 +71,12 @@
             <input type="submit" value="Submit">
         </form>
 
-        <form id="importStoryForm" action="///////////////" method="post" >
-            <label for="stories">Import story:</label>
-            <select id="stories" name="stories">
-                {% for story in stories %}
+        <form id="importStoryForm" action="/api/stories/import/" method="post" >
+            <label for="importableStories">Import story:</label>
+            <select id="importableStories" name="importableStories">
+                {% for importableStory in importableStories %}
                     <li>
-                        <option value="{{ story.storyname }}" name="{{ story.storyid }}">{{ story.storyname }}</option>
+                        <option value="{{ importableStory }}" name="{{ importableStory }}">{{ importableStory }}</option>
                     </li>
                 {% endfor %}
             </select>

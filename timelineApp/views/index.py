@@ -5,12 +5,14 @@ URLs include:
 /
 """
 import flask
+import os
 import timelineApp
+from timelineApp.config import UPLOAD_FOLDER
 
 
 @timelineApp.app.route('/welcome/', methods=['GET', 'POST'])
 def show_index():
-    """Display / route."""
+    #initialPath = os.getcwd()
     context = {}
     connection = timelineApp.model.get_db()
 
@@ -39,11 +41,30 @@ def show_index():
 
     context['stories'] = stories   #key = stories string. val = list of stories
 
+    context['importableStories'] = []
+    #gather list of stories that are available to be imported (aka all stories that have been exported by some user)
+    #aka all stories in the exportedStories directory in the file system
+    tempPath = os.path.join(UPLOAD_FOLDER, 'exportedStories')
+    directory = os.fsencode(tempPath)
+
+    storyAlreadyImported = False
+
+    for file in os.listdir(directory):
+        story = os.fsdecode(file).rsplit(".", 1)[0]
+        #ensure this story hasn't already been imported by this user before importing it
+        for s in context['stories']:
+            if s['storyname'] == story:
+                storyAlreadyImported = True
+        if storyAlreadyImported == False:
+            context['importableStories'].append(story)
+
     #option to delete account if this isn't the default user
     if flask.session['username'] != "test":
         context['ableToDeleteUser'] = True
     else:
         context['ableToDeleteUser'] = False
 
+    #os.chdir(initialPath)
     #return "Return value of show_index function in index.py in views.  This is main page of app"
+
     return flask.render_template("index.html", **context)
