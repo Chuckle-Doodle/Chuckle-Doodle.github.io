@@ -1,6 +1,7 @@
 # Timelines and Maps for History Analysis
 
-First are the steps for running this application in development mode. For production, don't do step 10 and start the server a different way. Please note we are using a Python virtual environment in this guide. BEFORE STARTING:
+# How to run application in development mode.
+For production, don't do step 10 and start the server a different way. Please note we are using a Python virtual environment in this guide. BEFORE STARTING:
 
   - Navigate to where you want to clone this repository.
   - Clone this repository then cd into it.
