@@ -75,7 +75,6 @@ const drawTimeline = (props) => {
                 'font-size': "smaller"
             }
         });
-
     }
 
     //make interactive labels:
