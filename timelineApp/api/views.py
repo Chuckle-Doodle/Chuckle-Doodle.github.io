@@ -25,7 +25,7 @@ def get_current_views(storyid):
     temp["ReferenceViews"].append(view)
 
     view2 = {}
-    view2["Type"] = "Timeline"
+    view2["Type"] = "Map"
     view2["Question"] = "When was this written"
     temp["ReferenceViews"].append(view2)
 
