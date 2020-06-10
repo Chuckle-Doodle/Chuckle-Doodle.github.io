@@ -40,7 +40,7 @@ export default class DataVisualization extends React.Component {
 		if (!this.state.data) {
         	return <div />
         }
-        console.log(this.state.data);
+        // console.log(this.state.data);
 
 		var documentsArray = [];
 		var docImages = [];

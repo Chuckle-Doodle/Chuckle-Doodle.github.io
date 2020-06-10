@@ -1,4 +1,173 @@
-// import * as ol from 'ol';
+class DocumentData {
+    constructor() {
+        this.location = "someLocation";
+        this.coordinates = []; // [longitude, latitude]
+        this.color = "someColor";
+        this.imgSrc = "";
+        this.docStyle;
+    }
+}
+
+function preprocessData(props, docData, colors) {
+    props.documents.forEach(doc => docData.push(new DocumentData()));
+
+    // gets the index of the question that has the word "where" in it (assuming that we want to use this question for location purposes)
+    var locationIdx = props.documents[0].Questions.findIndex(function (question) {
+        return question.toLowerCase().includes("where");
+    });
+    
+    // gets all the locations
+    props.documents.forEach(function (doc, idx) {
+        docData[idx].location = doc.Answers[locationIdx];
+        docData[idx].imgSrc = doc["Frontcover"];
+        docData[idx].color = colors[idx];
+    });
+    docData.forEach(doc =>
+        // geocoder feature
+        $.getJSON('https://nominatim.openstreetmap.org/search?format=json&q=' + doc.location, function (data) {
+            // console.log(data);
+            // var FoundExtent = data[0].boundingbox;
+            // var placemark_lon = data[0].lon;
+            // var placemark_lat = data[0].lat;
+            doc.coordinates = [parseFloat(data[0].lon), parseFloat(data[0].lat)];
+        }));
+}
+
+function displayMap(props, docData, colors) {
+    var coordinate = [-101.1017, 40.7438];
+    var vectorSource = new ol.source.Vector({});
+
+    docData.forEach(function (doc) {
+        var offset = 2.6; // this is to elevate the document to make space for the markers
+
+        // display image
+        var img = new ol.style.Style({
+            image: new ol.style.Icon({
+                anchor: [12, 37],
+                anchorXUnits: 'pixels',
+                anchorYUnits: 'pixels',
+                opacity: 1,
+                src: doc.imgSrc,
+                img: undefined,
+                imgSize: undefined,
+                scale: 0.1
+            })
+        });
+
+        var tempFeature = new ol.Feature(new ol.geom.Point(ol.proj.fromLonLat([doc.coordinates[0], doc.coordinates[1] + offset])));
+        tempFeature.set("style", img);
+        vectorSource.addFeature(tempFeature);
+    });
+
+    // setInterval(function () {
+    //     vectorSource.getFeatures().forEach(feature => feature.changed());
+    // }, 2000);
+
+    var activeColor;
+    var currRes = -1;
+    var docIdx = 0;
+    var map = new ol.Map({
+        layers: [
+            new ol.layer.Tile({
+                source: new ol.source.OSM({
+                    key: 'myKey',
+                    crossOrigin: ''
+                })
+            }),
+            new ol.layer.Vector({
+                source: vectorSource,
+                style: function (feature, resolution) {
+                    if (feature.get("initStyle") == undefined && feature.get("style").getImage().getImage().width != 0) {
+                        currRes = resolution;
+                        activeColor = docData[docIdx].color;
+
+                        var initStyle = feature.get("initStyle");
+                        if (!initStyle) {
+                            initStyle = feature.get("style");
+                            feature.set("initStyle", initStyle);
+                        }
+                        var image = initStyle.getImage().getImage();
+                        var canvas = document.createElement("canvas");
+                        var ctx = canvas.getContext("2d");
+                        var dArr = [-1, -1, 0, -1, 1, -1, -1, 0, 1, 0, -1, 1, 0, 1, 1, 1], // offset array
+                            s = 8, // thickness scale
+                            i = 0, // iterator
+                            x = s, // final x position
+                            y = s; // final y position
+
+                        //set new canvas dimentions adjusted for border
+                        canvas.width = image.width * 0.1 + s + s;
+                        canvas.height = image.height * 0.1 + s + s;
+
+                        // draw images at offsets from the array scaled by s
+                        for (; i < dArr.length; i += 2)
+                            ctx.drawImage(image, x + dArr[i] * s, y + dArr[i + 1] * s);
+
+                        // fill with color
+                        ctx.globalCompositeOperation = "source-in";
+                        ctx.fillStyle = activeColor;
+                        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+                        // draw original image in normal mode
+                        ctx.globalCompositeOperation = "source-over";
+                        ctx.drawImage(image, 0, 0, image.width, image.height, x, y, canvas.width - 2 * x, canvas.height - 2 * y);
+
+                        //create new openlayers icon style from canvas
+                        var newStyle = new ol.style.Style({
+                            image: new ol.style.Icon(
+                            /** @type {olx.style.IconOptions} */({
+                                    crossOrigin: "anonymous",
+                                    src: undefined,
+                                    img: canvas,
+                                    imgSize: canvas ? [canvas.width, canvas.height] : undefined,
+                                    scale: 2500 / resolution
+                                }))
+                        });
+
+                        feature.set("style", newStyle);
+                        docData[docIdx].docStyle = newStyle;
+                        ++docIdx;
+                    }
+                    else if (currRes != -1 && currRes != resolution) {
+                        currRes = resolution;
+
+                        var scaleFactor = 2500 / resolution;
+                        if (scaleFactor < 0.27) scaleFactor = 0;
+                        docData.forEach(function (doc) {
+                            doc.docStyle.getImage().setScale(scaleFactor);
+                        })
+                        // console.log(ol.proj.toLonLat( map.getView().getCenter() ));
+                    }
+                    return feature.get("style");
+                }
+            })
+        ],
+        target: document.getElementById("map"),
+        view: new ol.View({
+            center: ol.proj.fromLonLat(coordinate),
+            zoom: 5,
+            maxZoom: 6.75
+        })
+    });
+
+    docData.forEach(function (doc) {
+        var colorSrc = "/static/var/markers/" + doc.color + ".png";
+
+        var iconStyle = new ol.style.Style({
+            image: new ol.style.Icon({
+                anchor: [12, 37],
+                anchorXUnits: 'pixels',
+                anchorYUnits: 'pixels',
+                opacity: 0.8,
+                src: colorSrc
+            })
+        });
+
+        var marker = new ol.Feature(new ol.geom.Point(ol.proj.fromLonLat([doc.coordinates[0], doc.coordinates[1]])));
+        marker.setStyle(iconStyle);
+        vectorSource.addFeature(marker);
+    });
+}
 
 const drawMap = (props) => {
     //props are:
@@ -17,209 +186,15 @@ const drawMap = (props) => {
     // console.log(props.question); // When was this written
     // console.log(props.isUpper); // false
 
-    var mapId = 'map';
+    var colors = ["lightskyblue", "yellow", "red", "green"];
 
-    function createMap() {
-        var coordinate = [-117.1610838, 32.715738];
-        var vectorSource = new ol.source.Vector({});
-        var vectorLayer = new ol.layer.Vector({
-            source: vectorSource
-        });
+    // The main source of data
+    var docData = [];
+    preprocessData(props, docData, colors);
 
-        // display image
-        var img = new ol.style.Style({
-            image: new ol.style.Icon({
-                anchor: [12, 37],
-                anchorXUnits: 'pixels', //'fraction'
-                anchorYUnits: 'pixels',
-                opacity: 1,
-                src: props.documents[0]["Frontcover"],
-                img: undefined,
-                imgSize: undefined,
-                scale: 0.1
-            })
-        });
-
-        var iconFeature = new ol.Feature(new ol.geom.Point(ol.proj.fromLonLat([coordinate[0], coordinate[1] + 0.04])));
-        iconFeature.set("style", img);
-
-        setInterval(function() {
-            index = (index + 1) % colors.length;
-            activeColor = colors[index];
-            iconFeature.changed();
-          }, 5000);
-
-        var colors = ["lightskyblue"];
-        var activeColor;
-        var index = 0;
-        var map = new ol.Map({
-            layers: [
-                new ol.layer.Tile({
-                    source: new ol.source.OSM({
-                        key: 'myKey',
-                        crossOrigin: ''
-                    })
-                }),
-                new ol.layer.Vector({
-                    source: new ol.source.Vector({ features: [iconFeature] }),
-                    style: function (feature) {
-                        if (feature.get("color") !== activeColor) {
-                            var initStyle = feature.get("initStyle");
-                            if (!initStyle) {
-                                initStyle = feature.get("style");
-                                feature.set("initStyle", initStyle);
-                            }
-                            var image = initStyle.getImage().getImage();
-
-                            var canvas = document.createElement("canvas");
-                            var ctx = canvas.getContext("2d");
-                            var dArr = [-1, -1, 0, -1, 1, -1, -1, 0, 1, 0, -1, 1, 0, 1, 1, 1], // offset array
-                                s = 8, // thickness scale
-                                i = 0, // iterator
-                                x = s, // final x position
-                                y = s; // final y position
-
-                            //set new canvas dimentions adjusted for border
-                            canvas.width = image.width * 0.1 + s + s;
-                            canvas.height = image.height * 0.1 + s + s;
-
-                            // draw images at offsets from the array scaled by s
-                            for (; i < dArr.length; i += 2)
-                                ctx.drawImage(image, x + dArr[i] * s, y + dArr[i + 1] * s);
-
-                            // fill with color
-                            ctx.globalCompositeOperation = "source-in";
-                            ctx.fillStyle = activeColor;
-                            ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-                            // draw original image in normal mode
-                            ctx.globalCompositeOperation = "source-over";
-                            // ctx.drawImage(image, x, y, image.width, image.height);
-                            ctx.drawImage(image, 0, 0, image.width, image.height, x, y, canvas.width - 2*x, canvas.height - 2*y);
-
-                            //create new openlayers icon style from canvas
-                            var newStyle = new ol.style.Style({
-                                image: new ol.style.Icon(
-              /** @type {olx.style.IconOptions} */({
-                                        crossOrigin: "anonymous",
-                                        src: undefined,
-                                        img: canvas,
-                                        imgSize: canvas ? [canvas.width, canvas.height] : undefined
-                                    })
-                                )
-                            });
-
-                            feature.set("style", newStyle);
-                            feature.set("color", activeColor);
-                        }
-                        return feature.get("style");
-                    }
-                }),
-                vectorLayer
-            ],
-            target: document.getElementById("map"),
-            view: new ol.View({
-                center: ol.proj.fromLonLat(coordinate),
-                zoom: 12,
-            })
-        });
-
-
-        // var view = new ol.View({
-        //     center: ol.proj.fromLonLat(coordinate),
-        //     zoom: 12,
-        //     maxZoom: 19,
-        //     minZoom: 5
-        // });
-        // var map = new ol.Map({
-        //     layers: [new ol.layer.Tile({
-        //         source: new ol.source.OSM({
-        //             key: 'myKey',
-        //             crossOrigin: ''
-        //         })
-        //     }), vectorLayer,],
-        //     target: document.getElementById(mapId),
-        //     controls: ol.control.defaults(),
-        //     view: view
-        // });
-
-
-        // // adds line
-
-        // var points = [[-117.1610838, 32.715738], [-95.04286, 46.9235]];
-
-        // for (var i = 0; i < points.length; i++) {
-        //     points[i] = ol.proj.transform(points[i], 'EPSG:4326', 'EPSG:3857');
-        // }
-
-        // var featureLine = new ol.Feature({
-        //     geometry: new ol.geom.LineString(points)
-        // });
-
-        // var vectorLine = new ol.source.Vector({});
-        // vectorLine.addFeature(featureLine);
-
-        // var vectorLineLayer = new ol.layer.Vector({
-        //     source: vectorLine,
-        //     style: new ol.style.Style({
-        //         fill: new ol.style.Fill({ color: 'red', weight: 4 }),
-        //         stroke: new ol.style.Stroke({ color: 'red', width: 2 })
-        //     })
-        // });
-
-        // map.addLayer(vectorLineLayer);
-
-        // create custom marker image with custom text in bottom
-        var iconStyle = new ol.style.Style({
-            image: new ol.style.Icon({
-                anchor: [12, 37],
-                anchorXUnits: 'pixels', //'fraction'
-                anchorYUnits: 'pixels',
-                opacity: 0.8,
-                src: '/static/var/markers/blue.png'
-            })
-        });
-
-        var coordinate = [-117.1610838, 32.715738];
-        var marker = new ol.Feature(
-            new ol.geom.Point(ol.proj.fromLonLat(coordinate))
-        );
-        marker.setStyle(iconStyle);
-        vectorSource.addFeature(marker);
-
-        // // display image
-        // var img = new ol.style.Style({
-        //     image: new ol.style.Icon({
-        //         anchor: [12, 37],
-        //         anchorXUnits: 'pixels', //'fraction'
-        //         anchorYUnits: 'pixels',
-        //         opacity: 1,
-        //         src: props.documents[0]["Frontcover"],
-        //         scale: 0.1
-        //     })
-        // });
-        // marker = new ol.Feature(
-        //     new ol.geom.Point(ol.proj.fromLonLat([coordinate[0] - 0.02, coordinate[1] + 0.065]))
-        // );
-        // marker.setStyle(img);
-        // vectorSource.addFeature(marker);
-
-        return this;
-    }
-    var map = createMap();
-    // map.setMarker([-117.1610838, 32.715738])
-    // map.setImg([-117.1610838, 32.715738])
-
-
-    // // geocoder feature
-    // $.getJSON('https://nominatim.openstreetmap.org/search?format=json&q=Minnesota', function (data) {
-    //     console.log(data);
-    //     var FoundExtent = data[0].boundingbox;
-    //     var placemark_lat = data[0].lat;
-    //     var placemark_lon = data[0].lon;
-    //     console.log("lat long");
-    //     console.log(placemark_lat + " " + placemark_lon);
-    // });
+    setTimeout(function() { displayMap(props, docData, colors); }, 2000);
 }
 
 export default drawMap;
+
+
