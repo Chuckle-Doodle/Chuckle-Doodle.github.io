@@ -9,3 +9,4 @@ from timelineApp.views.addStory import add_story_2
 from timelineApp.views.editStory import edit_story
 from timelineApp.views.deleteAccount import delete_account
 from timelineApp.views.addView import add_view
+from timelineApp.views.editView import edit_view

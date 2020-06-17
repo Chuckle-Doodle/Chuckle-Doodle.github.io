@@ -14,7 +14,25 @@
 
         {% for view in views.Views %}
             <div>
-                <h3>View {{loop.index}}: <button>Edit view</button></h3>
+                <h3>View {{loop.index}}: 
+                    <form id="editViewForm" method="post" enctype="multipart/form-data">
+                        <input type="submit" name="editView" value="Edit View {{loop.index}}">
+                    </form>
+                    <form id="deleteViewForm" method="post" enctype="multipart/form-data">
+                        <input type="submit" name="deleteView" value="Delete View {{loop.index}}">
+                    </form>
+                    {% if DeletingActiveViewError == True and loop.index == viewToDelete + 1 %}
+                        <div id="DeletingActiveViewError">Unable to delete an active view!</div>
+                        <!-- javascript to make the error message disappear after a bit  -->
+                        <script>
+                            var ele = document.getElementById('DeletingActiveViewError');
+                            ele.style.display = 'block';
+                            setTimeout(function(){
+                                ele.style.display = 'none';
+                            }, 2500);
+                        </script>
+                    {% endif %}
+                </h3>
                 <p>Name: {{view.Name}}</p>
                 <p>
                     Reference Views:
@@ -28,12 +46,18 @@
                     </ol>
                 </p>
                 <p>Cluster By: {{view.ClusterBy}}</p>
-                <p>Active: {{view.Active}}</p>
+                <p>
+                    Active: {{view.Active}}
+                    {% if view.Active == False %}
+                        <form id="activateViewForm" method="post" enctype="multipart/form-data">
+                            <input type="submit" name="activateView" value="Activate View {{loop.index}}">
+                        </form>
+                    {% endif %}
+                </p>
             </div>
         {% endfor %}
 
-        <a href="/addView/{{storyid}}/">Add View</a><br>
-        <button>Delete view</button><br>
+        <a href="/addView/{{storyid}}/">Add View</a><br><br>
 
         <a href="/{{storyid}}/"> Back </a>
 
