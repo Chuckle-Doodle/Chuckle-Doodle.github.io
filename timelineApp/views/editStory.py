@@ -1,5 +1,6 @@
 import flask
 import timelineApp
+import math
 from timelineApp.config import UPLOAD_FOLDER
 from pdf2image import convert_from_path
 import os
@@ -8,6 +9,7 @@ from werkzeug.utils import secure_filename
 
 @timelineApp.app.route('/editStory/', methods=['GET', 'POST'])
 def edit_story():
+    
 
     #check if user is signed in. if not go back to login screen
     context = {}
@@ -30,16 +32,39 @@ def edit_story():
     originalStoryName = flask.request.form['storyToEdit']
     context['originalStoryName'] = originalStoryName
 
-    if (flask.request.method == 'POST'):
+    #get storyid in database for this particular story, for use in below queries
+    storyId = connection.execute("SELECT storyid FROM stories where username = ? and storyname = ?", (flask.session['username'], context['originalStoryName'])).fetchone()['storyid']
+    
+    #ensure storyId is a number, otherwise there's a problem
+    if storyId == None:
+        return "ERROR: the story that is going to be edited is not found in database!"
 
+    docs = connection.execute("SELECT documentid, filename FROM documents where username = ? and storyid = ?", (flask.session['username'], storyId)).fetchall()
+    numDocs = 0
+    for doc in docs:
+
+        
+        numDocs = numDocs + 1
+    
+    questions = connection.execute("SELECT questiontext FROM formquestions where username = ? and storyid = ?", (flask.session['username'], storyId)).fetchall()
+    totalQuestions = 0
+    for q in questions:
+        
+        
+        totalQuestions = totalQuestions + 1
+        
+    uniqueQuestions = math.ceil(totalQuestions / numDocs)
+
+    if (flask.request.method == 'POST'):
+        print("post request")
+        context['username'] = flask.session['username']
         #extract file objects for use later
         files = []
         for docid, file in flask.request.files.items():
             fname = secure_filename(file.filename)
             if len(fname) > 0:
                 files.append(fname)
-
-        numberDocuments = len(files)
+        
 
 
         #extract question data from form for later
@@ -51,16 +76,40 @@ def edit_story():
                 if len(val) > 0:
                     questions.append(val)
 
-        numberQuestions = len(questions)
+        numberQuestions = len(questions) 
 
-    
-
-        i = 1
-        context['username'] = "test"
-        #tempPath = os.path.join(UPLOAD_FOLDER, context['username'])
-        #tempPath = os.path.join(tempPath, 'stories')
-        #tempPath = os.path.join(tempPath, context['storyName'])
-        #os.chdir(tempPath)
+        print(questions)
+        
+        k = 1
+        #Update questions in database
+        print(uniqueQuestions)
+        while k <= numDocs:
+            j = 1
+            while j < numberQuestions:#May need to remove -1
+                #print(str(j) + " " + str(k))
+                #counter = counter + 1
+                connection.execute("UPDATE formquestions SET questiontext = ? where questionid = ? and documentid = ? and storyid = ? and username = ?", (questions[j], j, k, storyId, context['username']))
+                j = j + 1
+            
+            #Inserts the new question in
+              
+            k = k + 1     
+        if numberQuestions > uniqueQuestions + 1:
+            documentID = 1
+            while documentID <= numDocs:
+                print(questions[numberQuestions - 1])
+                print("got here")
+                connection.execute(
+                "INSERT INTO formquestions(questionid, documentid, storyid, username, questiontext) VALUES (?, ?, ?, ?, ?)", (uniqueQuestions + 1, documentID , storyId, context['username'], questions[numberQuestions-1])
+                ) 
+                documentID = documentID + 1
+        #i = 1
+        context['username'] = flask.session['username']
+        tempPath = os.path.join(UPLOAD_FOLDER, "users")
+        tempPath = os.path.join(tempPath, context['username'])
+        tempPath = os.path.join(tempPath, 'stories')
+        tempPath = os.path.join(tempPath, context['originalStoryName'])
+        os.chdir(tempPath)
         #os.mkdir('documents')
         #os.mkdir('images')
 
@@ -82,13 +131,14 @@ def edit_story():
             #os.chdir(tempPath)
 
             #update record in documents table
+            #TODO Replace the "1" with storyid
             #connection.execute(
-            #    "INSERT INTO documents(documentid, storyid, username, filename, frontcover) VALUES (?, ?, ?, ?, ?)", (i, storyid, context['username'], filename, '{}.jpg'.format(str(i)))
+             #   "INSERT INTO documents(documentid, storyid, username, filename, frontcover) VALUES (?, ?, ?, ?, ?)", (i, 1, context['username'], filename, '{}.jpg'.format(str(i)))
             #)
             #connection.execute("UPDATE documents SET //// where ////")
 
 
-        i = i + 1
+            #i = i + 1
 
 
 
@@ -109,12 +159,7 @@ def edit_story():
 
     ############  do below code if get request (also if post request? ...)  #################
 
-    #get storyid in database for this particular story, for use in below queries
-    storyId = connection.execute("SELECT storyid FROM stories where username = ? and storyname = ?", (flask.session['username'], context['originalStoryName'])).fetchone()['storyid']
 
-    #ensure storyId is a number, otherwise there's a problem
-    if storyId == None:
-        return "ERROR: the story that is going to be edited is not found in database!"
 
 
     #go to database to retrieve documents and questions currently stored for this story to populate editStory form with most recent data.
@@ -122,16 +167,29 @@ def edit_story():
     context['storyQuestions'] = []
 
     docs = connection.execute("SELECT documentid, filename FROM documents where username = ? and storyid = ?", (flask.session['username'], storyId)).fetchall()
+    numDocs = 0
     for doc in docs:
 
         context['storyDocuments'].append(doc['filename']) #populate this dict with the names of each document file for this story
+        numDocs = numDocs + 1
 
-
-    questions = connection.execute("SELECT questiontext FROM formquestions where username = ? and storyid = ?", (flask.session['username'], storyId)).fetchall()
+    #Extract the unique questions from database
+    questions = connection.execute("SELECT questiontext FROM formquestions where documentid = ? and username = ? and storyid = ?", (1,flask.session['username'], storyId)).fetchall()
+    print("from sql")
+    print(questions)
+    allQuestions = []
+    totalQuestions = 0
     for q in questions:
+        
+        allQuestions.append(q['questiontext'])
         context['storyQuestions'].append(q['questiontext'])
-        print(q['questiontext'])
-       
+        totalQuestions = totalQuestions + 1
+        
+    #uniqueQuestions = math.ceil(totalQuestions / numDocs)
+    #count = 0
+    #while count < uniqueQuestions:
+     #   context['storyQuestions'].append(allQuestions[count])
+      #  count = count + 1
 
 
 
