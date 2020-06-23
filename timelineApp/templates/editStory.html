@@ -46,17 +46,28 @@
             <div>
                 {% for q in storyQuestions %}
 
-                <label for="question1">Question:</label>
-                <input type="text" id="question1" name="question1" value = "{{q}}"><br>
+                <label for="{{q}}">Question:</label>
+                <input type="text" id="{{q}}" name="{{q}}" value = "{{q}}">
+                <button onclick = "deleteQuestion()">Delete Question</button>
+                <br>
                 
                 {% endfor %}
-                <br>
+                
             </div>
 
-            <button>Add question</button>
-            <button>Remove question</button><br><br>
-            <input type="submit" value="Submit">
+            <label for = "NewQuestion">Enter New Question: </label>
+            <input type="text" id = "newQuestionToAdd" name = newQuestionToAdd>
+            <input type ="submit" value = "Add Question"><br>
+            
+
+
+            <input type="submit" value="Update Questions"><br><br>
         </form>
+
+
+
+        
+        <button>Remove question</button><br><br>
 
         <a href="/"> Back </a>
 
