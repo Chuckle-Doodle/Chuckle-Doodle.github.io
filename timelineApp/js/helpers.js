@@ -2,7 +2,7 @@ import * as d3 from 'd3';
 import fetch from 'isomorphic-fetch';
 import Timeline from './timelinePlugin.js';
 
-var colors = ["1E90FF", "DAA520", "DC143C", "006400", "FF1493", "2F4F4F", "0000FF", "00BFFF"];
+//var colors = ["blue", "goldenrod", "fuchsia", "green", "burlywood", "crimson", "lightslategray", "red"];
 
 //var url = "http://ec2-3-86-184-180.compute-1.amazonaws.com/"
 
@@ -36,13 +36,13 @@ const drawTimeline = (props) => {
             dotRadius: 7,
             margin: { "bottom": 60, "right": 200 },
             labelBgColor: function (d, i) {
-                return colors[i];
+                return props.colors[i];
             },
             dotColor: function (d, i) {
-                return colors[i];
+                return props.colors[i];
             },
             linkColor: function (d, i) {
-                return colors[i];
+                return props.colors[i];
             },
             textFn: function (d, i) {
                 return d.name;
@@ -60,13 +60,13 @@ const drawTimeline = (props) => {
             dotRadius: 7,
             margin: { "top": 60, "right": 200 },
             labelBgColor: function (d, i) {
-                return colors[i];
+                return props.colors[i];
             },
             dotColor: function (d, i) {
-                return colors[i];
+                return props.colors[i];
             },
             linkColor: function (d, i) {
-                return colors[i];
+                return props.colors[i];
             },
             textFn: function (d, i) {
                 return d.name;
@@ -102,7 +102,7 @@ const drawTimeline = (props) => {
 
     chart.data(myData).visualize().resizeToFit();
 
-    chart.dotInfo["colors"] = colors;
+    //chart.dotInfo["colors"] = colors;
     return chart.dotInfo;
 }
 

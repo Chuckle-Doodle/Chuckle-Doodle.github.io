@@ -39,15 +39,16 @@ export default class ReferenceView extends React.Component {
 
     //find out which type of ReferenceView we have, timeline or map
     const refViewType = this.props.type;
+    var colors = ["blue", "goldenrod", "fuchsia", "green", "burlywood", "crimson", "lightslategray", "red"];
 
     return (
       <div>
         <div>
 
           {refViewType == "Timeline" ? (
-              <Timeline docImages={this.props.docImages} viewName={this.props.viewName} clusterBy={this.props.clusterBy} dataUrl={this.props.dataUrl} data={this.props.data} documents={this.props.documents} question={this.props.question} isUpper={this.props.isUpper} storyid={this.props.storyid} />
+              <Timeline docImages={this.props.docImages} viewName={this.props.viewName} clusterBy={this.props.clusterBy} dataUrl={this.props.dataUrl} data={this.props.data} documents={this.props.documents} question={this.props.question} isUpper={this.props.isUpper} storyid={this.props.storyid} referenceViewOrder={this.props.referenceViewOrder} colors={colors} />
             ) : (
-              <Map docImages={this.props.docImages} viewName={this.props.viewName} clusterBy={this.props.clusterBy} dataUrl={this.props.dataUrl} data={this.props.data} documents={this.props.documents} question={this.props.question} isUpper={this.props.isUpper} />
+              <Map docImages={this.props.docImages} viewName={this.props.viewName} clusterBy={this.props.clusterBy} dataUrl={this.props.dataUrl} data={this.props.data} documents={this.props.documents} question={this.props.question} isUpper={this.props.isUpper} referenceViewOrder={this.props.referenceViewOrder} colors={colors} />
             )
           }
         </div>

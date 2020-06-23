@@ -65,7 +65,7 @@ class Timeline extends d3kit.SvgChart {
     //my edits
     this.dotInfo = {};
     this.dotInfo["locations"] = [];
-    this.dotInfo["colors"] = [];
+    //this.dotInfo["colors"] = [];
   }
 
   resizeToFit(){

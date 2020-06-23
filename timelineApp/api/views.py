@@ -2,58 +2,29 @@
 #allow user to submit post requests to edit this data to their liking
 import flask
 import timelineApp
+from timelineApp.config import UPLOAD_FOLDER
+import json
+import os
 
 
 @timelineApp.app.route('/api/stories/<int:storyid>/views', methods=["GET"])
 def get_current_views(storyid):
 
-    # ***** Hardcode this view stuff in for now. ****** #
-    #
-    ##
-    ###
-    ####
+    initialPath = os.getcwd()
+
+    if "username" not in flask.session:
+        return flask.redirect(flask.url_for('show_login'))
+
     context = {}
-    context['Views'] = []
 
-    temp = {}
-
-    temp["Name"] = "Author View"
-    temp["ReferenceViews"] = []
-    view = {}
-    view["Type"] = "Timeline"
-    view["Question"] = "When did the event occur"
-    temp["ReferenceViews"].append(view)
-
-    view2 = {}
-    view2["Type"] = "Map"
-    view2["Question"] = "When was this written"
-    temp["ReferenceViews"].append(view2)
-
-    temp["ClusterBy"] = "Author"
-    temp["Active"] = True
-
-    context['Views'].append(temp)
+    connection = timelineApp.model.get_db()
+    context['username'] = flask.session['username']
+    context['storyid'] = storyid
+    context['storyname'] = connection.execute("SELECT storyname from stories WHERE username = ? and storyid = ?", (context['username'], context['storyid'])).fetchone()['storyname']
 
 
-    temp = {}
+    with open(os.path.join(UPLOAD_FOLDER, 'users', flask.session['username'], 'stories', context['storyname'], 'config.json'), "r+") as jsonFile:
+        data = json.load(jsonFile)
 
-    temp["Name"] = "Location of Event View"
-    temp["ReferenceViews"] = []
-    view = {}
-    view["Type"] = "Timeline"
-    view["Question"] = "When did the event occur"
-    temp["ReferenceViews"].append(view)
-
-    view2 = {}
-    view2["Type"] = "Map"
-    view2["Question"] = "Where did the event occur"
-    temp["ReferenceViews"].append(view2)
-
-    temp["ClusterBy"] = "Where did the event occur"
-    temp["Active"] = False
-
-    context['Views'].append(temp)
-
-    # ************************************************** #
-
-    return flask.jsonify(**context)
+    os.chdir(initialPath)
+    return flask.jsonify(**data)

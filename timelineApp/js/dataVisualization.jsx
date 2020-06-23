@@ -27,20 +27,40 @@ export default class DataVisualization extends React.Component {
 				return Promise.all([response1.json(), response2.json()])
 			})
 			.then(([response1, response2]) => {
+				//logic capture data from the View that is "Active"
+				var activeView = {}
+				for (let i = 0; i < response2.Views.length; i++) {
+					if (response2.Views[i]['Active'] == true) {
+						activeView = response2.Views[i];
+						break;
+					} 
+				}
+				//by now activeView should be correctly set
+				console.log("printing active view");
+				console.log(activeView);
+
 				this.setState({
 					data: response1.Documents,
 					storyName: response1.Story,  //something like storyName probably doesn't have to be in state considering it doesn't really change
-		  			viewInfo: response2.Views[0],
+		  			viewInfo: activeView,
 		  		});
 			});
 	}
 
 	render() {
+
 		//prevent render before data is filled up from fetch calls
-		if (!this.state.data) {
+		if (!this.state.data || !this.state.viewInfo) {
         	return <div />
         }
-        // console.log(this.state.data);
+        
+        //determine order of reference views for use in later components' rendering
+        //Pass this as a prop to each reference view, so each ref view knows the type of ALL ref views
+        // ex/ ['Timeline', 'Timeline'] or ['Map', 'Timeline']
+        var referenceViewOrder = [];
+        for (let i = 0; i < this.state.viewInfo['ReferenceViews'].length; i++) {
+        	referenceViewOrder.push(this.state.viewInfo['ReferenceViews'][i]['Type']);
+        }
 
 		var documentsArray = [];
 		var docImages = [];
@@ -84,7 +104,7 @@ export default class DataVisualization extends React.Component {
           <div>
             {this.state.viewInfo.ReferenceViews.map((view, index) =>
               <ReferenceView docImages={docImages} viewName={this.state.viewInfo.Name} clusterBy={this.state.viewInfo.ClusterBy} dataUrl={this.props.dataUrl} data={ this.state.data } documents={ documentsArray } type={ view.Type } question={ view.Question }
-              isUpper={index == 0 ? true : false} storyid={this.props.storyid} />
+              isUpper={index == 0 ? true : false} storyid={this.props.storyid} referenceViewOrder={referenceViewOrder} />
             )}
           </div>
 

@@ -32,7 +32,7 @@ def edit_view():
             print(data["Views"][context['viewNumber'] - 1])
             data["Views"][context['viewNumber'] - 1]['Name'] = flask.request.form['title']
             data["Views"][context['viewNumber'] - 1]['ClusterBy'] = flask.request.form['clusterBy']
-            data["Views"][context['viewNumber'] - 1]['Active'] = flask.request.form['active']
+            data["Views"][context['viewNumber'] - 1]['Active'] = eval(flask.request.form['active'])
             data["Views"][context['viewNumber'] - 1]['ReferenceViews'][0]['Question'] = flask.request.form['RefView1Question']
             data["Views"][context['viewNumber'] - 1]['ReferenceViews'][0]['Type'] = flask.request.form['RefView1Type']
             data["Views"][context['viewNumber'] - 1]['ReferenceViews'][1]['Question'] = flask.request.form['RefView2Question']

@@ -13,16 +13,25 @@
   	justify-content:center; */
 }
 #timeline2 {
-    display: none;
+    /*display: none;*/
 	order:2;
 }
-#map {
-    order:3;
+#map1 {
+    /*order:3;*/
     width: 75%;
 	height: 150%;
 }
-#documentsDiv {
+#map2 {
+    /*order:3;*/
+    width: 75%;
+	height: 150%;
+	margin-top: 35px;
+}
+/*#documentsDiv {
 	order:1;
+}*/
+#clusteringByText {
+	margin-top: 10px;
 }
 #DocumentArray {
 	position: relative;
@@ -45,25 +54,21 @@
 	display:inline-block
 } 
 
-#image1 {
+#image1 {                  
     border-style: solid;
     border-width: 8px;
-    border-color: lightskyblue;
 }
 #image2 {
     border-style: solid;
     border-width: 8px;
-    border-color: yellow;
 }
 #image3 {
     border-style: solid;
     border-width: 8px;
-    border-color: red;
 }
 #image4 {
     border-style: solid;
     border-width: 8px;
-    border-color: green;
 }
 
 #svgLine1 {
@@ -91,28 +96,28 @@
 	z-index: -2;
 }
 #svgLineBottom1 {
-    display: none;
+    /*display: none;*/
 	position: fixed;
 	top: 0;
 	left: 0;
 	z-index: -2;
 }
 #svgLineBottom2 {
-    display: none;
+    /*display: none;*/
 	position: fixed;
 	top: 0;
 	left: 0;
 	z-index: -2;
 }
 #svgLineBottom3 {
-    display: none;
+    /*display: none;*/
 	position: fixed;
 	top: 0;
 	left: 0;
 	z-index: -2;
 }
 #svgLineBottom4 {
-    display: none;
+    /*display: none;*/
 	position: fixed;
 	top: 0;
 	left: 0;

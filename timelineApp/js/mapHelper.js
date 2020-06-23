@@ -142,7 +142,7 @@ function displayMap(props, docData, colors) {
                 }
             })
         ],
-        target: document.getElementById("map"),
+        target: props.isUpper == true ? document.getElementById("map1") : document.getElementById("map2"),
         view: new ol.View({
             center: ol.proj.fromLonLat(coordinate),
             zoom: 5,
@@ -186,13 +186,13 @@ const drawMap = (props) => {
     // console.log(props.question); // When was this written
     // console.log(props.isUpper); // false
 
-    var colors = ["lightskyblue", "yellow", "red", "green"];
+    //var colors = ["lightskyblue", "yellow", "red", "green"];
 
     // The main source of data
     var docData = [];
-    preprocessData(props, docData, colors);
+    preprocessData(props, docData, props.colors);
 
-    setTimeout(function() { displayMap(props, docData, colors); }, 2000);
+    setTimeout(function() { displayMap(props, docData, props.colors); }, 2000);
 }
 
 export default drawMap;
