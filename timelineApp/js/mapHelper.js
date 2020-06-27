@@ -25,20 +25,50 @@ function preprocessData(props, docData, colors) {
     docData.forEach(doc =>
         // geocoder feature
         $.getJSON('https://nominatim.openstreetmap.org/search?format=json&q=' + doc.location, function (data) {
-            // console.log(data);
             // var FoundExtent = data[0].boundingbox;
-            // var placemark_lon = data[0].lon;
-            // var placemark_lat = data[0].lat;
             doc.coordinates = [parseFloat(data[0].lon), parseFloat(data[0].lat)];
         }));
 }
 
-function displayMap(props, docData, colors) {
-    var coordinate = [-101.1017, 40.7438];
+function removeDuplicatedCoordinates(docData, duplicateCoordinateOffset) {
+    var coordinates = [];
+    docData.forEach(function (doc, idx) {
+        coordinates.push([doc.coordinates, idx]);
+    });
+    coordinates.sort(); // sort coordinates then see if there are duplicate coordinates
+    for (let i = 1; i < coordinates.length; i++) {
+        var prevCoordinate = coordinates[i - 1][0];
+        while (i < coordinates.length && coordinates[i][0].toString() == prevCoordinate.toString()) {
+            prevCoordinate = coordinates[i][0].slice();
+            coordinates[i][0][0] = coordinates[i - 1][0][0] + duplicateCoordinateOffset;
+            docData[coordinates[i][1]].coordinates = coordinates[i][0];
+            ++i;
+        }
+    }
+}
+
+function getCenterCoordinates(docData) {
+    var minX = 200, maxX = -200, minY = 200, maxY = -200;
+    docData.forEach(function (doc) {
+        minX = Math.min(minX, doc.coordinates[0]);
+        maxX = Math.max(maxX, doc.coordinates[0]);
+        minY = Math.min(minY, doc.coordinates[1]);
+        maxY = Math.max(maxY, doc.coordinates[1]);
+    });
+
+    var center = [(minX + maxX) / 2, (minY + maxY) / 2];
+    return center;
+}
+
+function displayMap(props, docData) {
+    var duplicateCoordinateOffset = 1; // in terms of longitude
+    removeDuplicatedCoordinates(docData, duplicateCoordinateOffset);
+
+    var center = getCenterCoordinates(docData);
     var vectorSource = new ol.source.Vector({});
 
     docData.forEach(function (doc) {
-        var offset = 2.6; // this is to elevate the document to make space for the markers
+        var offset = 1.5; // this is to elevate the document to make space for the markers
 
         // display image
         var img = new ol.style.Style({
@@ -136,7 +166,6 @@ function displayMap(props, docData, colors) {
                         docData.forEach(function (doc) {
                             doc.docStyle.getImage().setScale(scaleFactor);
                         })
-                        // console.log(ol.proj.toLonLat( map.getView().getCenter() ));
                     }
                     return feature.get("style");
                 }
@@ -144,13 +173,16 @@ function displayMap(props, docData, colors) {
         ],
         target: props.isUpper == true ? document.getElementById("map1") : document.getElementById("map2"),
         view: new ol.View({
-            center: ol.proj.fromLonLat(coordinate),
-            zoom: 5,
+            center: ol.proj.fromLonLat(center),
             maxZoom: 6.75
-        })
+        }),
     });
 
+    // makes sure all docs are fit on the screen
+    map.getView().fit(vectorSource.getExtent());
+
     docData.forEach(function (doc) {
+        var offset = -2; // lowers the marker to make room for the doc
         var colorSrc = "/static/var/markers/" + doc.color + ".png";
 
         var iconStyle = new ol.style.Style({
@@ -159,42 +191,28 @@ function displayMap(props, docData, colors) {
                 anchorXUnits: 'pixels',
                 anchorYUnits: 'pixels',
                 opacity: 0.8,
-                src: colorSrc
+                src: colorSrc,
+                scale: 1.5
             })
         });
 
-        var marker = new ol.Feature(new ol.geom.Point(ol.proj.fromLonLat([doc.coordinates[0], doc.coordinates[1]])));
+        var marker = new ol.Feature(new ol.geom.Point(ol.proj.fromLonLat([doc.coordinates[0], doc.coordinates[1] + offset])));
         marker.setStyle(iconStyle);
         vectorSource.addFeature(marker);
     });
 }
 
+// the main function that brings it all together
 const drawMap = (props) => {
-    //props are:
-    //viewName={props.viewName} clusterBy={props.clusterBy} dataUrl={props.dataUrl} data={props.data} documents={props.documents} question={props.question} isUpper={props.isUpper}
-    //console.log("inside draw function that actually creates timeline w mock data");
-
-    //var viewName = props.viewName;
-
-    // var myData = [];  //take props.data and edit it to look like above data, place in this variable
-
-    // console.log(props.viewName); // Author View
-    // console.log(props.clusterBy); // Author
-    // console.log(props.dataUrl); // /api/stories/1/test
-    // console.log(props.data); // {filename: asdf.pdf, FormDataAnsers: {array}, FormDataQuestions: {array}, Frontcover: /path/asdf.jpg, docId: asdf}
-    // console.log(props.documents); // {Frontcover: /path/asdf.jpg, Questions: {array}, Answers: {array}, Filename: asdf.pdf, docId: asdf}
-    // console.log(props.question); // When was this written
-    // console.log(props.isUpper); // false
-
-    //var colors = ["lightskyblue", "yellow", "red", "green"];
+    var colors = ["lightskyblue", "yellow", "red", "green"];
 
     // The main source of data
     var docData = [];
     preprocessData(props, docData, props.colors);
 
-    setTimeout(function() { displayMap(props, docData, props.colors); }, 2000);
+    // needs timeout to retrieve the locations for geocoding
+    setTimeout(function() { displayMap(props, docData, colors); }, 2000);
 }
 
 export default drawMap;
-
 
