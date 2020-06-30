@@ -1,3 +1,7 @@
 Use this link if you need more pngs
 
-https://maps.google.com/mapfiles/ms/micons/blue.png
+https://labs.google.com/ridefinder/images/mm_20_blue.png
+
+
+All the colors can be found here:
+https://sites.google.com/site/gmapsdevelopment/

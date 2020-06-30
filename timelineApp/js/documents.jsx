@@ -15,14 +15,23 @@ export default class Documents extends React.Component {
     }
 
     this.state = {
-      imageOrder: {
-        documentOrder: this.props.docImages,
-        spaceOrder: initialSpaceOrder
-      },
-      clusterBy: 'Document ID',
+        imageOrder: {
+            documentOrder: this.props.docImages,
+            spaceOrder: initialSpaceOrder
+        },
+        clusterBy: 'docID',
+        colorOrder: this.props.dotColors,
     };
 
   }
+
+  componentDidUpdate() {
+    // updates the border colors according to cluster
+    for (let i = 0; i < this.props.documents.length; i++) {
+        var image = document.getElementById("image" + (i + 1));
+        image.style.borderColor = this.state.colorOrder[i];
+    }
+}
 
 
   render() {
@@ -44,14 +53,16 @@ export default class Documents extends React.Component {
 
           <button className="button" value="docID" onClick={() => this.setState({
               imageOrder: utils.cluster(this.props.data, 'docID', this.props.documents),
-              clusterBy: 'Document ID'
+              clusterBy: 'Document ID',
+              colorOrder: utils.clusterColors(this.props.data, 'docID', this.props.documents, this.props.dotColors)
           })}> 
             Cluster by Document ID
           </button>
 
           <button className="button" value={this.props.clusterBy} onClick={() => this.setState({
               imageOrder: utils.cluster(this.props.data, this.props.clusterBy, this.props.documents),
-              clusterBy: this.props.clusterBy
+              clusterBy: this.props.clusterBy,
+              colorOrder: utils.clusterColors(this.props.data, this.props.clusterBy, this.props.documents, this.props.dotColors)
           })}> 
             Cluster by {this.props.clusterBy}
           </button>
@@ -76,14 +87,16 @@ export default class Documents extends React.Component {
 
           <button className="button" value="docID" onClick={() => this.setState({
               imageOrder: utils.cluster(this.props.data, 'docID', this.props.documents),
-              clusterBy: 'Document ID'
+              clusterBy: 'Document ID',
+              colorOrder: utils.clusterColors(this.props.data, 'docID', this.props.documents, this.props.dotColors)
           })}> 
             Cluster by Document ID
           </button>
 
           <button className="button" value={this.props.clusterBy} onClick={() => this.setState({
               imageOrder: utils.cluster(this.props.data, this.props.clusterBy, this.props.documents),
-              clusterBy: this.props.clusterBy
+              clusterBy: this.props.clusterBy,
+              colorOrder: utils.clusterColors(this.props.data, this.props.clusterBy, this.props.documents, this.props.dotColors)
           })}> 
             Cluster by {this.props.clusterBy}
           </button>

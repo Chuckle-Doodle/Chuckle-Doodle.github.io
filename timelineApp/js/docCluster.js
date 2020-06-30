@@ -96,3 +96,46 @@ export function cluster(data, clusterBy, documentsArray)
   return updatedImageOrder;
 
 }
+
+export function clusterColors(data, clusterBy, documentsArray, colors) {
+    let dataArray = []; //this will be array that above function uses
+
+    //different logic if clustering by docID, difference stemming from json data format
+    if (clusterBy == "docID") {
+        for (let z = 0; z < documentsArray.length; z++) {
+            dataArray.push(documentsArray[z]["docID"]);
+        }
+    }
+    else {
+        for (let i = 0; i < documentsArray.length; i++) {
+            //for each document, iterate through each question until we find the one we are clustering by
+            for (let j = 0; j < documentsArray[i]["Questions"].length; j++) {
+                if (clusterBy == documentsArray[i]["Questions"][j]) {
+                    //if the question matches, push its corresponding answer
+                    dataArray.push(documentsArray[i]["Answers"][j]);
+                }
+            }
+        }
+    }
+    //now we have gone through all data so cluster it
+    var clusteredDocOrder = clusterDriver(dataArray, documentsArray);
+    var colorOrder = [];
+    
+    var colorIdx = documentsArray.length;
+    for (let i = 0; i < clusteredDocOrder.length; i++) {
+        if (clusteredDocOrder[i] != "space") {
+            if (i < clusteredDocOrder.length - 2 && clusteredDocOrder[i + 1] != "space") {
+                while (clusteredDocOrder[i] != "space" && i < clusteredDocOrder.length) {
+                    colorOrder[clusteredDocOrder[i] - 1] = colors[colorIdx];
+                    i++;
+                }
+                colorIdx++;
+            }
+            else {
+                colorOrder[clusteredDocOrder[i] - 1] = colors[clusteredDocOrder[i] - 1];
+            }
+        }
+    }
+
+    return colorOrder;
+}

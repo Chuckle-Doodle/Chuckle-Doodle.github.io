@@ -21,11 +21,19 @@
     width: 75%;
 	height: 150%;
 }
+/* removes the "OpenStreeMap contributors." copyright below the map */
+.ol-overlaycontainer-stopevent { 
+    display: none;
+}
 #map2 {
     /*order:3;*/
     width: 75%;
 	height: 150%;
 	margin-top: 35px;
+}
+/* removes the "OpenStreeMap contributors." copyright below the map */
+.ol-overlaycontainer-stopevent { 
+    display: none;
 }
 /*#documentsDiv {
 	order:1;
