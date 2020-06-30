@@ -7,3 +7,6 @@ timelineApp/__pycache__/
 timelineApp/api/__pycache__/
 timelineApp/static/js/
 timelineApp/views/__pycache__/
+
+timelineApp/static/var/timelineApp.sqlite3
+timelineApp/static/var/users/
