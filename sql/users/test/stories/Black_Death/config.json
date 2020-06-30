@@ -2,7 +2,7 @@
   "Views": [
     {
       "Active": true, 
-      "ClusterBy": "Author", 
+      "ClusterByOptions": ["Author"], 
       "Name": "Author View", 
       "ReferenceViews": [
         {
@@ -17,7 +17,7 @@
     }, 
     {
       "Active": false, 
-      "ClusterBy": "Where did the event occur", 
+      "ClusterByOptions": ["Where did the event occur"], 
       "Name": "Location of Event View", 
       "ReferenceViews": [
         {

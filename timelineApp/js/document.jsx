@@ -72,8 +72,8 @@ export default class Document extends React.Component {
 
 
     render() {
-        console.log("about to render doc");
-        console.log(this.state);
+        //console.log("about to render doc");
+        //console.log(this.state);
 
         var margin = 0;
         if (this.props.endOfCluster == true) {
@@ -81,7 +81,7 @@ export default class Document extends React.Component {
         }
 
         if (this.state.xPos == null) {
-            console.log("rendering image");
+            //console.log("rendering image");
 
             return (
                 <img src={this.props.image} id={this.props.imageName} style={{ marginRight: margin + 'px', borderColor: this.props.lineColor }} alt="Picture of Document" height="200" width="150" ref={this.setImageRef} ></img>
@@ -89,7 +89,7 @@ export default class Document extends React.Component {
             );
 
         } else {
-            console.log("image already rendered!");
+            //console.log("image already rendered!");
 
             //4 different cases to return: timeline on top, timeline on bottom, timeline on top and bottom, no timeline
             //TODO: MAKE THIS STEP MORE EFFICIENT AND SCALABLE IN FUTURE
@@ -106,7 +106,7 @@ export default class Document extends React.Component {
                         </svg>
                     
                         <svg id={"svgLineBottom" + this.props.documentid} width="4000" height="4000">
-                            <line x1={this.state.xPos} y1={this.state.yPos - 100} x2={this.props.dotLocationBottom.x} y2={this.props.dotLocationBottom.y - 40} style={{ stroke: this.props.lineColor, strokeWidth: "3" }} />
+                            <line x1={this.state.xPos} y1={this.state.yPos - 100} x2={this.props.dotLocationBottom.x} y2={this.props.dotLocationBottom.y - 30} style={{ stroke: this.props.lineColor, strokeWidth: "3" }} />
                         </svg>
 
                     </div >
@@ -128,12 +128,6 @@ export default class Document extends React.Component {
                 );
 
             } else if (this.props.referenceViewTop == 'Map' && this.props.referenceViewBottom == 'Timeline') {
-                console.log("Map then timeline. should get here!");
-                console.log(this.props.dotLocationTop);
-                console.log(this.props.dotLocationBottom);
-                console.log(this.state);
-
-
                 return (
                     <div id={"Document" + this.props.documentid}>
                         <a href={"/" + this.props.storyid + "#" + this.props.documentid}>
@@ -141,7 +135,7 @@ export default class Document extends React.Component {
                         </a>
                     
                         <svg id={"svgLineBottom" + this.props.documentid} width="4000" height="4000">
-                            <line x1={this.state.xPos} y1={this.state.yPos} x2={this.props.dotLocationBottom.x} y2={this.props.dotLocationBottom.y + 750} style={{ stroke: this.props.lineColor, strokeWidth: "3" }} />
+                            <line x1={this.state.xPos} y1={this.state.yPos} x2={this.props.dotLocationBottom.x} y2={this.props.dotLocationBottom.y + 765} style={{ stroke: this.props.lineColor, strokeWidth: "3" }} />
                         </svg>
 
                     </div >

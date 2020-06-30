@@ -22,16 +22,36 @@ def edit_view():
     context['username'] = flask.session['username']
     context['storyname'] = connection.execute("SELECT storyname from stories WHERE username = ? and storyid = ?", (context['username'], context['storyid'])).fetchone()['storyname']
 
+    #get questions that correspond to this story
+    context['questions'] = []
+    rows = connection.execute("SELECT questiontext from formquestions WHERE username = ? and storyid = ? and documentid = 1", (context['username'], int(context['storyid']))).fetchall()
+    for row in rows:
+        context['questions'].append(row['questiontext'])
+
     if flask.request.method == 'POST':
+
+        print("printing form editView.pyyyyyy")
+        print(flask.request.form)
+        #print(flask.request.form['ClusterByOptions'])
         #edit config.json file with modified view data
         with open(os.path.join(UPLOAD_FOLDER, 'users', flask.session['username'], 'stories', context['storyname'], 'config.json'), "r+") as jsonFile:
             data = json.load(jsonFile)
 
+            print("????")
+            print(data)
+            print(data["Views"][context['viewNumber'] - 1]['ClusterByOptions'])
+
             #edit data
-            #data["Views"][context['viewNumber']]
-            print(data["Views"][context['viewNumber'] - 1])
+
+            #cluster options
+            data["Views"][context['viewNumber'] - 1]['ClusterByOptions'].clear()
+            counter = 1
+            while ("ClusterByOption" + str(counter)) in flask.request.form:
+                data["Views"][context['viewNumber'] - 1]['ClusterByOptions'].append(flask.request.form[("ClusterByOption" + str(counter))])
+                counter += 1
+
             data["Views"][context['viewNumber'] - 1]['Name'] = flask.request.form['title']
-            data["Views"][context['viewNumber'] - 1]['ClusterBy'] = flask.request.form['clusterBy']
+            #data["Views"][context['viewNumber'] - 1]['ClusterByOptions'] = flask.request.form['ClusterByOptions']
             data["Views"][context['viewNumber'] - 1]['Active'] = eval(flask.request.form['active'])
             data["Views"][context['viewNumber'] - 1]['ReferenceViews'][0]['Question'] = flask.request.form['RefView1Question']
             data["Views"][context['viewNumber'] - 1]['ReferenceViews'][0]['Type'] = flask.request.form['RefView1Type']
@@ -47,6 +67,9 @@ def edit_view():
     with open(os.path.join(UPLOAD_FOLDER, 'users', flask.session['username'], 'stories', context['storyname'], 'config.json'), "r") as json_file:
         data = json.load(json_file)
         context['view'] = data['Views'][context['viewNumber'] - 1]
+
+    print("printing context")
+    print(context)
 
     os.chdir(initialPath)
     return flask.render_template("editView.html", **context)

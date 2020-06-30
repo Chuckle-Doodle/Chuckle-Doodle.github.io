@@ -18,10 +18,15 @@ def show_views(storyid):
     if "username" not in flask.session:
         return flask.redirect(flask.url_for('show_login'))
 
+    #check if need to redirect based on Edit View button click:
+    if (flask.request.args.get("editView") != None):
+        viewToEdit = int(flask.request.args.get("editView")[-1])
+        return flask.redirect(flask.url_for('edit_view', viewToEdit=viewToEdit, storyid=storyid, **flask.request.args))
+
     context = {}
     context['username'] = flask.session['username']
     context['storyid'] = storyid
-    context['documents'] = []
+    #context['documents'] = []
     context['DeletingActiveViewError'] = False
 
     #connect to database
@@ -34,7 +39,6 @@ def show_views(storyid):
     if flask.request.method == 'POST':
 
         if 'editView' in flask.request.form:
-
             viewToEdit = int(flask.request.form['editView'][-1])
             return flask.redirect(flask.url_for('edit_view', viewToEdit=viewToEdit, storyid=storyid, **flask.request.args))
 
@@ -66,7 +70,6 @@ def show_views(storyid):
 
                 #check if this view was active
                 if data['Views'][viewToDelete]['Active'] == True:
-                    print("Setting DeletingViewErorr to TRUE!")
                     context['DeletingActiveViewError'] = True
                     context['viewToDelete'] = viewToDelete
                     #return flask.render_template("viewCreatorView.html", **context)
@@ -92,4 +95,6 @@ def show_views(storyid):
 
     os.chdir(initialPath)
     #return flask.jsonify(context)
+    #print(context['views']['Views'][0]['ClusterByOptions'])
+    #print(type(context['views']['Views'][0]['ClusterByOptions']))
     return flask.render_template("viewCreatorView.html", **context)

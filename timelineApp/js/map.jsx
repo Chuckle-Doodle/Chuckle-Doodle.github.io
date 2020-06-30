@@ -76,9 +76,9 @@ export default class Map extends React.Component {
                     <div id="maps">
 
                         <div id="documentsDiv">
-                            <Documents data={this.props.data} docImages={this.props.docImages} clusterBy={this.props.clusterBy} documents={this.props.documents} dotColors={this.props.colors} storyid={this.props.storyid} timelinePresent={false} referenceViewTop={this.props.referenceViewOrder[0]} referenceViewBottom={this.props.referenceViewOrder[1]} />
+                            <Documents data={this.props.data} docImages={this.props.docImages} clusterByOptions={this.props.clusterByOptions} documents={this.props.documents} dotColors={this.props.colors} storyid={this.props.storyid} timelinePresent={false} referenceViewTop={this.props.referenceViewOrder[0]} referenceViewBottom={this.props.referenceViewOrder[1]} />
                         </div>
-
+                        Map of: {this.props.question}
                         <div id="map2" />
 
                     </div>

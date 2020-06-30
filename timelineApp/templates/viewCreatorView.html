@@ -11,11 +11,10 @@
         <p>Here you can edit, create, or delete views to customize behavior to your needs.</p>
 
         <h2>Current Views</h2>
-
         {% for view in views.Views %}
             <div>
                 <h3>View {{loop.index}}: 
-                    <form id="editViewForm" method="post" enctype="multipart/form-data">
+                    <form id="editViewForm" method="get" enctype="multipart/form-data">
                         <input type="submit" name="editView" value="Edit View {{loop.index}}">
                     </form>
                     <form id="deleteViewForm" method="post" enctype="multipart/form-data">
@@ -45,7 +44,14 @@
                         {% endfor %}
                     </ol>
                 </p>
-                <p>Cluster By: {{view.ClusterBy}}</p>
+                <p>
+                    Cluster By Options:
+                    {% for clusterOption in view.ClusterByOptions %}
+                        <li>
+                            {{clusterOption}}
+                        </li>
+                    {% endfor %}
+                </p>
                 <p>
                     Active: {{view.Active}}
                     {% if view.Active == False %}

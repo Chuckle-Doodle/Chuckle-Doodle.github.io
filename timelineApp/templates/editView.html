@@ -6,8 +6,7 @@
 </head>
 
 <body>
-    <script type='text/javascript'>
-    </script>
+<div>
     <div>
         <p>Hi, {{username}}! Edit view {{viewNumber}} for your story, {{storyname}}, here!</p>
 
@@ -29,8 +28,99 @@
             <label for="RefView2Type">Type (Either "Timeline" or "Map"):</label>
             <input type="text" id="RefView2Type" name="RefView2Type" value="{{view.ReferenceViews[1].Type}}"><br><br>
 
-            <label for="clusterBy">Cluster By:</label>
-            <input type="text" id="clusterBy" name="clusterBy" value="{{view.ClusterBy}}"><br><br>
+            <label for="clusterByOptions">Cluster By Options:</label>
+                <ul id="clusterList">
+                    {% for cluster in view.ClusterByOptions %}
+                        {% set variableName = 'ClusterByOption' + loop.index|string %}
+                        {% set listId = 'listItem' + loop.index|string %}
+                            <li id={{listId}} >
+                                <input type="text" id="ClusterByOption1" name={{variableName}} value="{{view.ClusterByOptions[loop.index0]}}">
+
+                                <button type="button" id="{{listId}}" onclick="deleteClusterOption(this.id)">
+                                    Delete
+                                </button>
+                            </li>
+                        
+                    {% endfor %}
+                </ul>
+            <button onclick="addClusterOption({{questions}})" type="button" name="button" id="addButton">Add Cluster Option</button>
+            <br><br>
+
+        <script type='text/javascript'>
+            var clicks = 0;
+
+            function deleteClusterOption(listId) {
+                var elementToRemove = document.getElementById(listId);
+                var myParent = document.getElementById("clusterList");
+                myParent.removeChild(elementToRemove);
+
+                //update id's of each elem in list
+                var children = myParent.children;
+                for (var i = 0; i < children.length; i++) {
+                    var childElem = children[i];
+                    childElem.id = "listItem" + (i + 1);
+                    childElem.childNodes[1].id = "ClusterByOption" + (i + 1);
+                    childElem.childNodes[1].name = "ClusterByOption" + (i + 1);
+                    //console.log(childElem.childNodes);
+                    childElem.childNodes[3].id = "listItem" + (i + 1);
+                    //debugger;
+                }
+            }
+
+            function addClusterOption(questions) {
+
+                var myParent = document.getElementById("clusterList");
+
+                //Create array of options to be added
+                var array = questions;
+
+                var li = document.createElement("li");   //todo ADD VARIABLE NAME HERE !
+                li.id = "listItem" + (myParent.children.length - 1);
+
+                myParent.appendChild(li);
+                //Create and append select list
+                var selectList = document.createElement("select");
+                selectList.id = "clusterByOptions";
+                selectList.name = "ClusterByOption" + (myParent.children.length);
+                li.appendChild(selectList);
+
+                //Create and append the options
+                for (var i = 0; i < array.length; i++) {
+                    var option = document.createElement("option");
+                    option.value = array[i];
+                    option.text = array[i];
+                    selectList.appendChild(option);
+                }
+                var button = document.createElement("button");
+                button.id = "button" + (myParent.children.length);
+                button.innerHTML = "Delete"
+                li.appendChild(button);
+                button.onclick = function(){
+                    var element = document.getElementById("listItem" + (button.id.slice(-1)));
+                    //console.log("elem is");
+                    //console.log(element);
+                    //debugger;
+                    element.parentNode.removeChild(element);
+
+                    //update id's of each elem in list
+                    var children = myParent.children;
+                    for (var i = 0; i < children.length; i++) {
+                        var childElem = children[i];
+                        childElem.id = "listItem" + (i + 1)
+                    }
+                };
+
+                //update id's of each elem in list
+                var children = myParent.children;
+                for (var i = 0; i < children.length; i++) {
+                    var childElem = children[i];
+                    childElem.id = "listItem" + (i + 1)
+                    childElem.childNodes[1].id = "ClusterByOption" + (i + 1);
+                    childElem.childNodes[1].name = "ClusterByOption" + (i + 1);
+                }
+
+            }
+        </script>
 
             <label for="active">Active ("True" or "False"):</label>
             <input type="text" id="active" name="active" value="{{view.Active}}"><br><br>
@@ -42,6 +132,6 @@
 
     </div>
 
-
+</div>
 </body>
 </html>

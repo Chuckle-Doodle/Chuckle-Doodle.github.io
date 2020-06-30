@@ -78,6 +78,16 @@ export default class DataVisualization extends React.Component {
 	  		docImages.push([this.state.data[i].Frontcover, i + 1]);
 	  	}
 
+	  	//keep track of this only because it affects where to render Reference View Title
+	  	var allMaps = true;
+	  	for (let i = 0; i < referenceViewOrder.length; i++) {
+	  		if (referenceViewOrder[i] != "Map")
+	  		{
+	  			allMaps = false;
+	  			break;
+	  		}
+	  	}	
+
    	  return (
         <div id="DataVisualization">
 
@@ -103,8 +113,22 @@ export default class DataVisualization extends React.Component {
 
           <div>
             {this.state.viewInfo.ReferenceViews.map((view, index) =>
-              <ReferenceView docImages={docImages} viewName={this.state.viewInfo.Name} clusterBy={this.state.viewInfo.ClusterBy} dataUrl={this.props.dataUrl} data={ this.state.data } documents={ documentsArray } type={ view.Type } question={ view.Question }
-              isUpper={index == 0 ? true : false} storyid={this.props.storyid} referenceViewOrder={referenceViewOrder} />
+            	<div>
+            		<div className="ReferenceViewTitle">
+            			{index == 0 ? (view.Type == "Timeline" ? ("Timeline of: " + view.Question) : ("Map of: " + view.Question)) : null}
+            		</div>
+
+            		<div className="ReferenceViewTitle">
+						{index == 1 ? ((view.Type == "Map" && allMaps == false) ? ("Map of: " + view.Question) : null) : null}
+            		</div>
+
+            		<ReferenceView docImages={docImages} viewName={this.state.viewInfo.Name} clusterByOptions={this.state.viewInfo.ClusterByOptions} dataUrl={this.props.dataUrl} data={ this.state.data } documents={ documentsArray } type={ view.Type } question={ view.Question }
+              		isUpper={index == 0 ? true : false} storyid={this.props.storyid} referenceViewOrder={referenceViewOrder} />
+              		
+              		<div className="ReferenceViewTitle">
+						{index == 1 ? (view.Type == "Timeline" ? ("Timeline of: " + view.Question) : null) : null}
+            		</div>
+              	</div>
             )}
           </div>
 
