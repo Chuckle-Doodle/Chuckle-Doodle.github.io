@@ -40,7 +40,7 @@ export default class ReferenceView extends React.Component {
     //find out which type of ReferenceView we have, timeline or map
     const refViewType = this.props.type;
     // var colors = ["blue", "goldenrod", "fuchsia", "green", "burlywood", "crimson", "lightslategray", "red"];
-    var colors = ["blue", "yellow", "purple", "green", "orange", "brown", "gray", "red"];
+    var colors = ["blue", "gray", "green", "red", "orange", "brown", "purple"];
 
 
     return (
@@ -48,9 +48,9 @@ export default class ReferenceView extends React.Component {
         <div>
 
           {refViewType == "Timeline" ? (
-              <Timeline docImages={this.props.docImages} viewName={this.props.viewName} clusterBy={this.props.clusterBy} dataUrl={this.props.dataUrl} data={this.props.data} documents={this.props.documents} question={this.props.question} isUpper={this.props.isUpper} storyid={this.props.storyid} referenceViewOrder={this.props.referenceViewOrder} colors={colors} />
+              <Timeline docImages={this.props.docImages} viewName={this.props.viewName} clusterByOptions={this.props.clusterByOptions} dataUrl={this.props.dataUrl} data={this.props.data} documents={this.props.documents} question={this.props.question} isUpper={this.props.isUpper} storyid={this.props.storyid} referenceViewOrder={this.props.referenceViewOrder} colors={colors} />
             ) : (
-              <Map docImages={this.props.docImages} viewName={this.props.viewName} clusterBy={this.props.clusterBy} dataUrl={this.props.dataUrl} data={this.props.data} documents={this.props.documents} question={this.props.question} isUpper={this.props.isUpper} referenceViewOrder={this.props.referenceViewOrder} colors={colors} />
+              <Map docImages={this.props.docImages} viewName={this.props.viewName} clusterByOptions={this.props.clusterByOptions} dataUrl={this.props.dataUrl} data={this.props.data} documents={this.props.documents} question={this.props.question} isUpper={this.props.isUpper} referenceViewOrder={this.props.referenceViewOrder} colors={colors} />
             )
           }
         </div>

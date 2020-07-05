@@ -17,16 +17,59 @@
             Reference View #1:
             <br><br>
             <label for="RefView1Question">Question:</label>
-            <input type="text" id="RefView1Question" name="RefView1Question" value="{{view.ReferenceViews[0].Question}}"><br>
-            <label for="RefView1Type">Type (Either "Timeline" or "Map"):</label>
-            <input type="text" id="RefView1Type" name="RefView1Type" value="{{view.ReferenceViews[0].Type}}"><br><br>
+
+            <select id="RefView1Question" name="RefView1Question">
+                {% for question in questions %}
+                    {% if question == view.ReferenceViews[0].Question %}
+                        <option value="{{question}}" name="{{question}}" selected>{{question}}</option>
+                    {% else %}
+                        <option value="{{question}}" name="{{question}}">{{question}}</option>
+                    {% endif %}
+                {% endfor %}
+            </select>
+
+            <br>
+
+            <label for="RefView1Type">Type:</label>
+            <select id="RefView1Type" name="RefView1Type">
+                {% if view.ReferenceViews[0].Type == "Timeline" %}
+                    <option value="Timeline" name="Timeline" selected>Timeline</option>
+                    <option value="Map" name="Map">Map</option>
+                {% else %}
+                    <option value="Timeline" name="Timeline">Timeline</option>
+                    <option value="Map" name="Map" selected>Map</option>
+                {% endif %}
+            </select>
+
+            <br><br>
 
             Reference View #2:
             <br><br>
             <label for="RefView2Question">Question:</label>
-            <input type="text" id="RefView2Question" name="RefView2Question" value="{{view.ReferenceViews[1].Question}}"><br>
-            <label for="RefView2Type">Type (Either "Timeline" or "Map"):</label>
-            <input type="text" id="RefView2Type" name="RefView2Type" value="{{view.ReferenceViews[1].Type}}"><br><br>
+            <select id="RefView2Question" name="RefView2Question">
+                {% for question in questions %}
+                    {% if question == view.ReferenceViews[1].Question %}
+                        <option value="{{question}}" name="{{question}}" selected>{{question}}</option>
+                    {% else %}
+                        <option value="{{question}}" name="{{question}}">{{question}}</option>
+                    {% endif %}
+                {% endfor %}
+            </select>
+
+            <br>
+
+            <label for="RefView2Type">Type:</label>
+            <select id="RefView2Type" name="RefView2Type">
+                {% if view.ReferenceViews[1].Type == "Timeline" %}
+                    <option value="Timeline" name="Timeline" selected>Timeline</option>
+                    <option value="Map" name="Map">Map</option>
+                {% else %}
+                    <option value="Timeline" name="Timeline">Timeline</option>
+                    <option value="Map" name="Map" selected>Map</option>
+                {% endif %}
+            </select>
+
+            <br><br>
 
             <label for="clusterByOptions">Cluster By Options:</label>
                 <ul id="clusterList">
@@ -122,9 +165,18 @@
             }
         </script>
 
-            <label for="active">Active ("True" or "False"):</label>
-            <input type="text" id="active" name="active" value="{{view.Active}}"><br><br>
+            <label for="active">Make this view active?</label>
+            <select id="active" name="active">
+                {% if view.Active %}
+                    <option value="True" name="True" selected>True</option>
+                    <option value="False" name="False">False</option>
+                {% else %}
+                    <option value="True" name="True">True</option>
+                    <option value="False" name="False" selected>False</option>
+                {% endif %}
+            </select>
 
+            <br>
             <input type="submit" value="Submit"> <!-- clicking this should: update config.json for this story for this user. then re-render this "add view" screen.-->
         </form>
 

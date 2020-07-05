@@ -84,7 +84,7 @@ export default class Document extends React.Component {
             //console.log("rendering image");
 
             return (
-                <img src={this.props.image} id={this.props.imageName} style={{ marginRight: margin + 'px', borderColor: this.props.lineColor }} alt="Picture of Document" height="200" width="150" ref={this.setImageRef} ></img>
+                <img src={this.props.image} id={this.props.imageName} style={{ marginRight: margin + 'px', borderColor: this.props.color }} alt="Picture of Document" height="200" width="150" ref={this.setImageRef} ></img>
 
             );
 
@@ -98,15 +98,15 @@ export default class Document extends React.Component {
                 return (
                     <div id={"Document" + this.props.documentid}>
                         <a href={"/" + this.props.storyid + "#" + this.props.documentid}>
-                            <img id={this.props.imageName} src={this.props.image} style={{ marginRight: margin + 'px', borderColor: this.props.lineColor }} alt="Picture of Document" height="200" width="150" ref={this.setImageRef} ></img>
+                            <img id={this.props.imageName} src={this.props.image} style={{ marginRight: margin + 'px', borderColor: this.props.color }} alt="Picture of Document" height="200" width="150" ref={this.setImageRef} ></img>
                         </a>
 
                         <svg id={"svgLine" + this.props.documentid} width="4000" height="4000">
-                            <line x1={this.state.xPos} y1={this.state.yPos - 300} x2={this.props.dotLocationTop.x} y2={this.props.dotLocationTop.y - 300} style={{ stroke: this.props.lineColor, strokeWidth: "3" }} />
+                            <line x1={this.state.xPos} y1={this.state.yPos - 300} x2={this.props.dotLocationTop.x} y2={this.props.dotLocationTop.y - 300} style={{ stroke: this.props.color, strokeWidth: "3" }} />
                         </svg>
                     
                         <svg id={"svgLineBottom" + this.props.documentid} width="4000" height="4000">
-                            <line x1={this.state.xPos} y1={this.state.yPos - 100} x2={this.props.dotLocationBottom.x} y2={this.props.dotLocationBottom.y - 30} style={{ stroke: this.props.lineColor, strokeWidth: "3" }} />
+                            <line x1={this.state.xPos} y1={this.state.yPos - 100} x2={this.props.dotLocationBottom.x} y2={this.props.dotLocationBottom.y - 40} style={{ stroke: this.props.color, strokeWidth: "3" }} />
                         </svg>
 
                     </div >
@@ -117,11 +117,11 @@ export default class Document extends React.Component {
                 return (
                     <div id={"Document" + this.props.documentid}>
                         <a href={"/" + this.props.storyid + "#" + this.props.documentid}>
-                            <img id={this.props.imageName} src={this.props.image} style={{ marginRight: margin + 'px', borderColor: this.props.lineColor }} alt="Picture of Document" height="200" width="150" ref={this.setImageRef} ></img>
+                            <img id={this.props.imageName} src={this.props.image} style={{ marginRight: margin + 'px', borderColor: this.props.color }} alt="Picture of Document" height="200" width="150" ref={this.setImageRef} ></img>
                         </a>
 
                         <svg id={"svgLine" + this.props.documentid} width="4000" height="4000">
-                            <line x1={this.state.xPos} y1={this.state.yPos - 300} x2={this.props.dotLocationTop.x} y2={this.props.dotLocationTop.y - 300} style={{ stroke: this.props.lineColor, strokeWidth: "3" }} />
+                            <line x1={this.state.xPos} y1={this.state.yPos - 300} x2={this.props.dotLocationTop.x} y2={this.props.dotLocationTop.y - 300} style={{ stroke: this.props.color, strokeWidth: "3" }} />
                         </svg>
 
                     </div >
@@ -131,11 +131,11 @@ export default class Document extends React.Component {
                 return (
                     <div id={"Document" + this.props.documentid}>
                         <a href={"/" + this.props.storyid + "#" + this.props.documentid}>
-                            <img id={this.props.imageName} src={this.props.image} style={{ marginRight: margin + 'px', borderColor: this.props.lineColor }} alt="Picture of Document" height="200" width="150" ref={this.setImageRef} ></img>
+                            <img id={this.props.imageName} src={this.props.image} style={{ marginRight: margin + 'px', borderColor: this.props.color }} alt="Picture of Document" height="200" width="150" ref={this.setImageRef} ></img>
                         </a>
                     
                         <svg id={"svgLineBottom" + this.props.documentid} width="4000" height="4000">
-                            <line x1={this.state.xPos} y1={this.state.yPos} x2={this.props.dotLocationBottom.x} y2={this.props.dotLocationBottom.y + 765} style={{ stroke: this.props.lineColor, strokeWidth: "3" }} />
+                            <line x1={this.state.xPos} y1={this.state.yPos} x2={this.props.dotLocationBottom.x} y2={this.props.dotLocationBottom.y + 765} style={{ stroke: this.props.color, strokeWidth: "3" }} />
                         </svg>
 
                     </div >
@@ -145,7 +145,7 @@ export default class Document extends React.Component {
                 return (
                     <div id={"Document" + this.props.documentid}>
                         <a href={"/" + this.props.storyid + "#" + this.props.documentid}>
-                            <img id={this.props.imageName} src={this.props.image} style={{ marginRight: margin + 'px', borderColor: this.props.lineColor }} alt="Picture of Document" height="200" width="150" ref={this.setImageRef} ></img>
+                            <img id={this.props.imageName} src={this.props.image} style={{ marginRight: margin + 'px', borderColor: this.props.color }} alt="Picture of Document" height="200" width="150" ref={this.setImageRef} ></img>
                         </a>
                     </div>
                 );

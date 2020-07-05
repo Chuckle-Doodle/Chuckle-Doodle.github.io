@@ -33,10 +33,15 @@ export function updateImageOrder(data, clusteredDocOrder)
       //update order of docs on screen each time state (aka document order) changes
 
     //this will be the array we use to actually render the images in proper order
+    //console.log("clusteredDocOrder is:");
+    //console.log(clusteredDocOrder);
+
     var imageOrder = {};
     imageOrder["documentOrder"] = [];
     imageOrder["spaceOrder"] = [];
+    imageOrder["clusterOrder"] = {}; //this data structure maps doc IDs to which cluster number they are in
 
+    var clusterNumber = 0;
 
     //iterate through current docOrder
     for (let i = 0; i < clusteredDocOrder.length; i++)
@@ -47,15 +52,23 @@ export function updateImageOrder(data, clusteredDocOrder)
       {
         //imageOrder.push(blankImage);
         imageOrder["spaceOrder"].push(clusteredDocOrder[i - 1]);
+        clusterNumber += 1;
         continue;
       } 
       else //push image to the imageOrder array
       {
+        imageOrder['clusterOrder'][clusteredDocOrder[i]] = clusterNumber;
         //console.log(data[clusteredDocOrder[i] - 1]["Frontcover"]);
         imageOrder["documentOrder"].push([data[clusteredDocOrder[i] - 1]["Frontcover"], data[clusteredDocOrder[i] - 1]["docID"]]);
       }
     }
 
+    //print("printing clusters")
+    //print(imageOrder["clusters"])
+    //console.log("printing clusters");
+    //console.log(imageOrder["clusters"]);   //TODO!!! FIX LOGIC HERE. clusters list is not correct !!
+    //console.log("printing imageOrder");
+    //console.log(imageOrder);
     return imageOrder;
 }
 
@@ -63,11 +76,19 @@ export function updateImageOrder(data, clusteredDocOrder)
 //function to manipulate data so clusterDriver function has appropriate input
 export function cluster(data, clusterBy, documentsArray)
 {
+  //console.log("GOT HERE !!!!");
+  //console.log(clusterBy);
+  //console.log(data);
+  //console.log(documentsArray);
+
+
   let dataArray = []; //this will be array that above function uses
 
   //different logic if clustering by docID, difference stemming from json data format
-  if (clusterBy == "docID")
+  if (clusterBy == "Document ID")
   {
+    //set clusterBY to docID because that's what it's called in data dict
+    clusterBy = 'docID'
     for(let z = 0; z < documentsArray.length; z++)
     {
       dataArray.push(documentsArray[z]["docID"]);
@@ -88,6 +109,8 @@ export function cluster(data, clusterBy, documentsArray)
       }
     }
   }
+
+  console.log(dataArray);
   //now we have gone through all data so cluster it
   var clusteredDocOrder = clusterDriver(dataArray, documentsArray);
   var updatedImageOrder = updateImageOrder(data, clusteredDocOrder);

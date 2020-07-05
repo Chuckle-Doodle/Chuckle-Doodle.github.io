@@ -86,7 +86,7 @@ export default class Timeline extends React.Component {
             <div id="timeline1" />
 
             <div id="documentsDiv">
-              <Documents data={this.props.data} docImages={this.props.docImages} clusterByOptions={this.props.clusterByOptions} documents={this.props.documents} dotLocations={this.state.dotLocations} dotColors={this.props.colors} storyid={this.props.storyid} timelinePresent={true} referenceViewTop={this.props.referenceViewOrder[0]} referenceViewBottom={this.props.referenceViewOrder[1]} />
+              <Documents data={this.props.data} docImages={this.props.docImages} clusterByOptions={this.props.clusterByOptions} documents={this.props.documents} dotLocations={this.state.dotLocations} colors={this.props.colors} storyid={this.props.storyid} timelinePresent={true} referenceViewTop={this.props.referenceViewOrder[0]} referenceViewBottom={this.props.referenceViewOrder[1]} />
             </div>
 
           </div>
@@ -108,7 +108,7 @@ export default class Timeline extends React.Component {
           <div id="timeline2" />
 
           <div id="documentsDiv">
-            <Documents data={this.props.data} docImages={this.props.docImages} clusterByOptions={this.props.clusterByOptions} documents={this.props.documents} dotLocations={this.state.dotLocations} dotColors={this.props.colors} storyid={this.props.storyid} timelinePresent={true} referenceViewTop={this.props.referenceViewOrder[0]} referenceViewBottom={this.props.referenceViewOrder[1]} />
+            <Documents data={this.props.data} docImages={this.props.docImages} clusterByOptions={this.props.clusterByOptions} documents={this.props.documents} dotLocations={this.state.dotLocations} colors={this.props.colors} storyid={this.props.storyid} timelinePresent={true} referenceViewTop={this.props.referenceViewOrder[0]} referenceViewBottom={this.props.referenceViewOrder[1]} />
           </div>
 
         </div>

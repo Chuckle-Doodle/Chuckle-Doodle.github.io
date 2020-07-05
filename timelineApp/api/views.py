@@ -26,5 +26,16 @@ def get_current_views(storyid):
     with open(os.path.join(UPLOAD_FOLDER, 'users', flask.session['username'], 'stories', context['storyname'], 'config.json'), "r+") as jsonFile:
         data = json.load(jsonFile)
 
+        #edit config.json file to append "docID" to beginning of clusterByOptions list for each view
+        for view in data["Views"]:
+            #don't append this if it's already there
+            if view["ClusterByOptions"][0] == "Document ID":
+                continue
+            view["ClusterByOptions"][:0] = ['Document ID']
+
+        jsonFile.seek(0)  # rewind
+        json.dump(data, jsonFile)
+        jsonFile.truncate()
+
     os.chdir(initialPath)
     return flask.jsonify(**data)

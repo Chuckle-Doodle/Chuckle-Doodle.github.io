@@ -61,7 +61,7 @@ function getCenterCoordinates(docData) {
 }
 
 function displayMap(props, docData) {
-    var duplicateCoordinateOffset = 1; // in terms of longitude
+    var duplicateCoordinateOffset = .5; // in terms of longitude
     removeDuplicatedCoordinates(docData, duplicateCoordinateOffset);
 
     var center = getCenterCoordinates(docData);
@@ -204,14 +204,14 @@ function displayMap(props, docData) {
 
 // the main function that brings it all together
 const drawMap = (props) => {
-    var colors = ["lightskyblue", "yellow", "red", "green"];
+    //var colors = ["blue", "orange", "red", "green"];
 
     // The main source of data
     var docData = [];
     preprocessData(props, docData, props.colors);
 
     // needs timeout to retrieve the locations for geocoding
-    setTimeout(function() { displayMap(props, docData, colors); }, 2000);
+    setTimeout(function() { displayMap(props, docData, props.colors); }, 2000);
 }
 
 export default drawMap;

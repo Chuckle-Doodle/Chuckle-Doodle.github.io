@@ -29,7 +29,7 @@
     /*order:3;*/
     width: 75%;
 	height: 150%;
-	margin-top: 35px;
+	margin-top: 20px;
 }
 /* removes the "OpenStreeMap contributors." copyright below the map */
 .ol-overlaycontainer-stopevent { 
@@ -39,7 +39,9 @@
 	order:1;
 }*/
 #clusteringByText {
-	margin-top: 10px;
+	/*margin-top: 10px;    this is what ALEX HAD 6.27.20*/
+	margin-top: 6px;
+	margin-bottom: 10px;
 }
 #DocumentArray {
 	position: relative;

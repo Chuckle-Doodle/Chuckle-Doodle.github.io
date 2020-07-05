@@ -37,10 +37,6 @@ def edit_view():
         with open(os.path.join(UPLOAD_FOLDER, 'users', flask.session['username'], 'stories', context['storyname'], 'config.json'), "r+") as jsonFile:
             data = json.load(jsonFile)
 
-            print("????")
-            print(data)
-            print(data["Views"][context['viewNumber'] - 1]['ClusterByOptions'])
-
             #edit data
 
             #cluster options
@@ -68,8 +64,8 @@ def edit_view():
         data = json.load(json_file)
         context['view'] = data['Views'][context['viewNumber'] - 1]
 
-    print("printing context")
-    print(context)
+    #print("printing context")
+    #print(context)
 
     os.chdir(initialPath)
     return flask.render_template("editView.html", **context)
