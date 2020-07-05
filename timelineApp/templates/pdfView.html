@@ -5,50 +5,94 @@
     <link href="/static/css/style.css" rel="stylesheet" type="text/css"/>
 </head>
 
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+* {
+  box-sizing: border-box;
+}
+
+/* Create two equal columns that floats next to each other */
+.column {
+  float: left;
+  width: 50%;
+  padding: 10px;
+   /* Should be removed. Only for demonstration */
+}
+
+/* Clear floats after the columns */
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+</style>
+</head>
 <body>
+
+
+<body>
+    <div>
+        <a href="/{{ storyid }}/views/"> Customize your options </a>
+    </div>
+
     <div id="pdfPageHeading">
         <div>Current topic: {{ storyname }} </div>
         <div id="homePageLink"><a href="/">Return to Home Page</a></div>
         <div id="pdfScreenLogout"> <a href="/logout/">Logout</a> </div>
     </div>
 
-    <div>
-        <a href="/{{ storyid }}/views/"> Customize your options </a>
+    <div class="row">
+        <div class="column" style="background-color:#aaa;">
+          <h2>Documents</h2>
+          
+          <div>
+            {% for document in documents %}
+                <p id="{{ document.documentid }}" >Document {{ document.documentid }}</p>
+    
+                <!-- INSERT PDF OF EACH DOC HERE-->
+                <!--<a href="{{url_for('static', filename= document.filename )}}"> picture goes here </a> 
+                    data="/static/pdfs/{{ document.filename }}#page=1" 
+                    data="../var/uploads/{{storyname}}/{{document.filename}}#page=1" 
+    
+                "/var/uploads/{{ storyname }}/{{ document.filename }}"
+            "/static/pdfs/{{ document.filename }}"-->
+    
+                <object
+                    data="/static/var/users/{{ username }}/stories/{{ storyname }}/documents/{{ document.filename }}"
+                    type="application/pdf"
+                    width="85%"
+                    height="600">
+                    <p>Your browser does not support PDFs.
+                        <a href="https://example.com/test.pdf">Download the PDF</a>.
+                    </p>
+                </object>
+    
+
+            {% endfor %}
+        </div>
+        </div>
+        <div class="column" style="background-color:#bbb;">
+          <h2>Questions</h2>
+          <br>
+          <div>
+            {% for document in documents %}
+                <form action="/{{storyid}}/" method="post" >
+                    {% for questionAnswer in document.questions %}
+                        <label for="{{ questionAnswer[0] }}"> {{ questionAnswer[0] }}: </label><br>
+                        <textarea id="{{ questionAnswer[0] }}" name="{{ loop.index }}" rows="4" cols="75">{{questionAnswer[1]}}</textarea>
+                        <!--<input type="text" id="question" name="answer{{loop.index}}" value="When did the Black death stop?"><br>-->
+                        <br>
+                    {% endfor %}
+                    <input type="submit" value="Submit Form {{ loop.index }}" name="submit">
+                </form>
+                <br><br><br><br><br><br><br><br><br><br><br>
+
+            {% endfor %}
+          </div>
+        </div>
     </div>
 
-    <div>
-        {% for document in documents %}
-            <p id="{{ document.documentid }}" >Document {{ document.documentid }}</p>
 
-            <!-- INSERT PDF OF EACH DOC HERE-->
-            <!--<a href="{{url_for('static', filename= document.filename )}}"> picture goes here </a> 
-                data="/static/pdfs/{{ document.filename }}#page=1" 
-                data="../var/uploads/{{storyname}}/{{document.filename}}#page=1" 
-
-            "/var/uploads/{{ storyname }}/{{ document.filename }}"
-        "/static/pdfs/{{ document.filename }}"-->
-
-            <object
-                data="/static/var/users/{{ username }}/stories/{{ storyname }}/documents/{{ document.filename }}"
-                type="application/pdf"
-                width="85%"
-                height="600">
-                <p>Your browser does not support PDFs.
-                    <a href="https://example.com/test.pdf">Download the PDF</a>.
-                </p>
-            </object>
-
-            <form action="/{{storyid}}/" method="post" >
-                {% for questionAnswer in document.questions %}
-                    <label for="{{ questionAnswer[0] }}"> {{ questionAnswer[0] }}: </label><br>
-                    <textarea id="{{ questionAnswer[0] }}" name="{{ loop.index }}" rows="4" cols="75">{{questionAnswer[1]}}</textarea>
-                    <!--<input type="text" id="question" name="answer{{loop.index}}" value="When did the Black death stop?"><br>-->
-                    <br>
-                {% endfor %}
-                <input type="submit" value="Submit Form {{ loop.index }}" name="submit">
-            </form>
-        {% endfor %}
-    </div>
 
     <div>
         <a href="/{{ storyid }}/timeline/"> Continue to Custom-Generated Timelines / Maps </a>
