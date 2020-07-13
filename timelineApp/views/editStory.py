@@ -56,7 +56,7 @@ def edit_story():
     uniqueQuestions = math.ceil(totalQuestions / numDocs)
 
     if (flask.request.method == 'POST'):
-        print("post request")
+        
         context['username'] = flask.session['username']
         #extract file objects for use later
         files = []
@@ -78,16 +78,16 @@ def edit_story():
 
         numberQuestions = len(questions) 
 
-        print(questions)
+        
         
         k = 1
         #Update questions in database
-        print(uniqueQuestions)
+        
         while k <= numDocs:
             j = 1
             while j < numberQuestions:#May need to remove -1
-                #print(str(j) + " " + str(k))
-                #counter = counter + 1
+                
+                
                 connection.execute("UPDATE formquestions SET questiontext = ? where questionid = ? and documentid = ? and storyid = ? and username = ?", (questions[j], j, k, storyId, context['username']))
                 j = j + 1
             
@@ -97,8 +97,7 @@ def edit_story():
         if numberQuestions > uniqueQuestions + 1:
             documentID = 1
             while documentID <= numDocs:
-                print(questions[numberQuestions - 1])
-                print("got here")
+
                 connection.execute(
                 "INSERT INTO formquestions(questionid, documentid, storyid, username, questiontext) VALUES (?, ?, ?, ?, ?)", (uniqueQuestions + 1, documentID , storyId, context['username'], questions[numberQuestions-1])
                 ) 
@@ -175,8 +174,7 @@ def edit_story():
 
     #Extract the unique questions from database
     questions = connection.execute("SELECT questiontext FROM formquestions where documentid = ? and username = ? and storyid = ?", (1,flask.session['username'], storyId)).fetchall()
-    print("from sql")
-    print(questions)
+
     allQuestions = []
     totalQuestions = 0
     for q in questions:
