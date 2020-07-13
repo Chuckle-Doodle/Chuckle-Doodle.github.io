@@ -12,6 +12,9 @@
 	align-items:center;
   	justify-content:center; */
 }
+/*#timeline1 {
+	z-index: -3;
+}*/
 #timeline2 {
     /*display: none;*/
 	order:2;
@@ -43,6 +46,7 @@
 	margin-top: 6px;
 	margin-bottom: 10px;
 }
+
 #DocumentArray {
 	position: relative;
 }
@@ -82,10 +86,11 @@
 }
 
 #svgLine1 {
-	position: fixed;
+	position: fixed; /* want position absolute  for these svg lines so lines scroll with rest of timelines, etc. !!!!  appear to be viewport issues.  currently only fixed works as of 7.6.20 */
 	top: 0;
 	left: 0;
 	z-index: -2;
+	/*border: 3px solid red; color svg element border for testing */
 }
 #svgLine2 {
 	position: fixed;
@@ -106,28 +111,24 @@
 	z-index: -2;
 }
 #svgLineBottom1 {
-    /*display: none;*/
 	position: fixed;
 	top: 0;
 	left: 0;
 	z-index: -2;
 }
 #svgLineBottom2 {
-    /*display: none;*/
 	position: fixed;
 	top: 0;
 	left: 0;
 	z-index: -2;
 }
 #svgLineBottom3 {
-    /*display: none;*/
 	position: fixed;
 	top: 0;
 	left: 0;
 	z-index: -2;
 }
 #svgLineBottom4 {
-    /*display: none;*/
 	position: fixed;
 	top: 0;
 	left: 0;

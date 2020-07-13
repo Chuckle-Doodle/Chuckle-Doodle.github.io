@@ -16,7 +16,7 @@
   float: left;
   width: 50%;
   padding: 10px;
-   /* Should be removed. Only for demonstration */
+   
 }
 
 /* Clear floats after the columns */
@@ -25,6 +25,9 @@
   display: table;
   clear: both;
 }
+
+
+
 </style>
 </head>
 <body>
@@ -46,57 +49,67 @@
           <h2>Documents</h2>
           
           <div>
-            {% for document in documents %}
-                <p id="{{ document.documentid }}" >Document {{ document.documentid }}</p>
+            
+                <p id="{{ documents[pdfid-1].documentid }}" >Document {{ documents[pdfid-1].documentid }}</p>
     
-                <!-- INSERT PDF OF EACH DOC HERE-->
-                <!--<a href="{{url_for('static', filename= document.filename )}}"> picture goes here </a> 
-                    data="/static/pdfs/{{ document.filename }}#page=1" 
-                    data="../var/uploads/{{storyname}}/{{document.filename}}#page=1" 
-    
-                "/var/uploads/{{ storyname }}/{{ document.filename }}"
-            "/static/pdfs/{{ document.filename }}"-->
+
     
                 <object
-                    data="/static/var/users/{{ username }}/stories/{{ storyname }}/documents/{{ document.filename }}"
+                    data="/static/var/users/{{ username }}/stories/{{ storyname }}/documents/{{ documents[pdfid-1].filename }}"
                     type="application/pdf"
-                    width="85%"
-                    height="600">
+                    width="100%"
+                    height="681">
                     <p>Your browser does not support PDFs.
                         <a href="https://example.com/test.pdf">Download the PDF</a>.
                     </p>
                 </object>
     
 
-            {% endfor %}
+           
         </div>
         </div>
         <div class="column" style="background-color:#bbb;">
           <h2>Questions</h2>
           <br>
           <div>
-            {% for document in documents %}
-                <form action="/{{storyid}}/" method="post" >
-                    {% for questionAnswer in document.questions %}
+            
+                <form action="/{{storyid}}/{{pdfid}}/" method="post" >
+                    {% for questionAnswer in documents[pdfid-1].questions %}
                         <label for="{{ questionAnswer[0] }}"> {{ questionAnswer[0] }}: </label><br>
-                        <textarea id="{{ questionAnswer[0] }}" name="{{ loop.index }}" rows="4" cols="75">{{questionAnswer[1]}}</textarea>
+                        <textarea id="{{ questionAnswer[0] }}" name="{{ loop.index }}" rows="6" cols="90">{{questionAnswer[1]}}</textarea>
                         <!--<input type="text" id="question" name="answer{{loop.index}}" value="When did the Black death stop?"><br>-->
                         <br>
                     {% endfor %}
-                    <input type="submit" value="Submit Form {{ loop.index }}" name="submit">
+                    <input style = "margin-left: 550px" type="submit" value="Submit Form {{ documents[pdfid-1].documentid }}" name="submit">
                 </form>
-                <br><br><br><br><br><br><br><br><br><br><br>
+                <br>
 
-            {% endfor %}
+            <div>
+            
+                
+                <a style="margin-right: 415px" href="/{{storyid}}/{{pdfid-1}}/">Previous Document</a>
+                <a href="/{{storyid}}/{{pdfid+1}}/">Next Document</a>
+                
+            </div>
+
+            
+
+                <br><br><br>
+
+
+           
           </div>
         </div>
     </div>
 
+    
+
 
 
     <div>
-        <a href="/{{ storyid }}/timeline/"> Continue to Custom-Generated Timelines / Maps </a>
+        <a style = "margin-left: 1500px" href="/{{ storyid }}/timeline/"> Continue to Custom-Generated Timelines / Maps </a>
     </div>
+
 
     <!--
     <ul>

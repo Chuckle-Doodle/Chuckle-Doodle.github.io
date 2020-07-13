@@ -48,9 +48,13 @@ export default class ReferenceView extends React.Component {
         <div>
 
           {refViewType == "Timeline" ? (
-              <Timeline docImages={this.props.docImages} viewName={this.props.viewName} clusterByOptions={this.props.clusterByOptions} dataUrl={this.props.dataUrl} data={this.props.data} documents={this.props.documents} question={this.props.question} isUpper={this.props.isUpper} storyid={this.props.storyid} referenceViewOrder={this.props.referenceViewOrder} colors={colors} />
+              <div>
+                <Timeline docImages={this.props.docImages} viewName={this.props.viewName} clusterByOptions={this.props.clusterByOptions} dataUrl={this.props.dataUrl} data={this.props.data} documents={this.props.documents} question={this.props.question} isUpper={this.props.isUpper} storyid={this.props.storyid} referenceViewOrder={this.props.referenceViewOrder} colors={colors} imageOrder={this.props.imageOrder} clusterBy={this.props.clusterBy} colorBy={this.props.colorBy} />
+              </div>
             ) : (
-              <Map docImages={this.props.docImages} viewName={this.props.viewName} clusterByOptions={this.props.clusterByOptions} dataUrl={this.props.dataUrl} data={this.props.data} documents={this.props.documents} question={this.props.question} isUpper={this.props.isUpper} referenceViewOrder={this.props.referenceViewOrder} colors={colors} />
+              <div>
+                <Map docImages={this.props.docImages} viewName={this.props.viewName} clusterByOptions={this.props.clusterByOptions} dataUrl={this.props.dataUrl} data={this.props.data} documents={this.props.documents} question={this.props.question} isUpper={this.props.isUpper} referenceViewOrder={this.props.referenceViewOrder} colors={colors} imageOrder={this.props.imageOrder} clusterBy={this.props.clusterBy} colorBy={this.props.colorBy} />
+              </div>
             )
           }
         </div>

@@ -32,22 +32,15 @@ export default class Document extends React.Component {
 
     componentDidMount() {
         // Runs when an instance is added to the DOM
-        //console.log("in compDiDMount");
-        //var x1 = this.imageElement.getBoundingClientRect().x;
-        //var y1 = this.imageElement.getBoundingClientRect().y;
-        //console.log(x1, y1);
         this.setState(
             {
                 xPos: this.imageElement.getBoundingClientRect().x,
-                yPos: this.imageElement.getBoundingClientRect().y,
+                yPos: this.imageElement.getBoundingClientRect().y + 310,
             }
         );
     }
 
     componentDidUpdate(prevProps, prevState) {
-        //console.log("in compDiDUpdate");
-        //console.log(prevState.xPos, prevState.yPos);
-        //console.log();
         if (prevProps == this.props)
         {
             return;
@@ -56,11 +49,7 @@ export default class Document extends React.Component {
             return;
         }
         if (prevState.xPos != this.imageElement.getBoundingClientRect().x || prevState.yPos != this.imageElement.getBoundingClientRect().y + 310) {
-            //var x1 = this.imageElement.getBoundingClientRect().x;
-            //var y1 = this.imageElement.getBoundingClientRect().y;
-            //console.log("state is different !!!");
-            //console.log(this.imageElement.getBoundingClientRect().x);
-            //console.log(this.imageElement.getBoundingClientRect().y);
+
             this.setState(
                 {
                     xPos: this.imageElement.getBoundingClientRect().x,
@@ -72,8 +61,6 @@ export default class Document extends React.Component {
 
 
     render() {
-        //console.log("about to render doc");
-        //console.log(this.state);
 
         var margin = 0;
         if (this.props.endOfCluster == true) {
@@ -81,15 +68,12 @@ export default class Document extends React.Component {
         }
 
         if (this.state.xPos == null) {
-            //console.log("rendering image");
 
             return (
                 <img src={this.props.image} id={this.props.imageName} style={{ marginRight: margin + 'px', borderColor: this.props.color }} alt="Picture of Document" height="200" width="150" ref={this.setImageRef} ></img>
-
             );
 
         } else {
-            //console.log("image already rendered!");
 
             //4 different cases to return: timeline on top, timeline on bottom, timeline on top and bottom, no timeline
             //TODO: MAKE THIS STEP MORE EFFICIENT AND SCALABLE IN FUTURE
@@ -106,7 +90,7 @@ export default class Document extends React.Component {
                         </svg>
                     
                         <svg id={"svgLineBottom" + this.props.documentid} width="4000" height="4000">
-                            <line x1={this.state.xPos} y1={this.state.yPos - 100} x2={this.props.dotLocationBottom.x} y2={this.props.dotLocationBottom.y - 40} style={{ stroke: this.props.color, strokeWidth: "3" }} />
+                            <line x1={this.state.xPos} y1={this.state.yPos - 100} x2={this.props.dotLocationBottom.x} y2={this.props.dotLocationBottom.y - 80} style={{ stroke: this.props.color, strokeWidth: "3" }} />
                         </svg>
 
                     </div >
