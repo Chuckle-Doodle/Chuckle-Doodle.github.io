@@ -24,7 +24,6 @@ npx webpack
 # How to put application online through AWS
 
 1. Create AWS Account
-    -ddd
 2. Start EC2 instance with the following settings:
     -“Ubuntu Server 20.04 LTS” Amazon Machine Image (AMI)
     -t2.micro instance type
