@@ -104,18 +104,6 @@ changeColorBy (event) {
 
     if (this.props.timelinePresent)
     {
-      //console.log("colors are: ", this.props.colors);
-      //console.log("image order is: ");
-      //console.log(this.state.imageOrder);
-      //console.log(this.state.imageOrder.documentOrder);
-      //console.log("colorBy: ", this.state.colorBy);
-
-      //console.log("printing state!");
-      //console.log(this.state.imageOrder);
-      //console.log(this.state.imageOrder.documentOrder);
-      //console.log(this.state.imageOrder.documentOrder[0]);
-      //console.log(this.state.imageOrder.documentOrder[0][0]);
-
       return (
 
         <div className="Documents">

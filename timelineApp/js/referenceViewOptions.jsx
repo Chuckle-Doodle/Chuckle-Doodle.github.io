@@ -75,7 +75,7 @@ export default class ReferenceViewOptions extends React.Component {
 
             {this.props.ReferenceViews.map((view, index) =>
               <div style={{display: 'inline-block', marginRight: '50px'}} >
-                { view.Type == "Timeline" ? (index == 0 ? ("Timeline #1 of: " + view.Question) : ("Timeline #2 of: " + view.Question)) : (index == 0 ? ("Map #1 of: " + view.Question) : ("Map #2 of: " + view.Question)) }
+                { view.Type == "Timeline" ? (index == 0 ? ("#1: Timeline of " + view.Question) : ("#2: Timeline of " + view.Question)) : (index == 0 ? ("#1: Map of " + view.Question) : ("#2: Map of " + view.Question)) }
               </div>
             )}
 
