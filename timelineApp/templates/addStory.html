@@ -1,24 +1,8 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <title>timelineApp</title>
     <link href="/static/css/style.css" rel="stylesheet" type="text/css"/>
-    <!-- Added bootstrap -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-    <style>
-        #helo{
-            overflow: auto;
-            margin: auto;
-            margin-top:40px;
-            margin-bottom:80px;
-            text-align:center;
-            width: 550px;
-        }
-    </style>
 </head>
 
 <body>
@@ -33,40 +17,42 @@
             <a href={{ "/u/" ~ logname ~ "/" }}> {{logname}} </a>
         </p>
     </div> -->
-    <div id="helo">
-        <p class="aler alert-primary">Hi, {{username}}!</p>
-        <p class="aler alert-secondary">
+    <div>
+        <p>Hi, {{username}}!</p>
+        <p>
             Title your story, add your documents (as .pdf files), and add your questions.
         </p>
 
-        <form id="addStoryForm" method="post" enctype="multipart/form-data" style="text-align:left" >
-            <div class="form-group">
-                <label for="stories">Story title:</label>
-                <input class="form-control" type="text" id="title" name="title"> {{storyAlreadyExists}}<br><br>
-                <label for="document1">Document 1:</label>
-                <input class="form-control" type="file" id="document1" name="document1" accept="application/pdf"><br>
-                <label for="document1">Document 2:</label>
-                <input class="form-control" type="file" id="document2" name="document2" accept="application/pdf"><br>
-                <label for="document1">Document 3:</label>
-                <input class="form-control" type="file" id="document3" name="document3" accept="application/pdf"><br>
-                <label for="document1">Document 4:</label>
-                <input class="form-control" type="file" id="document4" name="document4" accept="application/pdf"><br>
-                <button onclick="addDocument()"  type="button" class="btn btn-primary" >Add document</button>
-                <button type="button" class="btn btn-primary">Remove document</button><br><br>
-                <label for="question1">Question:</label>
-                <input class="form-control" type="text" id="question1" name="question1"><br>
-                <label for="question2">Question:</label>
-                <input class="form-control" type="text" id="question2" name="question2"><br>
-                <label for="question3">Question:</label>
-                <input class="form-control" type="text" id="question3" name="question3"><br>
-                <label for="question4">Question:</label>
-                <input class="form-control" type="text" id="question4" name="question4"><br>
-                <button type="button" class="btn btn-primary">Add question</button>
-                <button type="button" class="btn btn-primary">Remove question</button><br><br>
-                <input class="form-control" type="submit" value="Submit">          
-            </div>
+        <form id="addStoryForm" method="post" enctype="multipart/form-data">
+            <label for="stories">Story title:</label>
+            <input type="text" id="title" name="title"> {{storyAlreadyExists}}<br><br>
+            <label for="document1">Document 1:</label>
+            <input type="file" id="document1" name="document1" accept="application/pdf"><br>
+            <label for="document1">Document 2:</label>
+            <input type="file" id="document2" name="document2" accept="application/pdf"><br>
+            <label for="document1">Document 3:</label>
+            <input type="file" id="document3" name="document3" accept="application/pdf"><br>
+            <label for="document1">Document 4:</label>
+            <input type="file" id="document4" name="document4" accept="application/pdf"><br>
+            <button onclick="addDocument()" >Add document</button>
+            <button>Remove document</button><br><br>
+            <label for="question1">Question:</label>
+            <input type="text" id="question1" name="question1"><br>
+            <label for="question2">Question:</label>
+            <input type="text" id="question2" name="question2"><br>
+            <label for="question3">Question:</label>
+            <input type="text" id="question3" name="question3"><br>
+            <label for="question4">Question:</label>
+            <input type="text" id="question4" name="question4"><br>
+            <button>Add question</button>
+            <button>Remove question</button><br><br>
+            <input type="submit" value="Submit">
         </form>
-        <a href="/" type="button" class="btn btn-primary"> Back </a>
+
+        <a href="/"> Back </a>
+
     </div>
+
+
 </body>
 </html>
