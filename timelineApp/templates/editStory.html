@@ -21,13 +21,14 @@
 
         <div>
             {% for doc in storyDocuments %}
-                <p id="{{doc}}" >{{doc}}<button onclick="deleteDocument()" >Delete document</button>
+                <p id="{{doc}}" >{{doc}}
+                 <!--<button onclick="deleteDocument()" >Delete document</button>-->
             {% endfor %}
         </div>
 
-
+        
         <form id="editStoryForm" method="post" enctype="multipart/form-data">
-            <label for="stories">Story title:</label> 
+           <!-- <label for="stories">Story title:</label> 
             <input type="text" value = "{{originalStoryName}}" id="storyToEdit" name="storyToEdit"> {{storyAlreadyExists}}<br><br>
             <label for="document1">Document 1:</label>
             <input type="file" id="document1" name="document1" accept="application/pdf"><br>
@@ -39,7 +40,7 @@
             <input type="file" id="document4" name="document4" accept="application/pdf"><br>
             <button onclick="addDocument()" >Add document</button>
             <button>Remove document</button><br><br>
-
+        -->
 
 
 
@@ -48,7 +49,7 @@
 
                 <label for="{{q}}">Question:</label>
                 <input type="text" id="{{q}}" name="{{q}}" value = "{{q}}">
-                <button onclick = "deleteQuestion()">Delete Question</button>
+                
                 <br>
                 
                 {% endfor %}
@@ -67,7 +68,7 @@
 
 
         
-        <button>Remove question</button><br><br>
+        
 
         <a href="/"> Back </a>
 

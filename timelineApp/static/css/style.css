@@ -12,6 +12,9 @@
 	align-items:center;
   	justify-content:center; */
 }
+/*#timeline1 {
+	z-index: -3;
+}*/
 #timeline2 {
     /*display: none;*/
 	order:2;
@@ -20,6 +23,7 @@
     /*order:3;*/
     width: 75%;
 	height: 150%;
+	/*display: none;*/
 }
 /* removes the "OpenStreeMap contributors." copyright below the map */
 .ol-overlaycontainer-stopevent { 
@@ -43,6 +47,7 @@
 	margin-top: 6px;
 	margin-bottom: 10px;
 }
+
 #DocumentArray {
 	position: relative;
 }
@@ -80,58 +85,70 @@
     border-style: solid;
     border-width: 8px;
 }
+#svgTimeline1 {
+	position: absolute;
+	top: 0;     /* NOTE: putting top and left at 0 moves svg box to complete top left corner of page. 
+	removing has it start at top of timeline1  */
+	left: 0;
+	z-index: -10;
+	/*border: 3px solid green;*/
+}
+#svgTimeline2 {
+	position: absolute;
+	top: 0;
+	left: 0;
+	border: 3px solid orange;
+}
 
 #svgLine1 {
-	position: fixed;
+	position: absolute; /* want position absolute  for these svg lines so lines scroll with rest of timelines, etc. !!!!  appear to be viewport issues.  currently only fixed works as of 7.6.20 */
 	top: 0;
 	left: 0;
-	z-index: -2;
+	z-index: 10;
+	border: 3px solid red;/* color svg element border for testing */
 }
 #svgLine2 {
-	position: fixed;
+	position: absolute;
 	top: 0;
 	left: 0;
-	z-index: -2;
+	z-index: 10;
 }
 #svgLine3 {
-	position: fixed;
+	position: absolute;
 	top: 0;
 	left: 0;
-	z-index: -2;
+	z-index: 10;
 }
 #svgLine4 {
-	position: fixed;
+	position: absolute;
 	top: 0;
 	left: 0;
-	z-index: -2;
+	z-index: 10;
 }
 #svgLineBottom1 {
-    /*display: none;*/
-	position: fixed;
+	position: absolute;
 	top: 0;
 	left: 0;
-	z-index: -2;
+	z-index: 10;
+	/*border: 10px solid red;*/
 }
 #svgLineBottom2 {
-    /*display: none;*/
-	position: fixed;
+	position: absolute;
 	top: 0;
 	left: 0;
-	z-index: -2;
+	z-index: 10;
 }
 #svgLineBottom3 {
-    /*display: none;*/
-	position: fixed;
+	position: absolute;
 	top: 0;
 	left: 0;
-	z-index: -2;
+	z-index: 10;
 }
 #svgLineBottom4 {
-    /*display: none;*/
-	position: fixed;
+	position: absolute;
 	top: 0;
 	left: 0;
-	z-index: -2;
+	z-index: 10;
 }
 
 #pdfPageHeading {

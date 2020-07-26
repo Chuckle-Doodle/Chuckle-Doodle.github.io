@@ -8,8 +8,8 @@ import flask
 import timelineApp
 
 
-@timelineApp.app.route('/<int:storyid>/', methods=['GET', 'POST'])
-def show_pdf(storyid):
+@timelineApp.app.route('/<int:storyid>/<int:pdfid>/', methods=['GET', 'POST'])
+def show_pdf(storyid,pdfid):
     """Display pdf view (pdf of documents + questions for this story)."""
     #things to return to pdfView.html template: pdfs for each document in story, questions pertaining to each doc
 
@@ -26,17 +26,32 @@ def show_pdf(storyid):
         context['username'] = flask.session['username']
     else:
         return flask.redirect(flask.url_for('show_login'))
+    
+    #Set pdfid to either 1 or last document if end is reached
+    if pdfid == 0:
+        pdfid = 1  
+    questions = connection.execute("SELECT * from documents where username = ? and storyid = ?",(context['username'],storyid)).fetchall()
+    if pdfid > len(questions):
+        pdfid = len(questions) 
+
+    #tell which pdf id to display as url
+    context['pdfid'] = pdfid
+
 
 
     if (flask.request.method == 'POST'):
+
+
         # find out which form aka document this submission corresponds with
         docid = int(flask.request.form['submit'][-1:])
+        
 
         # get number of questions associated with this document / this post request
         #cursor3 = connection.execute("SELECT COUNT(*) FROM formquestions where storyid = ? and documentid = ?", (storyid, docid))
         cursor3 = connection.execute("SELECT questionid FROM formquestions where username = ? and storyid = ? and documentid = ?", (context['username'], storyid, docid))
         questionIDs = cursor3.fetchall()
         numberOfQuestions = len(questionIDs)
+       
         for i in range(1, numberOfQuestions + 1):  # +1 to do 1 indexing rather than 0 indexing
             #persist this answer to the database
             #connection.execute("UPDATE formdata SET answertext = ? WHERE storyid = ? and documentid = ? and questionid = ?", (flask.request.form[str(i)], storyid, docid, i))

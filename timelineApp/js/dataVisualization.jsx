@@ -1,7 +1,8 @@
 import React from 'react';
 import fetch from 'isomorphic-fetch';
-//import Documents from './documents.jsx';
-import ReferenceView from './referenceView';
+import Documents from './documents.jsx';
+//import ReferenceView from './referenceView';
+import ReferenceViewOptions from './referenceViewOptions';
 import '../static/css/style.css';
 
 export default class DataVisualization extends React.Component {
@@ -36,8 +37,8 @@ export default class DataVisualization extends React.Component {
 					} 
 				}
 				//by now activeView should be correctly set
-				console.log("printing active view");
-				console.log(activeView);
+				//console.log("printing active view");
+				//console.log(activeView);
 
 				this.setState({
 					data: response1.Documents,
@@ -61,6 +62,8 @@ export default class DataVisualization extends React.Component {
         for (let i = 0; i < this.state.viewInfo['ReferenceViews'].length; i++) {
         	referenceViewOrder.push(this.state.viewInfo['ReferenceViews'][i]['Type']);
         }
+
+        //var colors = ["blue", "gray", "green", "red", "orange", "brown", "purple"];
 
 		var documentsArray = [];
 		var docImages = [];
@@ -102,7 +105,7 @@ export default class DataVisualization extends React.Component {
           	</h3>
 
           	<div id="timelineBackLink">
-        	  <a href={"/" + this.props.storyid + "/"} >Return to PDF form page</a>
+        	  <a href={"/" + this.props.storyid + "/1/"} >Return to PDF form page</a>
       		</div>
 
       		<div id="timelineLogoutLink">
@@ -111,26 +114,7 @@ export default class DataVisualization extends React.Component {
 
           </div>
 
-          <div>
-            {this.state.viewInfo.ReferenceViews.map((view, index) =>
-            	<div>
-            		<div className="ReferenceViewTitle">
-            			{index == 0 ? (view.Type == "Timeline" ? ("Timeline of: " + view.Question) : ("Map of: " + view.Question)) : null}
-            		</div>
-
-            		<div className="ReferenceViewTitle">
-						{index == 1 ? ((view.Type == "Map" && allMaps == false) ? ("Map of: " + view.Question) : null) : null}
-            		</div>
-
-            		<ReferenceView docImages={docImages} viewName={this.state.viewInfo.Name} clusterByOptions={this.state.viewInfo.ClusterByOptions} dataUrl={this.props.dataUrl} data={ this.state.data } documents={ documentsArray } type={ view.Type } question={ view.Question }
-              		isUpper={index == 0 ? true : false} storyid={this.props.storyid} referenceViewOrder={referenceViewOrder} />
-              		
-              		<div className="ReferenceViewTitle">
-						{index == 1 ? (view.Type == "Timeline" ? ("Timeline of: " + view.Question) : null) : null}
-            		</div>
-              	</div>
-            )}
-          </div>
+          <ReferenceViewOptions ReferenceViews={this.state.viewInfo.ReferenceViews} docImages={docImages} documents={documentsArray} data={this.state.data} clusterByOptions={this.state.viewInfo.ClusterByOptions} viewName={this.state.viewInfo.Name} dataUrl={this.props.dataUrl} referenceViewOrder={referenceViewOrder} />
 
 
         </div>

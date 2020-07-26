@@ -2,16 +2,7 @@ import * as d3 from 'd3';
 import fetch from 'isomorphic-fetch';
 import Timeline from './timelinePlugin.js';
 
-//var colors = ["blue", "goldenrod", "fuchsia", "green", "burlywood", "crimson", "lightslategray", "red"];
-
-//var url = "http://ec2-3-86-184-180.compute-1.amazonaws.com/"
-
 const drawTimeline = (props) => {
-    //props are:
-    //viewName={this.props.viewName} clusterBy={this.props.clusterBy} dataUrl={this.props.dataUrl} data={this.props.data} documents={this.props.documents} question={this.props.question} isUpper={this.props.isUpper}
-    //console.log("inside draw function that actually creates timeline w mock data");
-
-    //var viewName = props.viewName;
 
     var myData = [];  //take props.data and edit it to look like above data, place in this variable
 
@@ -28,6 +19,7 @@ const drawTimeline = (props) => {
     }
 
     if (props.isUpper == true) {
+
         var chart = new Timeline('#timeline1', {
             direction: 'up',
             initialWidth: 1100,
@@ -36,13 +28,13 @@ const drawTimeline = (props) => {
             dotRadius: 7,
             margin: { "bottom": 60, "right": 200 },
             labelBgColor: function (d, i) {
-                return props.colors[i];
+                return (props.colorBy == "Document ID" || props.clusterBy == "Document ID" ? props.colors[i] : props.colors[props.colors.length - 1 - props.imageOrder.clusterOrder[i]]);
             },
             dotColor: function (d, i) {
-                return props.colors[i];
+                return (props.colorBy == "Document ID" || props.clusterBy == "Document ID" ? props.colors[i] : props.colors[props.colors.length - 1 - props.imageOrder.clusterOrder[i]]);
             },
             linkColor: function (d, i) {
-                return props.colors[i];
+                return (props.colorBy == "Document ID" || props.clusterBy == "Document ID" ? props.colors[i] : props.colors[props.colors.length - 1 - props.imageOrder.clusterOrder[i]]);
             },
             textFn: function (d, i) {
                 return d.name;
@@ -60,13 +52,13 @@ const drawTimeline = (props) => {
             dotRadius: 7,
             margin: { "top": 60, "right": 200 },
             labelBgColor: function (d, i) {
-                return props.colors[i];
+                return (props.colorBy == "Document ID" || props.clusterBy == "Document ID" ? props.colors[i] : props.colors[props.colors.length - 1 - props.imageOrder.clusterOrder[i]]);
             },
             dotColor: function (d, i) {
-                return props.colors[i];
+                return (props.colorBy == "Document ID" || props.clusterBy == "Document ID" ? props.colors[i] : props.colors[props.colors.length - 1 - props.imageOrder.clusterOrder[i]]);
             },
             linkColor: function (d, i) {
-                return props.colors[i];
+                return (props.colorBy == "Document ID" || props.clusterBy == "Document ID" ? props.colors[i] : props.colors[props.colors.length - 1 - props.imageOrder.clusterOrder[i]]);
             },
             textFn: function (d, i) {
                 return d.name;
@@ -84,26 +76,11 @@ const drawTimeline = (props) => {
         window.location.href = window.location.origin + "/" + props.storyid + "/#" + (i + 1);
     });
 
-    /*
-    chart.on('labelMouseenter', function(d,i){
-      //display popup next to label with more info on that doc
-      var labelElement = document.getElementById("label-g" + (i+1) + (props.isUpper == true ? "upper" : "lower"));
-      var labelLocation = labelElement.getBoundingClientRect();
-      //console.log(labelLocation);
-    
-    
-    });
-    
-    chart.on('labelMouseleave', function(d,i){
-      //delete popup pertaining to that label
-    
-    });
-    */
-
     chart.data(myData).visualize().resizeToFit();
 
     //chart.dotInfo["colors"] = colors;
-    return chart.dotInfo;
+    //return chart.dotInfo;
+    return chart;
 }
 
 export default drawTimeline;

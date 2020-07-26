@@ -1,14 +1,14 @@
 import React from 'react';
 import fetch from 'isomorphic-fetch';
 //import Timeline from './timeline.js';
-import * as utils from './docCluster.js';
+//import * as utils from './docCluster.js';
 import Document from './document.jsx';
 import '../static/css/style.css'; 
 
 export default class Documents extends React.Component {
   constructor(props) {
     super(props);
-
+/*
     var initialSpaceOrder = [];
     var initialClusterOrder = {};
     for (var i = 0; i < this.props.documents.length; i++) {
@@ -26,9 +26,10 @@ export default class Documents extends React.Component {
         //colorOrder: this.props.dotColors,
         colorBy: 'Document ID',
     };
+    */
 
-    this.changeClusterBy = this.changeClusterBy.bind(this);
-    this.changeColorBy = this.changeColorBy.bind(this);
+    //this.changeClusterBy = this.changeClusterBy.bind(this);
+    //this.changeColorBy = this.changeColorBy.bind(this);
   }
 
 /*
@@ -41,6 +42,7 @@ export default class Documents extends React.Component {
 }
 */
 
+/*
 changeClusterBy (event) {
 
   this.setState({
@@ -56,7 +58,7 @@ changeColorBy (event) {
     colorBy: event.target.value
   });
 }
-
+*/
 
   render() {
     //console.log("printing cluster order !!!");
@@ -97,43 +99,20 @@ changeColorBy (event) {
 
     console.log("colorOrder is: ", colorOrder);
     */
-
+    //console.log("printing props");
+    //console.log(this.props);
 
     if (this.props.timelinePresent)
     {
-      //console.log("colors are: ", this.props.colors);
-      //console.log("image order is: ");
-      //console.log(this.state.imageOrder);
-      //console.log(this.state.imageOrder.documentOrder);
-      //console.log("colorBy: ", this.state.colorBy);
-
       return (
 
         <div className="Documents">
 
           <div id="DocumentArray">
-            {this.state.imageOrder.documentOrder.map((imageData, index) =>
-              <Document image={imageData[0]} documentid={imageData[1]} imageName={"image" + imageData[1]} endOfCluster={this.state.imageOrder.spaceOrder.indexOf(imageData[1]) > -1 ? true : false} dotLocationTop={this.props.referenceViewTop == "Timeline" ? this.props.dotLocations[imageData[1] - 1] : null} dotLocationBottom={this.props.referenceViewBottom == "Timeline" ? this.props.dotLocations[this.props.dotLocations.length - 1 - 4 + imageData[1]] : null} color={this.state.colorBy == "Document ID" ? this.props.colors[imageData[1] - 1] : this.props.colors[this.state.imageOrder.clusterOrder[imageData[1]]]} storyid={this.props.storyid} referenceViewTop={this.props.referenceViewTop} referenceViewBottom={this.props.referenceViewBottom} />
+            {this.props.imageOrder.documentOrder.map((imageData, index) =>
+              <Document image={imageData[0]} documentid={imageData[1]} imageName={"image" + imageData[1]} endOfCluster={this.props.imageOrder.spaceOrder.indexOf(imageData[1]) > -1 ? true : false} dotLocationTop={this.props.referenceViewTop == "Timeline" ? this.props.dotLocations[imageData[1] - 1] : null} dotLocationBottom={this.props.referenceViewBottom == "Timeline" ? this.props.dotLocations[this.props.dotLocations.length - 1 - 4 + imageData[1]] : null} color={this.props.colorBy == "Document ID" ? this.props.colors[imageData[1] - 1] : (this.props.clusterBy == "Document ID" ? this.props.colors[imageData[1] - 1] : this.props.colors[this.props.colors.length - 1 - this.props.imageOrder.clusterOrder[imageData[1]]])} storyid={this.props.storyid} referenceViewTop={this.props.referenceViewTop} referenceViewBottom={this.props.referenceViewBottom} />
             )}
           </div>
-
-            Cluster by:
-            <select id="clusterByList" name="clusterByList" onChange={this.changeClusterBy} value={this.state.clusterBy} >
-                {this.props.clusterByOptions.map((clusterByOption, index) =>
-                  <option value={clusterByOption}>
-                    {clusterByOption}
-                  </option>
-
-
-                )}
-            </select>
-
-            <div onChange={this.changeColorBy}>
-              Color by:
-              <input type="radio" value="Document ID" name="colorByOption" defaultChecked/> Document ID
-              <input type="radio" value="Cluster" name="colorByOption"/> Cluster
-            </div>
-
 
         </div>
       );
@@ -144,31 +123,9 @@ changeColorBy (event) {
         <div className="Documents">
 
           <div id="DocumentArray">
-            {this.state.imageOrder.documentOrder.map((imageData, index) =>
-              <Document image={imageData[0]} documentid={imageData[1]} imageName={"image" + imageData[1]} endOfCluster={this.state.imageOrder.spaceOrder.indexOf(imageData[1]) > -1 ? true : false} color={this.state.colorBy == "Document ID" ? this.props.colors[imageData[1] - 1] : this.props.colors[this.state.imageOrder.clusterOrder[imageData[1]]]} storyid={this.props.storyid} referenceViewTop={this.props.referenceViewTop} referenceViewBottom={this.props.referenceViewBottom} />
+            {this.props.imageOrder.documentOrder.map((imageData, index) =>
+              <Document image={imageData[0]} documentid={imageData[1]} imageName={"image" + imageData[1]} endOfCluster={this.props.imageOrder.spaceOrder.indexOf(imageData[1]) > -1 ? true : false} color={this.props.colorBy == "Document ID" ? this.props.colors[imageData[1] - 1] : (this.props.clusterBy == "Document ID" ? this.props.colors[imageData[1] - 1] : this.props.colors[this.props.colors.length - 1 - this.props.imageOrder.clusterOrder[imageData[1]]])} storyid={this.props.storyid} referenceViewTop={this.props.referenceViewTop} referenceViewBottom={this.props.referenceViewBottom} />
             )}
-          </div>
-
-          <button className="button" value="docID" onClick={() => this.setState({
-              imageOrder: utils.cluster(this.props.data, 'docID', this.props.documents),
-              clusterBy: 'Document ID'
-          })}> 
-            Cluster by Document ID (default)
-          </button>
-
-          {this.props.clusterByOptions.map((option) =>
-
-            <button className="button" value={option} onClick={() => this.setState({
-              imageOrder: utils.cluster(this.props.data, option, this.props.documents),
-              clusterBy: option
-            })}>
-              Cluster by: {option}
-            </button>
-
-          )}
-
-          <div id="clusteringByText">
-            Clustering by: {this.state.clusterBy}
           </div>
 
         </div>
@@ -212,3 +169,49 @@ changeColorBy (event) {
 
 //colorOrder: utils.clusterColors(this.props.data, 'docID', this.props.documents, this.props.dotColors)
 //colorOrder: utils.clusterColors(this.props.data, this.props.clusterBy, this.props.documents, this.props.dotColors)
+
+
+/* gotten rid of 7.12.20
+            Cluster by:
+            <select id="clusterByList" name="clusterByList" onChange={this.changeClusterBy} value={this.state.clusterBy} >
+                {this.props.clusterByOptions.map((clusterByOption, index) =>
+                  <option value={clusterByOption}>
+                    {clusterByOption}
+                  </option>
+
+
+                )}
+            </select>
+
+            <div onChange={this.changeColorBy}>
+              Color by:
+              <input type="radio" value="Document ID" name="colorByOption" defaultChecked/> Document ID
+              <input type="radio" value="Cluster" name="colorByOption"/> Cluster
+            </div>
+
+
+
+
+          <button className="button" value="docID" onClick={() => this.setState({
+              imageOrder: utils.cluster(this.props.data, 'docID', this.props.documents),
+              clusterBy: 'Document ID'
+          })}> 
+            Cluster by Document ID (default)
+          </button>
+
+          {this.props.clusterByOptions.map((option) =>
+
+            <button className="button" value={option} onClick={() => this.setState({
+              imageOrder: utils.cluster(this.props.data, option, this.props.documents),
+              clusterBy: option
+            })}>
+              Cluster by: {option}
+            </button>
+
+          )}
+
+          <div id="clusteringByText">
+            Clustering by: {this.state.clusterBy}
+          </div>
+
+*/

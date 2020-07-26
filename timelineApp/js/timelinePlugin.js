@@ -186,6 +186,8 @@ class Timeline extends d3kit.SvgChart {
     this.dotInfo["locations"] = elements.map(function(elem) {
       return elem.getBoundingClientRect();
     })
+    //console.log("initial dot locations!");
+    //console.log(this.dotInfo["locations"]);
 
     return this;
   }
