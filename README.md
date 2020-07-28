@@ -99,3 +99,5 @@ npx webpack
 
  - improve organization for integrating different types of reference views, like timelines, maps, etc
  - change colors of markers on map as the map legend changes
+ - provide different functionality depending on if user is teacher or student
+ - make background of exported image white not black
