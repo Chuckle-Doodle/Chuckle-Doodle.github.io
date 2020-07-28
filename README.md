@@ -81,6 +81,7 @@ npx webpack
     nodeenv --python-virtualenv
     source env/bin/activate
     npm install .
+    npx webpack
     ```
 11. Initialize sql database and file system data
     ```sh
