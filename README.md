@@ -30,7 +30,7 @@ npx webpack
     -add a rule to allow both SSH and HTTP traffic in and out of your instance.
     -Make sure to create a key pair and download it.
 3. SSH into instance.
-    -Copy or move your instance’s SSH key to your project directory and set the permissions to read-only with the command "chmod 400 <your SSH key>"
+    -Copy or move your instance’s SSH key (should be a .pem file) to your project directory and set the permissions to read-only with the command "chmod 400 <your SSH key>"
     ```sh
     ssh -i <your instance's SSH key> ubuntu@<your instance's public DNS>
     ```
