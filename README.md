@@ -17,7 +17,7 @@ deactivate
 source env/bin/activate
 npm install .
 npx webpack
-./bin/timelineApprun (if on Windows Subsystem for Linux, first run dos2unix ./bin/timelineApprun)
+./bin/timelineApprun (if on Windows Subsystem for Linux, first run dos2unix ./bin/timelineApprun) (this command runs the app on a Flask server)
 ```
   - Navigate to localhost:8000 or selected host:port in a web browser to access application!
 
