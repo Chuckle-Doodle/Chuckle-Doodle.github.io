@@ -6,6 +6,7 @@ import os
 from distutils.dir_util import copy_tree
 import json
 import datetime
+import shutil
 
 
 @timelineApp.app.route('/api/stories/', methods=["GET"])

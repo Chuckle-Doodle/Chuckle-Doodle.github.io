@@ -9,6 +9,11 @@ export default class ReferenceViewOptions extends React.Component {
   constructor(props) {
     super(props);
 
+    this.wait = 0;
+    if (this.props.referenceViewOrder[0] == "Map" && this.props.referenceViewOrder[1] == "Timeline")
+    {
+      this.wait = 4; //wait 4 second before rendering timeline to allow time for map to render
+    }
     var initialSpaceOrder = [];
     var initialClusterOrder = {};
     for (var i = 0; i < this.props.documents.length; i++) {
@@ -24,7 +29,6 @@ export default class ReferenceViewOptions extends React.Component {
       },
       clusterBy: 'Document ID',
       colorBy: 'Document ID',
-
     };
 
     this.changeClusterBy = this.changeClusterBy.bind(this);
@@ -86,14 +90,12 @@ export default class ReferenceViewOptions extends React.Component {
               <div>
 
                 <ReferenceView docImages={this.props.docImages} viewName={this.props.viewName} clusterByOptions={this.props.clusterByOptions} dataUrl={this.props.dataUrl} data={ this.props.data } documents={ this.props.documents } type={ view.Type } question={ view.Question }
-                  isUpper={index == 0 ? true : false} storyid={this.props.storyid} referenceViewOrder={this.props.referenceViewOrder} imageOrder={this.state.imageOrder} clusterBy={this.state.clusterBy} colorBy={this.state.colorBy} />
+                  isUpper={index == 0 ? true : false} storyid={this.props.storyid} referenceViewOrder={this.props.referenceViewOrder} imageOrder={this.state.imageOrder} clusterBy={this.state.clusterBy} colorBy={this.state.colorBy} wait={this.wait == 4 && index == 1 ? 4 : 0} answersPerCluster={this.props.answersPerCluster} clusterNumbers={this.props.clusterNumbers} />
 
               </div>
             )}
 
           </div>
-
-
         </div>
       );
     }

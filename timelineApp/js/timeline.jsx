@@ -18,6 +18,7 @@ export default class Timeline extends React.Component {
   }
 
   componentDidMount() {
+    console.log("compDidMount");
     //console.log("drawing timeline comp did mount");
     this.chart = drawTimeline(this.props);
     //this.setState(
@@ -26,14 +27,27 @@ export default class Timeline extends React.Component {
       //}
     //);
     this.dotLocations = this.chart.dotInfo["locations"];
-    setTimeout(function() { //Start the timer
-      this.setState({render: true}) //After 4 second, set render to true
-    }.bind(this), 0)
-
+    /*
+    if (this.props.referenceViewOrder[0] == "Map" && this.props.referenceViewOrder[1] == "Timeline")
+    {
+      setTimeout(function() { //Start the timer
+        this.setState({render: true}) //After 3 second, set render to true
+      }.bind(this), 3)
+    } else
+    {
+        setTimeout(function() { //Start the timer
+          this.setState({render: true}) //After 0 second, set render to true
+        }.bind(this), 0)
+    }
+  */
+          setTimeout(function() { //Start the timer
+          this.setState({render: true}) //After 0 second, set render to true
+        }.bind(this), 0)
   }
   
 
   componentDidUpdate(prevProps) {
+    console.log("comp Did update");
     var tempProps = this.props;
     if ((prevProps.colorBy != this.props.colorBy) || (prevProps.colorBy == "Cluster" && prevProps.clusterBy == "Document ID" && this.props.clusterBy != "Document ID") || (this.props.clusterBy == "Document ID"))
     {
@@ -113,16 +127,22 @@ export default class Timeline extends React.Component {
   }
 
   render() {
-
+    //console.log("rendering timeline");
+    //if (this.state.render == false)
+    //{
+      //return <div/>
+    //}
+/*
     if (this.props.referenceViewOrder[0] == "Map" && this.props.referenceViewOrder[1] == "Timeline")
     {
       if (this.state.render == false)
       {
+        console.log("this.state.render is false!");
         return (
           <div id="timelines">
 
 
-            <svg id="svgTimeline2" width="4000" height="4000">
+            <svg id="svgTimeline2" width="100%" height="100%">
 
             </svg>
 
@@ -134,7 +154,7 @@ export default class Timeline extends React.Component {
         );
       }
     }
-
+*/
     if (this.dotLocations.length == 0)
     {
       if (this.props.isUpper == true)
@@ -144,7 +164,7 @@ export default class Timeline extends React.Component {
 
             <div id="timeline1" />
 
-            <svg id="svgTimeline1" width="4000" height="4000">
+            <svg id="svgTimeline1" width="100%" height="100%">
 
             </svg>
 
@@ -152,9 +172,16 @@ export default class Timeline extends React.Component {
         )
       } else
       {
+        console.log("dot locations zero");
         //need to add svg here too? ??
+//TODO: SET PAUSE HERE TO WAIT FOR MAP TO RENDER !!!
+
         return (
           <div id="timelines">
+
+            <svg id="svgTimeline2" width="100%" height="100%">
+
+            </svg>
 
             <div id="timeline2" />
 
@@ -176,7 +203,7 @@ export default class Timeline extends React.Component {
 
             <div id="timeline1" />
 
-            <svg id="svgTimeline1" width="4000" height="4000">
+            <svg id="svgTimeline1" width="100%" height="100%">
 
             </svg>
 
@@ -192,7 +219,7 @@ export default class Timeline extends React.Component {
 
             <div id="timeline1" />
 
-            <svg id="svgTimeline1" width="4000" height="4000">
+            <svg id="svgTimeline1" width="100%" height="100%">
 
             </svg>
 
@@ -203,8 +230,13 @@ export default class Timeline extends React.Component {
     } else //this.props.isUpper == false
     {
       //need to add svg here too ???
+      //console.log("bottom part render");
       return (
         <div id="timelines">
+
+          <svg id="svgTimeline2" width="100%" height="100%">
+
+          </svg>
 
           <div id="timeline2" />
 

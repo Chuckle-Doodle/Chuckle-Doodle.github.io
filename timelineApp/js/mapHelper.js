@@ -200,11 +200,14 @@ function displayMap(props, docData) {
         marker.setStyle(iconStyle);
         vectorSource.addFeature(marker);
     });
+    //return map;
+    //TODO: return map and/or markers to the drawMap function!!
+
+    //idea: separate out markers from actual map, so each time color clustering changes, only change markers, not entire map!
 }
 
 // the main function that brings it all together
 const drawMap = (props) => {
-    //var colors = ["blue", "orange", "red", "green"];
 
     // The main source of data
     var docData = [];
@@ -212,6 +215,8 @@ const drawMap = (props) => {
 
     // needs timeout to retrieve the locations for geocoding
     setTimeout(function() { displayMap(props, docData, props.colors); }, 2000);
+
+    //TODO: REturn what i need from this function to later change marker colors on the map!
 }
 
 export default drawMap;

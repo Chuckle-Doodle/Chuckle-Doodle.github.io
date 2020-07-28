@@ -5,12 +5,6 @@ export default class Document extends React.Component {
         super(props);
         this.imageElement = null;
 
-        this.mapThenTimelineCase = false;
-        if (this.props.referenceViewTop == "Map" && this.props.referenceViewBottom == "Timeline")
-        {
-            this.mapThenTimelineCase = true;
-        }
-
         this.state = {
             xPos: null,   //approx. coordinates of upper left corner of document
             yPos: null,
@@ -56,7 +50,7 @@ export default class Document extends React.Component {
             this.setState(
                 {
                     xPos: this.imageElement.getBoundingClientRect().x,
-                    yPos: this.mapThenTimelineCase ? this.imageElement.getBoundingClientRect().y : this.imageElement.getBoundingClientRect().y,
+                    yPos: this.imageElement.getBoundingClientRect().y,
                 }
             );
         }
@@ -96,14 +90,14 @@ export default class Document extends React.Component {
                     lineTop.setAttributeNS(null, 'stroke', this.props.color);
 
                     lineBottom.setAttributeNS(null, 'x1', this.state.xPos);
-                    lineBottom.setAttributeNS(null, 'y1', this.state.yPos);
+                    lineBottom.setAttributeNS(null, 'y1', this.state.yPos + 200); //+200 so line starts from bottom of doc image
                     lineBottom.setAttributeNS(null, 'x2', this.props.dotLocationBottom.x);
                     lineBottom.setAttributeNS(null, 'y2', this.props.dotLocationBottom.y - 95);
                     lineBottom.setAttributeNS(null, 'stroke', this.props.color);
 
                 } else
                 {
-                    console.log("create new");
+                    //console.log("create new");
                     var newLine1 = document.createElementNS('http://www.w3.org/2000/svg', 'line');
                     newLine1.setAttributeNS(null, 'id', "top" + this.props.documentid);
                     newLine1.setAttributeNS(null, 'x1', this.state.xPos);
@@ -136,29 +130,83 @@ export default class Document extends React.Component {
                 );
 
             } else if (this.props.referenceViewTop == 'Timeline' && this.props.referenceViewBottom == 'Map') {
+
+                var svg = document.getElementById("svgTimeline1");
+                if (svg.childNodes.length == 4)
+                {
+
+                    var lineTop = document.getElementById("top" + this.props.documentid);
+
+                    lineTop.setAttributeNS(null, 'x1', this.state.xPos);
+                    lineTop.setAttributeNS(null, 'y1', this.state.yPos);
+                    lineTop.setAttributeNS(null, 'x2', this.props.dotLocationTop.x);
+                    lineTop.setAttributeNS(null, 'y2', this.props.dotLocationTop.y - 310);
+                    lineTop.setAttributeNS(null, 'stroke', this.props.color);
+
+                } else
+                {
+                    var newLine1 = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+                    newLine1.setAttributeNS(null, 'id', "top" + this.props.documentid);
+                    newLine1.setAttributeNS(null, 'x1', this.state.xPos);
+                    newLine1.setAttributeNS(null, 'y1', this.state.yPos);
+                    newLine1.setAttributeNS(null, 'x2', this.props.dotLocationTop.x);
+                    newLine1.setAttributeNS(null, 'y2', this.props.dotLocationTop.y - 310);
+                    newLine1.setAttributeNS(null, "stroke", this.props.color);
+                    newLine1.setAttributeNS(null, "stroke-width", 3);
+                    svg.appendChild(newLine1);
+                }
+
+/*
+                        <svg id={"svgLine" + this.props.documentid} width="4000" height="4000">
+                            <line x1={this.state.xPos} y1={this.state.yPos - 300} x2={this.props.dotLocationTop.x} y2={this.props.dotLocationTop.y - 300} style={{ stroke: this.props.color, strokeWidth: "3" }} />
+                        </svg>
+*/
+
                 return (
                     <div id={"Document" + this.props.documentid}>
                         <a href={"/" + this.props.storyid + "#" + this.props.documentid}>
                             <img id={this.props.imageName} src={this.props.image} style={{ marginRight: margin + 'px', borderColor: this.props.color }} alt="Picture of Document" height="200" width="150" ref={this.setImageRef} ></img>
                         </a>
-
-                        <svg id={"svgLine" + this.props.documentid} width="4000" height="4000">
-                            <line x1={this.state.xPos} y1={this.state.yPos - 300} x2={this.props.dotLocationTop.x} y2={this.props.dotLocationTop.y - 300} style={{ stroke: this.props.color, strokeWidth: "3" }} />
-                        </svg>
 
                     </div >
                 );
 
             } else if (this.props.referenceViewTop == 'Map' && this.props.referenceViewBottom == 'Timeline') {
+
+                var svg = document.getElementById("svgTimeline2");
+                if (svg.childNodes.length == 4)
+                {
+                    var lineBottom = document.getElementById("bottom" + this.props.documentid);
+
+                    lineBottom.setAttributeNS(null, 'x1', this.state.xPos);
+                    lineBottom.setAttributeNS(null, 'y1', this.state.yPos);
+                    lineBottom.setAttributeNS(null, 'x2', this.props.dotLocationBottom.x);
+                    lineBottom.setAttributeNS(null, 'y2', this.props.dotLocationBottom.y - 95);
+                    lineBottom.setAttributeNS(null, 'stroke', this.props.color);
+
+                } else
+                {
+                    var newLine2 = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+                    newLine2.setAttributeNS(null, 'id', "bottom" + this.props.documentid);
+                    newLine2.setAttributeNS(null, 'x1', this.state.xPos);
+                    newLine2.setAttributeNS(null, 'y1', this.state.yPos);
+                    newLine2.setAttributeNS(null, 'x2', this.props.dotLocationBottom.x);
+                    newLine2.setAttributeNS(null, 'y2', this.props.dotLocationBottom.y - 95);
+                    newLine2.setAttributeNS(null, "stroke", this.props.color);
+                    newLine2.setAttributeNS(null, "stroke-width", 3);
+                    svg.appendChild(newLine2);
+                }
+/*
+                        <svg id={"svgLineBottom" + this.props.documentid} width="4000" height="4000">
+                            <line x1={this.state.xPos} y1={this.state.yPos + 100} x2={this.props.dotLocationBottom.x} y2={this.props.dotLocationBottom.y + 120} style={{ stroke: this.props.color, strokeWidth: "3" }} />
+                        </svg>
+*/
+
                 return (
                     <div id={"Document" + this.props.documentid}>
                         <a href={"/" + this.props.storyid + "#" + this.props.documentid}>
                             <img id={this.props.imageName} src={this.props.image} style={{ marginRight: margin + 'px', borderColor: this.props.color }} alt="Picture of Document" height="200" width="150" ref={this.setImageRef} ></img>
                         </a>
-                    
-                        <svg id={"svgLineBottom" + this.props.documentid} width="4000" height="4000">
-                            <line x1={this.state.xPos} y1={this.state.yPos + 100} x2={this.props.dotLocationBottom.x} y2={this.props.dotLocationBottom.y + 120} style={{ stroke: this.props.color, strokeWidth: "3" }} />
-                        </svg>
 
                     </div >
                 );

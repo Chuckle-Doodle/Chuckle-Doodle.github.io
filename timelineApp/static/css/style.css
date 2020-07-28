@@ -5,6 +5,13 @@
 	height: 100%;
 	z-index: -1;
 }
+#customizeYourOptions {
+	display: inline-block;
+}
+#exportAsJpeg {
+	display: inline-block;
+	margin-left: 20px;
+}
 #timelines {
 	display: flex;
     flex-direction: column;
@@ -12,9 +19,6 @@
 	align-items:center;
   	justify-content:center; */
 }
-/*#timeline1 {
-	z-index: -3;
-}*/
 #timeline2 {
     /*display: none;*/
 	order:2;
@@ -23,6 +27,7 @@
     /*order:3;*/
     width: 75%;
 	height: 150%;
+	display: inline-block;
 	/*display: none;*/
 }
 /* removes the "OpenStreeMap contributors." copyright below the map */
@@ -34,24 +39,31 @@
     width: 75%;
 	height: 150%;
 	margin-top: 20px;
+	display: inline-block;
+}
+#buttonAndLegend {
+	margin-top: 20px;
+	display: inline-block;
+	vertical-align:top;
+}
+#mapButtonInput {
+	display: inline-block;
+}
+#mapButtonLabel {
+	display: inline-block;
 }
 /* removes the "OpenStreeMap contributors." copyright below the map */
 .ol-overlaycontainer-stopevent { 
     display: none;
 }
-/*#documentsDiv {
-	order:1;
-}*/
 #clusteringByText {
 	/*margin-top: 10px;    this is what ALEX HAD 6.27.20*/
 	margin-top: 6px;
 	margin-bottom: 10px;
 }
-
 #DocumentArray {
 	position: relative;
 }
-
 #Document1 {
 	position: relative;
 	display:inline-block
@@ -68,7 +80,6 @@
 	position: relative;
 	display:inline-block
 } 
-
 #image1 {                  
     border-style: solid;
     border-width: 8px;
@@ -97,7 +108,8 @@
 	position: absolute;
 	top: 0;
 	left: 0;
-	border: 3px solid orange;
+	z-index: -10;
+	/*border: 3px solid orange;*/
 }
 
 #svgLine1 {
@@ -105,7 +117,7 @@
 	top: 0;
 	left: 0;
 	z-index: 10;
-	border: 3px solid red;/* color svg element border for testing */
+	/*border: 3px solid red;*//* color svg element border for testing */
 }
 #svgLine2 {
 	position: absolute;

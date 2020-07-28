@@ -1,69 +1,72 @@
 import React from 'react';
 import drawMap from './mapHelper.js';
-import drawTimeline from './helpers.js'
 import Documents from './documents.jsx';
+import MapLegend from './mapLegend.jsx';
 import '../static/css/style.css';
 
 export default class Map extends React.Component {
     constructor(props) {
         super(props);
-        //this.state = {
-            //hasBeenRendered: false,
-        //};
+        this.map = null;
+        this.state = { 
+            colorBy: 'Document ID',
+        };
+
+        this.changeColorBy = this.changeColorBy.bind(this);
+        console.log("printing out props in map");
+        console.log(this.props);
     }
 
     componentDidMount() {
         drawMap(this.props);
-        //var dotInfo = drawTimeline(this.props);
-        //this.setState(
-            //{
-                //hasBeenRendered: true
-            //}
-        //);
-        //document.getElementById("timeline2").style.display = "";
+        //TODO: above, have to go into this draw map function to make sure its returning what i need to then change each time cluster coloring changes
+    }
+
+    changeColorBy (event) {
+        this.setState({
+            colorBy: event.target.value
+        });
     }
 
     render() {
-        //console.log("this.state.hasBeenRendered", this.state.hasBeenRendered);
-        
-        //return (
-            //<div id="timelines">
-
-                //<div id = "map"/>
-                
-
-                //<div id="documentsDiv">
-                    //<Documents data={this.props.data} docImages={this.props.docImages} clusterBy={this.props.clusterBy} documents={this.props.documents} dotLocations={this.state.dotLocations} dotColors={this.state.dotColors} />
-                //</div>
-
-                
-
-            //</div>
-        //}
-
-            //BELOW THIS WAS OLD STUFF. ABOVE IS WHAT ALEX HAD GOING ^^^^^^^^^^^^^^^^^^^^^^^^
-
-            //                <div id="timeline2" />
-
-            // <div id="mapPortion">
-            //     <div id="map" />
-
-            //     <div id="documentsDiv">
-            //         <Documents data={this.props.data} docImages={this.props.docImages} clusterBy={this.props.clusterBy} documents={this.props.documents} dotLocations={this.state.dotLocations} dotColors={this.state.dotColors} />
-            //     </div>
-            // </div>
-
 
         if (this.props.isUpper == true)
         {   
             if (this.props.referenceViewOrder[1] == "Timeline")
             {
+                //<div id="map1" style={{ width: '55%' }} />    NOTE: had this style included before 7.25.20
                 return (
-                    <div id="map1" style={{ width: '55%' }} />
+                    <div id="mapButtonAndLegend">
+                        <div id="map1" />
+                            <div id="buttonAndLegend">
+                                Color by:
+                                <select id="colorByList" name="colorByList" onChange={this.changeColorBy} value={this.state.colorBy} >
+                                    {this.props.clusterByOptions.map((clusterByOption, index) =>
+                                        <option value={clusterByOption}>
+                                            {clusterByOption}
+                                        </option>
+                                    )}
+                                </select>
+                                <MapLegend colorByOption={this.state.colorBy} answersPerCluster={this.props.answersPerCluster} imageOrder={this.props.imageOrder} clusterNumbers={this.props.clusterNumbers}  colors={this.props.colors} />
+                            </div>
+                    </div>
                 )
             } else {
                 return (
-                    <div id="map1" />
+                    <div id="mapButtonAndLegend">
+                        <div id="map1" />
+                            <div id="buttonAndLegend">
+                                Color by:
+                                <select id="colorByList" name="colorByList" onChange={this.changeColorBy} value={this.state.colorBy} >
+                                    {this.props.clusterByOptions.map((clusterByOption, index) =>
+                                        <option value={clusterByOption}>
+                                            {clusterByOption}
+                                        </option>
+                                    )}
+                                </select>
+                                <MapLegend colorByOption={this.state.colorBy} answersPerCluster={this.props.answersPerCluster} imageOrder={this.props.imageOrder} clusterNumbers={this.props.clusterNumbers} colors={this.props.colors} />
+                            </div>
+                    </div>
                 )
             }
         } else //this.props.isUpper == false
@@ -76,17 +79,44 @@ export default class Map extends React.Component {
                     <div id="maps">
 
                         <div id="documentsDiv">
-                            <Documents data={this.props.data} docImages={this.props.docImages} clusterByOptions={this.props.clusterByOptions} documents={this.props.documents} colors={this.props.colors} storyid={this.props.storyid} timelinePresent={false} referenceViewTop={this.props.referenceViewOrder[0]} referenceViewBottom={this.props.referenceViewOrder[1]} />
+                            <Documents data={this.props.data} docImages={this.props.docImages} imageOrder={this.props.imageOrder} clusterByOptions={this.props.clusterByOptions} documents={this.props.documents} colors={this.props.colors} storyid={this.props.storyid} timelinePresent={false} referenceViewTop={this.props.referenceViewOrder[0]} referenceViewBottom={this.props.referenceViewOrder[1]} clusterBy={this.props.clusterBy} colorBy={this.props.colorBy} />
                         </div>
                         Map of: {this.props.question}
-                        <div id="map2" />
-
+                        <div id="mapButtonAndLegend">
+                            <div id="map2" />
+                            <div id="buttonAndLegend">
+                                Color by:
+                                <select id="colorByList" name="colorByList" onChange={this.changeColorBy} value={this.state.colorBy} >
+                                    {this.props.clusterByOptions.map((clusterByOption, index) =>
+                                        <option value={clusterByOption}>
+                                            {clusterByOption}
+                                        </option>
+                                    )}
+                                </select>
+                                <MapLegend colorByOption={this.state.colorBy} answersPerCluster={this.props.answersPerCluster} imageOrder={this.props.imageOrder} clusterNumbers={this.props.clusterNumbers} colors={this.props.colors} />
+                            </div>
+                        </div>
                     </div>
                 )
             } else
             {
                 return (
-                    <div id="map2" />
+                    <div id="mapButtonAndLegend">
+                        <div id="map2" />
+                            <div id="buttonAndLegend">
+
+                                Color by:
+                                <select id="colorByList" name="colorByList" onChange={this.changeColorBy} value={this.state.colorBy} >
+                                    {this.props.clusterByOptions.map((clusterByOption, index) =>
+                                        <option value={clusterByOption}>
+                                            {clusterByOption}
+                                        </option>
+                                    )}
+                                </select>
+
+                                <MapLegend colorByOption={this.state.colorBy} answersPerCluster={this.props.answersPerCluster} imageOrder={this.props.imageOrder} clusterNumbers={this.props.clusterNumbers} colors={this.props.colors} />
+                            </div>
+                    </div>
                 )
             }
         }

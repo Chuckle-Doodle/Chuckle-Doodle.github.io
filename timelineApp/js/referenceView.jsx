@@ -8,34 +8,40 @@ import '../static/css/style.css';
 export default class ReferenceView extends React.Component {
   constructor(props) {
     super(props);
-    //this.state = {
-      //data: [],
-    //};
+    if (this.props.wait > 0)
+    {
+      this.state = {
+        render: false,
+      };
+    } else
+    {
+      this.state = {
+        render: true,
+      };
+    }
 
-    //NOTE: IF THIS CLASS HAS NO STATE, IT CAN BE MADE A FUNCTIONAL COMPONENT INSTEAD
 
   }
 
-  /*
+  
   componentDidMount() {
-    // Runs when an instance is added to the DOM
-    // Call REST API to get data
-    fetch(this.props.url, { credentials: 'same-origin' })
-      .then((response) => {
-        if (!response.ok) throw Error(response.statusText);
-        return response.json();
-      })
-      .then((data) => {
-        //this.setState({
-          //data: data.Black_Death
-        //});
-      })
-      .catch(error => console.log(error)); // eslint-disable-line no-console
+
+    setTimeout(function() { //Start the timer
+      this.setState({render: true}) //After 4 second, set render to true
+    }.bind(this), this.props.wait);
+
   }
-  */
 
 
   render() {
+    //console.log(this.state.render, this.props.wait, "top of render!");
+    //console.log(this.props.isUpper, "isUpper", this.state.render);
+    if (this.state.render == false)
+    {
+      console.log("render is false!");
+      return <div/>
+    }
+    //console.log("render is true!", this.props.isUpper);
 
     //find out which type of ReferenceView we have, timeline or map
     const refViewType = this.props.type;
@@ -53,7 +59,7 @@ export default class ReferenceView extends React.Component {
               </div>
             ) : (
               <div>
-                <Map docImages={this.props.docImages} viewName={this.props.viewName} clusterByOptions={this.props.clusterByOptions} dataUrl={this.props.dataUrl} data={this.props.data} documents={this.props.documents} question={this.props.question} isUpper={this.props.isUpper} referenceViewOrder={this.props.referenceViewOrder} colors={colors} imageOrder={this.props.imageOrder} clusterBy={this.props.clusterBy} colorBy={this.props.colorBy} />
+                <Map docImages={this.props.docImages} viewName={this.props.viewName} clusterByOptions={this.props.clusterByOptions} dataUrl={this.props.dataUrl} data={this.props.data} documents={this.props.documents} question={this.props.question} isUpper={this.props.isUpper} referenceViewOrder={this.props.referenceViewOrder} colors={colors} imageOrder={this.props.imageOrder} clusterBy={this.props.clusterBy} colorBy={this.props.colorBy}  answersPerCluster={this.props.answersPerCluster} clusterNumbers={this.props.clusterNumbers} />
               </div>
             )
           }
