@@ -21,7 +21,7 @@ npx webpack
 ```
   - Navigate to localhost:8000 or selected host:port in a web browser to access application!
 
-# How to put application online through AWS
+# How to put application online through AWS using Nginx and Gunicorn web server
 
 1. Create AWS Account
 2. Start EC2 instance with the following settings:
@@ -82,13 +82,17 @@ npx webpack
     source env/bin/activate
     npm install .
     ```
-11. Run server
+11. Initialize sql database and file system data
+    ```sh
+    ./bin/timelineAppdb reset
+    ```
+12. Run server
     ```sh
     pkill -f gunicorn
     pgrep -af gunicorn
     gunicorn -b localhost:8000 -w 2 -D timelineApp:app (alternative: gunicorn -b localhost:8000 -w 2 timelineApp:app --log-level debug)
     ```
-12. Browse to your Public DNS name (or refresh) and you should see your web app.
+13. Browse to your Public DNS name (or refresh) and you should see your web app.
 
 ### Todos
 
