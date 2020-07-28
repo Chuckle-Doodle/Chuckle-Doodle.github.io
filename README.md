@@ -97,4 +97,4 @@ npx webpack
 ### Todos
 
  - improve organization for integrating different types of reference views, like timelines, maps, etc
- - finish editStory functionality
+ - change colors of markers on map as the map legend changes
