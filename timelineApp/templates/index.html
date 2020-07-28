@@ -3,6 +3,22 @@
 <head>
     <title>timelineApp</title>
     <link href="/static/css/style.css" rel="stylesheet" type="text/css"/>
+        <!-- Added bootstrap -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <style>
+        #content{
+            width:400px;
+            overflow: auto;
+            margin: auto;
+            margin-top:40px;
+            position: absolute;
+            top: 0; left: 0; bottom: 0; right: 0; 
+            text-align:center;
+        }
+    </style>
 </head>
 
 <body>
@@ -15,79 +31,84 @@
             <a href={{ "/u/" ~ logname ~ "/" }}> {{logname}} </a>
         </p>
     </div> -->
-    <div>
-        <p>Welcome, {{user}}, to our tool that allows students to think like historians!</p>
-        <p>Please click on a story to continue.</p>
-    </div>
-    <ul>
-        {% for story in stories %}
-            <li>
-                <a href="/{{ story.storyid }}/{{1}}/">{{ story.storyname }}</a>
-            </li>
-        {% endfor %}
-    </ul>
+    <div id="content">
+        <div>
+            <p class="aler alert-primary">Welcome, {{user}}, to our tool that allows students to think like historians!</p>
+            <p class="aler alert-secondary">Please click on a story to continue.</p>
+        </div>
+        <ul class="list-group">
+            {% for story in stories %}
+                <li>
+                    <a href="/{{ story.storyid }}/{{1}}/" class="list-group-item list-group-item-action">{{ story.storyname }}</a>
+                </li>
+            {% endfor %}
+        </ul>
 
-    <a href="/welcome/">{{ askForStory }}</a>
+        <a href="/welcome/">{{ askForStory }}</a>
 
-    <div id="welcomeButtons">
-        
-        <div id="addStoryLink">
-            <a href="/addStory/">Add Story</a>
+        <div id="welcomeButtons">
+            
+            <div id="addStoryLink">
+                <a href="/addStory/" class="btn btn-primary" role="button">Add Story</a>
+            </div>
+
+            <form id="editStoryForm" action="/editStory/" method="post"  style="text-align:left">
+                <div class="form-group">
+                    <label for="storyToEdit">Edit story:</label>
+                     <select  class="form-control" id="storyToEdit" name="storyToEdit">
+                        {% for story in stories %}
+                            <li class="list-group-item">
+                                <option value="{{ story.storyname }}" name="{{ story.storyid }}">{{ story.storyname }}</option>
+                            </li>
+                        {% endfor %}
+                    </select>
+                    <input class="form-control" type="submit" value="Go">
+                </div>
+            </form>
+
+            <form id="exportStoryForm" action="/api/stories/export/" method="post" style="text-align:left" >
+                <label  for="stories">Export story:</label>
+                <select class="form-control" id="stories" name="stories">
+                    {% for story in stories %}
+                        <li class="list-group-item">
+                            <option value="{{ story.storyname }}" name="{{ story.storyid }}">{{ story.storyname }}</option>
+                        </li>
+                    {% endfor %}
+                </select>
+                <input  class="form-control" type="submit" value="Export">
+            </form>
+
+            <form id="deleteStoryForm" action="/api/stories/delete/" method="post"  style="text-align:left">
+                <label for="stories">Delete story:</label>
+                <select class="form-control" id="stories" name="stories">
+                    {% for story in stories %}
+                        <li class="list-group-item">
+                            <option value="{{ story.storyname }}" name="{{ story.storyid }}">{{ story.storyname }}</option>
+                        </li>
+                    {% endfor %}
+                </select>
+                <input class="form-control" type="submit" value="Submit">
+            </form>
+
+            <form id="importStoryForm" action="/api/stories/import/" method="post" style="text-align:left" >
+                <label for="importableStories">Import story:</label>
+                <select class="form-control" id="importableStories" name="importableStories">
+                    {% for importableStory in importableStories %}
+                        <li class="list-group-item" >
+                            <option value="{{ importableStory }}" name="{{ importableStory }}">{{ importableStory }}</option>
+                        </li>
+                    {% endfor %}
+                </select>
+                <input class="form-control" type="submit" value="Import">
+            </form>
+
+            <a href="/logout/" class="btn btn-primary" role="button">Logout</a>
+
+            {% if ableToDeleteUser == True %}
+                <a href="/deleteAccount/">Delete Account</a>
+            {% endif %}
         </div>
 
-        <form id="editStoryForm" action="/editStory/" method="post" >
-            <label for="storyToEdit">Edit story:</label>
-            <select id="storyToEdit" name="storyToEdit">
-                {% for story in stories %}
-                    <li>
-                        <option value="{{ story.storyname }}" name="{{ story.storyid }}">{{ story.storyname }}</option>
-                    </li>
-                {% endfor %}
-            </select>
-            <input type="submit" value="Go">
-        </form>
-
-        <form id="exportStoryForm" action="/api/stories/export/" method="post" >
-            <label for="stories">Export story:</label>
-            <select id="stories" name="stories">
-                {% for story in stories %}
-                    <li>
-                        <option value="{{ story.storyname }}" name="{{ story.storyid }}">{{ story.storyname }}</option>
-                    </li>
-                {% endfor %}
-            </select>
-            <input type="submit" value="Export">
-        </form>
-
-        <form id="deleteStoryForm" action="/api/stories/delete/" method="post" >
-            <label for="stories">Delete story:</label>
-            <select id="stories" name="stories">
-                {% for story in stories %}
-                    <li>
-                        <option value="{{ story.storyname }}" name="{{ story.storyid }}">{{ story.storyname }}</option>
-                    </li>
-                {% endfor %}
-            </select>
-            <input type="submit" value="Submit">
-        </form>
-
-        <form id="importStoryForm" action="/api/stories/import/" method="post" >
-            <label for="importableStories">Import story:</label>
-            <select id="importableStories" name="importableStories">
-                {% for importableStory in importableStories %}
-                    <li>
-                        <option value="{{ importableStory }}" name="{{ importableStory }}">{{ importableStory }}</option>
-                    </li>
-                {% endfor %}
-            </select>
-            <input type="submit" value="Import">
-        </form>
-
-        <a href="/logout/">Logout</a>
-
-        {% if ableToDeleteUser == True %}
-            <a href="/deleteAccount/">Delete Account</a>
-        {% endif %}
     </div>
 
 </body>

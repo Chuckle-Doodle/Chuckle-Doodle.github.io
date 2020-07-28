@@ -1,53 +1,73 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <title>timelineApp</title>
     <link href="/static/css/style.css" rel="stylesheet" type="text/css"/>
+    <!-- Added bootstrap -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <style>
+        #helo{
+            width:400px;
+            overflow: auto;
+            margin: auto;
+            margin-top:100px;
+            position: absolute;
+            top: 0; left: 0; bottom: 0; right: 0; 
+            text-align:center;
+        }
+    </style>
 </head>
 
 <body>
-    <!-- HEADER -->
-    <div>
-        <p class="welcome_header">
-            Welcome to the tool that lets history students act like historians. Please log in or sign up to begin.
-        </p>
-        <p>
-            Username=test and password=test is already setup for you to use.
-        </p>
+
+    <!-- CONTENT  -->
+    <div id="helo">
+        <!-- HEADER -->
+        <div>
+            <p class="aler alert-primary" role="alert">
+                Welcome to the tool that lets history students act like historians. Please log in or sign up to begin.
+            </p>
+            <p class="aler alert-secondary" role="alert">
+                Username=test and password=test is already setup for you to use.
+            </p>
+        </div>
+
+        <!--- LOGIN FORM --->
+        <div>
+            <form class="justify-content-center" action="" method="post" enctype="multipart/form-data">
+                <div class="form-group">
+                    <label for="usr">Username</label>
+                    <input class="form-control" type="text" name="username" id="usr" placeholder="Enter Username"/>
+                </div>
+                <div class="form-group">
+                    <label for="pass">Password</label>
+                    <input class="form-control" type="password" name="password" id="pass" placeholder="Enter Password"/>
+                </div>
+                <br>
+                <div class="form-group">
+                    <input class="form-control" type="radio" id="teacher" name="personType" value="teacher">
+                    <label for="teacher">I'm a teacher</label><br>
+                    <input class="form-control" type="radio" id="student" name="personType" value="student">
+                    <label for="female">I'm a student</label><br><br>
+                </div class="form-group">
+                <div class="form-group">
+                    <input class="form-control" type="submit" name="action" value="Login"/>
+                    <input class="form-control" type="submit" name="action" value="Sign Up"/>
+                </div>
+            </form>
+        </div>
+
+        <!-- Print unsuccessful if login failed -->
+        <div>
+            <p> {{ unsuccessful_str }} </p>
+            <p> {{ not_unique_username }} </p>
+        </div>
     </div>
-
-    <!--- LOGIN FORM --->
-    <div>
-        <form action="" method="post" enctype="multipart/form-data">
-            <div>
-                <label for="usr"><p>Username</p></label>
-                <input type="text" name="username" id="usr" placeholder="Enter Username"/>
-            </div>
-            <div>
-                <label for="pass"><p>Password</p></label>
-                <input type="password" name="password" id="pass" placeholder="Enter Password"/>
-            </div>
-            <br>
-            <div>
-                <input type="radio" id="teacher" name="personType" value="teacher">
-                <label for="teacher">I'm a teacher</label><br>
-                <input type="radio" id="student" name="personType" value="student">
-                <label for="female">I'm a student</label><br><br>
-            </div>
-            <div>
-                <input type="submit" name="action" value="Login"/>
-                <input type="submit" name="action" value="Sign Up"/>
-            </div>
-        </form>
-    </div>
-
-    <!-- Print unsuccessful if login failed -->
-    <div>
-        <p> {{ unsuccessful_str }} </p>
-        <p> {{ not_unique_username }} </p>
-    </div>
-
-
 
 </body>
 </html>
+

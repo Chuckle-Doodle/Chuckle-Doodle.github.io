@@ -28,9 +28,9 @@
 
         
         <form id="editStoryForm" method="post" enctype="multipart/form-data">
-           <!-- <label for="stories">Story title:</label> 
+         <label for="stories">Story title:</label> 
             <input type="text" value = "{{originalStoryName}}" id="storyToEdit" name="storyToEdit"> {{storyAlreadyExists}}<br><br>
-            <label for="document1">Document 1:</label>
+           <!--    <label for="document1">Document 1:</label>
             <input type="file" id="document1" name="document1" accept="application/pdf"><br>
             <label for="document1">Document 2:</label>
             <input type="file" id="document2" name="document2" accept="application/pdf"><br>
@@ -55,14 +55,21 @@
                 {% endfor %}
                 
             </div>
+            <br>
 
             <label for = "NewQuestion">Enter New Question: </label>
             <input type="text" id = "newQuestionToAdd" name = newQuestionToAdd>
             <input type ="submit" value = "Add Question"><br>
+            <br>
+
+           <!--   <label for = "DeleteQuestion">Enter Number of Question to Delete: </label><br>
+            <input type="text" id = "questionToDelete" name = questionToDelete><br>
+             -->
+            
             
 
 
-            <input type="submit" value="Update Questions"><br><br>
+            <input type="submit" value="Update Story"><br><br>
         </form>
 
 
