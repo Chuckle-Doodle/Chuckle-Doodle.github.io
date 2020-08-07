@@ -17,11 +17,11 @@ deactivate
 source env/bin/activate
 npm install .
 npx webpack
-./bin/timelineApprun (if on Windows Subsystem for Linux, first run dos2unix ./bin/timelineApprun)
+./bin/timelineApprun (if on Windows Subsystem for Linux, first run dos2unix ./bin/timelineApprun) (this command runs the app on a Flask server)
 ```
   - Navigate to localhost:8000 or selected host:port in a web browser to access application!
 
-# How to put application online through AWS
+# How to put application online through AWS using Nginx and Gunicorn web server
 
 1. Create AWS Account
 2. Start EC2 instance with the following settings:
@@ -30,7 +30,7 @@ npx webpack
     -add a rule to allow both SSH and HTTP traffic in and out of your instance.
     -Make sure to create a key pair and download it.
 3. SSH into instance.
-    -Copy or move your instance’s SSH key to your project directory and set the permissions to read-only with the command "chmod 400 <your SSH key>"
+    -Copy or move your instance’s SSH key (should be a .pem file) to your project directory and set the permissions to read-only with the command "chmod 400 <your SSH key>"
     ```sh
     ssh -i <your instance's SSH key> ubuntu@<your instance's public DNS>
     ```
@@ -81,16 +81,22 @@ npx webpack
     nodeenv --python-virtualenv
     source env/bin/activate
     npm install .
+    npx webpack
     ```
-11. Run server
+11. Initialize sql database and file system data
+    ```sh
+    ./bin/timelineAppdb reset
+    ```
+12. Run server
     ```sh
     pkill -f gunicorn
     pgrep -af gunicorn
     gunicorn -b localhost:8000 -w 2 -D timelineApp:app (alternative: gunicorn -b localhost:8000 -w 2 timelineApp:app --log-level debug)
     ```
-12. Browse to your Public DNS name (or refresh) and you should see your web app.
+13. Browse to your Public DNS name (or refresh) and you should see your web app.
 
 ### Todos
 
  - improve organization for integrating different types of reference views, like timelines, maps, etc
- - finish editStory functionality
+ - change colors of markers on map as the map legend changes
+ - provide different functionality depending on if user is teacher or student
