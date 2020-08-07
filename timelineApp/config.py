@@ -15,6 +15,8 @@ SECRET_KEY = b'\xea\x86\xf7&\x8b\x85\xc7i\xaaoJ\x8c\x93\xd8\xa0+._\xd9*\x9b\xd6\
 SESSION_COOKIE_NAME = 'login'
 
 # File Upload to timelineApp/static/var/
+# /home/ubuntu/Chuckle-Doodle.github.io/timelineApp/static/var/  --> when i try to run on aws
+# /Users/cgerard/Desktop/undergrad/year41stSem/eecs499/Chuckle-Doodle.github.io/timelineApp/static/var   --> when i run locally
 UPLOAD_FOLDER = os.path.join(
     os.path.dirname(os.path.dirname(os.path.realpath(__file__))),
     APPLICATION_NAME, 'static', 'var'

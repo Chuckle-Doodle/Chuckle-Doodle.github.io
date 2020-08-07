@@ -22,7 +22,7 @@ def get_current_views(storyid):
     context['storyid'] = storyid
     context['storyname'] = connection.execute("SELECT storyname from stories WHERE username = ? and storyid = ?", (context['username'], context['storyid'])).fetchone()['storyname']
 
-
+    print("UPLOAD FOLDER IS: ", UPLOAD_FOLDER)
     with open(os.path.join(UPLOAD_FOLDER, 'users', flask.session['username'], 'stories', context['storyname'], 'config.json'), "r+") as jsonFile:
         data = json.load(jsonFile)
 

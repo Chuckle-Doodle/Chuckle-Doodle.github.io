@@ -14,3 +14,5 @@ timelineApp/static/var/users/
 .DS_Store
 timelineApp/.DS_Store
 timelineApp/templates/.DS_Store
+
+timelineKeyPair.pem

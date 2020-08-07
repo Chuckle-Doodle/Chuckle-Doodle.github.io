@@ -1,5 +1,6 @@
 class DocumentData {
     constructor() {
+        this.docID;
         this.location = "someLocation";
         this.coordinates = []; // [longitude, latitude]
         this.color = "someColor";
@@ -18,9 +19,18 @@ function preprocessData(props, docData, colors) {
     
     // gets all the locations
     props.documents.forEach(function (doc, idx) {
+
+        docData[idx].docID = idx + 1;
+
         docData[idx].location = doc.Answers[locationIdx];
         docData[idx].imgSrc = doc["Frontcover"];
-        docData[idx].color = colors[idx];
+        //decide which color to give this document based on props:
+        if (props.colorBy == "Document ID") {  //i think props will always equal this! ...
+            docData[idx].color = colors[idx];
+        } else {
+            //determine which cluster number this doc is in to determine color!
+        }
+        //docData[idx].color = colors[idx];
     });
     docData.forEach(doc =>
         // geocoder feature
@@ -67,7 +77,7 @@ function displayMap(props, docData) {
     var center = getCenterCoordinates(docData);
     var vectorSource = new ol.source.Vector({});
 
-    docData.forEach(function (doc) {
+    docData.forEach(function (doc, index) {
         var offset = 1.5; // this is to elevate the document to make space for the markers
 
         // display image
@@ -78,6 +88,9 @@ function displayMap(props, docData) {
                 anchorYUnits: 'pixels',
                 opacity: 1,
                 src: doc.imgSrc,
+
+                id: doc.docID,
+
                 img: undefined,
                 imgSize: undefined,
                 scale: 0.1
@@ -86,6 +99,7 @@ function displayMap(props, docData) {
 
         var tempFeature = new ol.Feature(new ol.geom.Point(ol.proj.fromLonLat([doc.coordinates[0], doc.coordinates[1] + offset])));
         tempFeature.set("style", img);
+        tempFeature.setId(index + 1);
         vectorSource.addFeature(tempFeature);
     });
 
@@ -106,7 +120,7 @@ function displayMap(props, docData) {
             }),
             new ol.layer.Vector({
                 source: vectorSource,
-                style: function (feature, resolution) {
+                style: function (feature, resolution) { 
                     if (feature.get("initStyle") == undefined && feature.get("style").getImage().getImage().width != 0) {
                         currRes = resolution;
                         activeColor = docData[docIdx].color;
@@ -117,7 +131,11 @@ function displayMap(props, docData) {
                             feature.set("initStyle", initStyle);
                         }
                         var image = initStyle.getImage().getImage();
+                        //image.setAttribute("id", "mapDocImage" + docIdx);
+                        console.log("old img file is", image, initStyle);
                         var canvas = document.createElement("canvas");
+                        //canvas.setAttribute("id", "documentImage" + docIdx);
+                        //console.log("current canvas is!", canvas);
                         var ctx = canvas.getContext("2d");
                         var dArr = [-1, -1, 0, -1, 1, -1, -1, 0, 1, 0, -1, 1, 0, 1, 1, 1], // offset array
                             s = 8, // thickness scale
@@ -181,7 +199,7 @@ function displayMap(props, docData) {
     // makes sure all docs are fit on the screen
     map.getView().fit(vectorSource.getExtent());
 
-    docData.forEach(function (doc) {
+    docData.forEach(function (doc, index) {
         var offset = -2; // lowers the marker to make room for the doc
         var colorSrc = "/static/var/markers/" + doc.color + ".png";
 
@@ -198,9 +216,17 @@ function displayMap(props, docData) {
 
         var marker = new ol.Feature(new ol.geom.Point(ol.proj.fromLonLat([doc.coordinates[0], doc.coordinates[1] + offset])));
         marker.setStyle(iconStyle);
+        marker.setId(index + 5);  //the markers will have id's 5-8 if there are 4 documents on the map
         vectorSource.addFeature(marker);
     });
-    //return map;
+    //console.log("map object at end of displayMap function");
+    //console.log(map);
+    //console.log(map.getLayers());
+    //console.log(map.getLayers().array_);
+
+    //return map and data we may need later!;
+    return [map, docData];
+
     //TODO: return map and/or markers to the drawMap function!!
 
     //idea: separate out markers from actual map, so each time color clustering changes, only change markers, not entire map!
@@ -210,14 +236,30 @@ function displayMap(props, docData) {
 const drawMap = (props) => {
 
     // The main source of data
+    //console.log("printing props!");
+    //console.log(props);
     var docData = [];
     preprocessData(props, docData, props.colors);
 
-    // needs timeout to retrieve the locations for geocoding
-    setTimeout(function() { displayMap(props, docData, props.colors); }, 2000);
+    //above function, preprocessData is suitable for initializing colors based on doc id
+    //we need another function that EDITS only the color!!!
+    //once we have updated the colors, use OL methods for accessing each feature in vector layer and updating color with updated value!
 
-    //TODO: REturn what i need from this function to later change marker colors on the map!
+    // needs timeout to retrieve the locations for geocoding
+    //setTimeout(function() { 
+        //displayMap(map, props, docData, props.colors);
+    //}, 2000);
+
+    //using promises:
+    var promise = new Promise( function(resolve, reject) {
+        setTimeout(function() { 
+            resolve(displayMap(props, docData, props.colors));
+        }, 2000);
+    });
+    return promise;
+
 }
+
 
 export default drawMap;
 

@@ -46,7 +46,7 @@ export default class ReferenceView extends React.Component {
     //find out which type of ReferenceView we have, timeline or map
     const refViewType = this.props.type;
     // var colors = ["blue", "goldenrod", "fuchsia", "green", "burlywood", "crimson", "lightslategray", "red"];
-    var colors = ["blue", "gray", "green", "red", "orange", "brown", "purple"];
+    var colors = ["blue", "gray", "green", "red", "orange", "tan", "mediumorchid"];
 
 
     return (

@@ -54,7 +54,7 @@ export default class DataVisualization extends React.Component {
 		console.log("in export as jpeg function");
 		var node = document.getElementById('DataVisualization');
 
-		domtoimage.toJpeg(node, { quality: 1.0 })
+		domtoimage.toJpeg(node, { bgcolor: 'white' })
     		.then (function (dataUrl) {
     			console.log(dataUrl);
         		var link = document.createElement('a');

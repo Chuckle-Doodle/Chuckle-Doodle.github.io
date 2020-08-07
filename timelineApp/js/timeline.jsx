@@ -18,8 +18,6 @@ export default class Timeline extends React.Component {
   }
 
   componentDidMount() {
-    console.log("compDidMount");
-    //console.log("drawing timeline comp did mount");
     this.chart = drawTimeline(this.props);
     //this.setState(
       //{
@@ -40,9 +38,9 @@ export default class Timeline extends React.Component {
         }.bind(this), 0)
     }
   */
-          setTimeout(function() { //Start the timer
-          this.setState({render: true}) //After 0 second, set render to true
-        }.bind(this), 0)
+    setTimeout(function() { //Start the timer
+      this.setState({render: true}) //After 0 second, set render to true
+    }.bind(this), 0)
   }
   
 
