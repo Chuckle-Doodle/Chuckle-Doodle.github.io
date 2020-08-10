@@ -1,0 +1,34 @@
+{
+  "Views": [
+    {
+      "Active": true, 
+      "ClusterByOptions": ["Author"], 
+      "Name": "Author View", 
+      "ReferenceViews": [
+        {
+          "Question": "When did the event occur", 
+          "Type": "Timeline"
+        }, 
+        {
+          "Question": "When was this written", 
+          "Type": "Timeline"
+        }
+      ]
+    }, 
+    {
+      "Active": false, 
+      "ClusterByOptions": ["What is the stance taken on slavery by the author?"], 
+      "Name": "Slavery Stance and Allegiance", 
+      "ReferenceViews": [
+        {
+          "Question": "When did the event occur", 
+          "Type": "Timeline"
+        }, 
+        {
+          "Question": "Is the state/location mentioned Union or Confederate?", 
+          "Type": "Map"
+        }
+      ]
+    }
+  ]
+}
