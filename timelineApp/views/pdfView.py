@@ -30,6 +30,7 @@ def show_pdf(storyid,pdfid):
     #Set pdfid to either 1 or last document if end is reached
     if pdfid == 0:
         pdfid = 1  
+    #Number of documents in story if url exceeds max doc size, set it to the last doc
     questions = connection.execute("SELECT * from documents where username = ? and storyid = ?",(context['username'],storyid)).fetchall()
     if pdfid > len(questions):
         pdfid = len(questions) 
@@ -37,6 +38,7 @@ def show_pdf(storyid,pdfid):
     #tell which pdf id to display as url
     context['pdfid'] = pdfid
 
+    context['numDocs'] = len(questions)
 
 
     if (flask.request.method == 'POST'):
