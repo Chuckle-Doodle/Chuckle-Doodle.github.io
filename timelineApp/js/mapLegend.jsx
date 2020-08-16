@@ -93,7 +93,7 @@ export default class MapLegend extends React.Component {
                     return (
                         <div>
                             <div>
-                                {key}: {clusterColors[key]}
+                                {key}: {clusterColors[key] == "tan" ? "brown" : (clusterColors[key] == "mediumorchid" ? "purple" : clusterColors[key])}
                             </div>
                         </div>
                     );
