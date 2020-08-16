@@ -96,6 +96,6 @@ npx webpack
 13. Browse to your Public DNS name (or refresh) and you should see your web app.
 
 ### Todos
-
+ - add legend to timeline
  - improve organization for integrating different types of reference views, like timelines, maps, etc
  - provide different functionality depending on if user is teacher or student
