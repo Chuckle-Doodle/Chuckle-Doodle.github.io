@@ -48,7 +48,14 @@
                 {% for q in storyQuestions %}
 
                 <label for="{{q}}">Question:</label>
-                <input type="text" id="{{q}}" name="{{q}}" value = "{{q}}">
+                <input type="text" id="{{q}}" name="{{q}}" value = "{{q}}"><br>
+
+                <!--<form id="deleteQuestionForm" method="POST" enctype="multipart/form-data">
+                    <input  class="form-control" type="submit" name="deleteQuestionForm" value="Delete Question {{loop.index}}">
+                    <label for="stories"></label> 
+                    <input type="hidden" value = "{{originalStoryName}}" id="storyToEdit" name="storyToEdit"> {{storyAlreadyExists}}<br><br>
+                </form>-->
+
                 
                 <br>
                 
@@ -65,14 +72,32 @@
            <!--   <label for = "DeleteQuestion">Enter Number of Question to Delete: </label><br>
             <input type="text" id = "questionToDelete" name = questionToDelete><br>
              -->
-            
-            
 
+
+
+            
 
             <input type="submit" value="Update Story"><br><br>
         </form>
 
+        <div>
+        {% for q in storyQuestions %}
 
+        <label for="{{q}}">Question:</label>
+        
+        <label id="{{q}}" >{{q}} <br>
+
+            <form id="deleteQuestionForm" method="POST" enctype="multipart/form-data">
+            <input  class="form-control" type="submit" name="deleteQuestionForm" value="Delete Question {{loop.index}}">
+            
+            <input type="hidden" value = "{{originalStoryName}}" id="storyToEdit" name="storyToEdit"> {{storyAlreadyExists}}<br><br>
+        
+            
+        
+        
+        
+        {% endfor %}
+        </div>
 
         
         

@@ -10,7 +10,7 @@ from werkzeug.utils import secure_filename
 @timelineApp.app.route('/editStory/', methods=['GET', 'POST'])
 def edit_story():
     
-
+    
     #check if user is signed in. if not go back to login screen
     context = {}
     if "username" in flask.session:
@@ -26,7 +26,6 @@ def edit_story():
     connection = timelineApp.model.get_db()
 
 
-    #TODO NEXT! CONVERT THIS CODE FROM ADD STUFF TO EDIT STUFF
 
     #get which story is to be edited.
     originalStoryName = flask.request.form['storyToEdit']
@@ -56,7 +55,9 @@ def edit_story():
     uniqueQuestions = math.ceil(totalQuestions / numDocs)
 
     if (flask.request.method == 'POST'):
-        
+
+        print(flask.request.form.items)
+
         context['username'] = flask.session['username']
         #extract file objects for use later
         files = []
@@ -68,6 +69,7 @@ def edit_story():
 
 
         #extract question data from form for later
+        #Could also use this to remove storyname from the first entry
         questions = []
         for key, val in flask.request.form.items():
             if key == 'title':
@@ -80,24 +82,63 @@ def edit_story():
 
         
         
-        k = 1
-        #Update questions in database
         
-        while k <= numDocs:
-            j = 1
-            while j < numberQuestions:#May need to remove -1
+        
+        print(questions)
+
+        #Check if this request is to delete a question
+        if 'deleteQuestionForm' in flask.request.form:
+            #print("Now deleting question: ")
+            #print(int(flask.request.form['deleteQuestionForm'][-1]))
+            questionToDelete = int(flask.request.form['deleteQuestionForm'][-1])
+
+            #Need a loop to delete each instance of a question from each pdf
+            #Loop value goes in documentid
+            #Remeber to delete answers also
+            docidIndex = 1
+            while docidIndex <= numDocs:
+                connection.execute("DELETE FROM formquestions WHERE questionid = ? and documentid = ? and storyid = ? and username = ?", (questionToDelete,docidIndex,storyId,context['username']))
+               # print("deleting question")
+                docidIndex = docidIndex + 1
+            #Subtract one from number of unique questions
+            uniqueQuestions = uniqueQuestions - 1
+            #print("unique = ")
+            #print(uniqueQuestions)
+            #After deleting, update ids of questions after. First check if question deleted was the last one. Remember to update answer ids also
+
+            #If the question id was not the last one then change the ids
+            if questionToDelete != uniqueQuestions + 1:
+                questionsToChange = uniqueQuestions + 1 - questionToDelete #Number of question ids to update
+                n = 1
+                while n <= questionsToChange: #Need second loop for documents (need to go through all docs)
+                    documentindex = 1
+                    while documentindex <= numDocs: #numquestions
+                        connection.execute("UPDATE formquestions SET questionid = ? where questionid =? and documentid = ? and storyid = ? and username = ?",(questionToDelete,questionToDelete+1,documentindex,storyId,context['username']))
+                        #print("updating ids")
+                        
+                        documentindex = documentindex + 1
+                    questionToDelete = questionToDelete + 1
+                    n = n + 1
+
+
+        else: #Update questions and add a new one if there is one
+            k = 1
+            while k <= numDocs:
+                j = 1
+                while j < numberQuestions:
+                    
+                    
+                    connection.execute("UPDATE formquestions SET questiontext = ? where questionid = ? and documentid = ? and storyid = ? and username = ?", (questions[j], j, k, storyId, context['username']))
+                    j = j + 1
                 
                 
-                connection.execute("UPDATE formquestions SET questiontext = ? where questionid = ? and documentid = ? and storyid = ? and username = ?", (questions[j], j, k, storyId, context['username']))
-                j = j + 1
-            
-            #Inserts the new question in
-              
-            k = k + 1     
+                
+                k = k + 1     
+
         if numberQuestions > uniqueQuestions + 1:
             documentID = 1
             while documentID <= numDocs:
-
+                    #Inserts the new question in
                 connection.execute(
                 "INSERT INTO formquestions(questionid, documentid, storyid, username, questiontext) VALUES (?, ?, ?, ?, ?)", (uniqueQuestions + 1, documentID , storyId, context['username'], questions[numberQuestions-1])
                 ) 

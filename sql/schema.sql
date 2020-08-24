@@ -47,6 +47,7 @@ CREATE TABLE formanswers(
     answertext    VARCHAR(1024)          ,
 
     PRIMARY KEY (questionid, documentid, storyid, username),
+    FOREIGN KEY (questionid, documentid, storyid, username) REFERENCES formquestions(questionid, documentid, storyid, username) ON UPDATE CASCADE,
     FOREIGN KEY (questionid, documentid, storyid, username) REFERENCES formquestions(questionid, documentid, storyid, username) ON DELETE CASCADE,
     FOREIGN KEY (documentid, storyid, username) REFERENCES documents(documentid, storyid, username) ON DELETE CASCADE,
     FOREIGN KEY (storyid, username) REFERENCES stories(storyid, username) ON DELETE CASCADE,
