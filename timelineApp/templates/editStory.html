@@ -16,31 +16,37 @@
         </p>
 
         <p>
-            Documents currently in story:
+            Documents currently in story: {{originalStoryName}}
         </p>
 
         <div>
             {% for doc in storyDocuments %}
                 <p id="{{doc}}" >{{doc}}
                  <!--<button onclick="deleteDocument()" >Delete document</button>-->
+                 <form id = "deletePdfForm" method = "post" enctype="multipart/form-data">
+                    <input  class="form-control" type="submit" name="deletePdfForm" value="Delete Document {{loop.index}}">
+                    <input type="hidden" value = "{{originalStoryName}}" id="storyToEdit" name="storyToEdit"> {{storyAlreadyExists}}<br><br>
+                </form>
+                
             {% endfor %}
+        </div>
+
+        <div>
+            <form id="submitPdfForm" method = "post" enctype="multipart/form-data">
+                <p>
+                    Upload a new document and click submit
+                </p>
+                <input class="form-control" type="file" id="submitPdfForm" name="submitPdfForm" accept="application/pdf"><br><br>
+                <input type="hidden" value = "{{originalStoryName}}" id="storyToEdit" name="storyToEdit"> {{storyAlreadyExists}}
+                <input class="form-control" type="submit" name="submitPdfForm" value="Submit"> <br><br>
+            </form>
         </div>
 
         
         <form id="editStoryForm" method="post" enctype="multipart/form-data">
-         <label for="stories">Story title:</label> 
-            <input type="text" value = "{{originalStoryName}}" id="storyToEdit" name="storyToEdit"> {{storyAlreadyExists}}<br><br>
-           <!--    <label for="document1">Document 1:</label>
-            <input type="file" id="document1" name="document1" accept="application/pdf"><br>
-            <label for="document1">Document 2:</label>
-            <input type="file" id="document2" name="document2" accept="application/pdf"><br>
-            <label for="document1">Document 3:</label>
-            <input type="file" id="document3" name="document3" accept="application/pdf"><br>
-            <label for="document1">Document 4:</label>
-            <input type="file" id="document4" name="document4" accept="application/pdf"><br>
-            <button onclick="addDocument()" >Add document</button>
-            <button>Remove document</button><br><br>
-        -->
+            <label for="questionDirections">Edit, delete, and add questions:</label> 
+            <input type="hidden" value = "{{originalStoryName}}" id="storyToEdit" name="storyToEdit"> {{storyAlreadyExists}}<br><br>
+
 
 
 
@@ -49,12 +55,6 @@
 
                 <label for="{{q}}">Question:</label>
                 <input type="text" id="{{q}}" name="{{q}}" value = "{{q}}"><br>
-
-                <!--<form id="deleteQuestionForm" method="POST" enctype="multipart/form-data">
-                    <input  class="form-control" type="submit" name="deleteQuestionForm" value="Delete Question {{loop.index}}">
-                    <label for="stories"></label> 
-                    <input type="hidden" value = "{{originalStoryName}}" id="storyToEdit" name="storyToEdit"> {{storyAlreadyExists}}<br><br>
-                </form>-->
 
                 
                 <br>
@@ -68,11 +68,6 @@
             <input type="text" id = "newQuestionToAdd" name = newQuestionToAdd>
             <input type ="submit" value = "Add Question"><br>
             <br>
-
-           <!--   <label for = "DeleteQuestion">Enter Number of Question to Delete: </label><br>
-            <input type="text" id = "questionToDelete" name = questionToDelete><br>
-             -->
-
 
 
             

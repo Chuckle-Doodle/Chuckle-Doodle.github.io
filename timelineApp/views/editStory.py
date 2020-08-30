@@ -79,22 +79,91 @@ def edit_story():
                     questions.append(val)
 
         numberQuestions = len(questions) 
-
-        
-        
-        
-        
+   
         print(questions)
 
+        if 'deletePdfForm' in flask.request.form:
+            print("Deleting document")
+            print(int(flask.request.form['deletePdfForm'][-1]))
+            documentToDelete = int(flask.request.form['deletePdfForm'][-1])
+            
+            if documentToDelete == numDocs: #If the document is the last then no need to update ids
+                
+                #Delete image here
+                path = "timelineApp/static/var/users/" + context['username'] +"/stories/" + originalStoryName + "/images/" + str(documentToDelete) + ".jpg"
+                os.remove(path)
+                documentName = connection.execute("SELECT filename FROM documents where documentid = ? and storyid = ? and username = ?", (documentToDelete,storyId,context['username'])).fetchone()['filename']
+                #print(documentName)
+                #Delete pdf
+                path = "timelineApp/static/var/users/" + context['username'] +"/stories/" + originalStoryName + "/documents/" + documentName
+                os.remove(path)
+                connection.execute("DELETE FROM documents WHERE documentid = ? and storyid = ? and username = ?",(documentToDelete,storyId,context['username']))
+                numDocs = numDocs - 1
+            else:   
+                #Delete document and update docIDs along with image names
+                
+                documentName = connection.execute("SELECT filename FROM documents where documentid = ? and storyid = ? and username = ?", (documentToDelete,storyId,context['username'])).fetchone()['filename']
+                numDocsToUpdate = numDocs - documentToDelete
+                path = "timelineApp/static/var/users/" + context['username'] +"/stories/" + originalStoryName + "/images/" + str(documentToDelete) + ".jpg"
+                os.remove(path)
+                path = "timelineApp/static/var/users/" + context['username'] +"/stories/" + originalStoryName + "/documents/" + documentName
+                os.remove(path)
+                
+                connection.execute("DELETE FROM documents WHERE documentid = ? and storyid = ? and username = ?",(documentToDelete,storyId,context['username'])) 
+                numDocs = numDocs - 1
+                n = 1
+
+                while n <= numDocsToUpdate: #Update ids and image names
+                    
+                    connection.execute("UPDATE documents set documentid = ? where documentid = ? and storyid = ? and username = ?",(documentToDelete, documentToDelete + 1, storyId,context['username']))
+                    oldImageName = "timelineApp/static/var/users/" + context['username'] +"/stories/" + originalStoryName + "/images/" + str(documentToDelete + 1) + ".jpg"
+                    newImageName = "timelineApp/static/var/users/" + context['username'] +"/stories/" + originalStoryName + "/images/" + str(documentToDelete) + ".jpg"
+                    #Update the image name 
+                    os.rename(oldImageName,newImageName)
+                    imageName = str(documentToDelete + 1) + ".jpg"
+                    connection.execute("UPDATE documents set frontcover = ? where documentid = ? and storyid = ? and username = ?",(imageName,documentToDelete-1,storyId,context['username'])) 
+                    
+                    
+                    n = n + 1
+                    documentToDelete = documentToDelete + 1
+
+                
+        elif 'submitPdfForm' in flask.request.form:
+            print("not working lmao")    
+            #Save the pdf 
+            f = flask.request.files['submitPdfForm']
+            filename = secure_filename(f.filename)
+            path = "timelineApp/static/var/users/" + context['username'] +"/stories/" + originalStoryName + "/documents/" + filename
+            f.save(path)
+            #Save front cover as a jpeg
+            pages = convert_from_path(path,500)
+            for page in pages:
+                imagepath = "timelineApp/static/var/users/" + context['username'] +"/stories/" + originalStoryName + "/images/" + str(numDocs+1) + ".jpg"
+                page.save(imagepath,'JPEG')
+                break
+
+            #Create entry for pdf in database
+            connection.execute("INSERT INTO documents(documentid,storyid,username,filename,frontcover) VALUES (?,?,?,?,?)",(numDocs+1,storyId,context['username'],filename,str(numDocs+1)+'.jpg'))
+            #Copies questions from first document
+            #This will need to be changed if we decide documents can hold unique questions
+            n=1      
+            questionTexts = connection.execute("SELECT questiontext FROM formquestions where documentid = ? and username = ? and storyid = ?", (1,flask.session['username'], storyId)).fetchall()
+            questionData = []
+            for q in questionTexts:
+                questionData.append(q['questiontext'])
+            while n <= len(questionTexts):
+                print(questionData[n-1])
+                connection.execute("INSERT INTO formquestions(questionid,documentid,storyid,username,questiontext) VALUES (?,?,?,?,?)",(n,numDocs+1,storyId,context['username'],questionData[n-1]))
+                n=n+1
         #Check if this request is to delete a question
-        if 'deleteQuestionForm' in flask.request.form:
+        elif 'deleteQuestionForm' in flask.request.form:
             #print("Now deleting question: ")
             #print(int(flask.request.form['deleteQuestionForm'][-1]))
             questionToDelete = int(flask.request.form['deleteQuestionForm'][-1])
 
             #Need a loop to delete each instance of a question from each pdf
             #Loop value goes in documentid
-            #Remeber to delete answers also
+            #Answer ids should update too due to UPDATE cascade
             docidIndex = 1
             while docidIndex <= numDocs:
                 connection.execute("DELETE FROM formquestions WHERE questionid = ? and documentid = ? and storyid = ? and username = ?", (questionToDelete,docidIndex,storyId,context['username']))
@@ -112,7 +181,7 @@ def edit_story():
                 n = 1
                 while n <= questionsToChange: #Need second loop for documents (need to go through all docs)
                     documentindex = 1
-                    while documentindex <= numDocs: #numquestions
+                    while documentindex <= numDocs: 
                         connection.execute("UPDATE formquestions SET questionid = ? where questionid =? and documentid = ? and storyid = ? and username = ?",(questionToDelete,questionToDelete+1,documentindex,storyId,context['username']))
                         #print("updating ids")
                         
@@ -143,58 +212,15 @@ def edit_story():
                 "INSERT INTO formquestions(questionid, documentid, storyid, username, questiontext) VALUES (?, ?, ?, ?, ?)", (uniqueQuestions + 1, documentID , storyId, context['username'], questions[numberQuestions-1])
                 ) 
                 documentID = documentID + 1
-        #i = 1
+        
         context['username'] = flask.session['username']
         tempPath = os.path.join(UPLOAD_FOLDER, "users")
         tempPath = os.path.join(tempPath, context['username'])
         tempPath = os.path.join(tempPath, 'stories')
         tempPath = os.path.join(tempPath, context['originalStoryName'])
         os.chdir(tempPath)
-        #os.mkdir('documents')
-        #os.mkdir('images')
-
-        #save uploaded documents for this story into proper directory in file system
-        #while i <= numberDocuments:
-         #   f = flask.request.files['document' + str(i)]
-          #  filename = secure_filename(f.filename)
-           # updatedPath = os.path.join(tempPath, 'documents')
-            #pathToFile = os.path.join(updatedPath, filename)
-            #f.save(pathToFile)
-
-            ##extract frontcover from pdf
-            #pages = convert_from_path(pathToFile, 500)
-            #for page in pages:
-            #	os.chdir(os.path.join(tempPath, 'images'))
-            #	page.save('{}.jpg'.format(str(i)), 'JPEG')
-            #	break
-
-            #os.chdir(tempPath)
-
-            #update record in documents table
-            #TODO Replace the "1" with storyid
-            #connection.execute(
-             #   "INSERT INTO documents(documentid, storyid, username, filename, frontcover) VALUES (?, ?, ?, ?, ?)", (i, 1, context['username'], filename, '{}.jpg'.format(str(i)))
-            #)
-            #connection.execute("UPDATE documents SET //// where ////")
 
 
-            #i = i + 1
-
-
-
-        #update questions in database with new questions for this story
-        #questionIdCounter = 1
-        #docIdCounter = 1
-        #while docIdCounter <= numberDocuments:
-         #   while questionIdCounter <= numberQuestions:
-                #connection.execute(
-                #    "INSERT INTO formquestions(questionid, documentid, storyid, username, questiontext) VALUES (?, ?, ?, ?, ?)", (questionIdCounter, docIdCounter, storyid, context['username'], questions[questionIdCounter - 1])
-                #)
-          #      connection.execute("UPDATE formquestions SET ")
-
-           #     questionIdCounter += 1
-            #questionIdCounter = 1
-            #docIdCounter += 1
 
 
     ############  do below code if get request (also if post request? ...)  #################
