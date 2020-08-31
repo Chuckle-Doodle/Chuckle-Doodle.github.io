@@ -152,7 +152,7 @@ def edit_story():
             for q in questionTexts:
                 questionData.append(q['questiontext'])
             while n <= len(questionTexts):
-                print(questionData[n-1])
+                #print(questionData[n-1])
                 connection.execute("INSERT INTO formquestions(questionid,documentid,storyid,username,questiontext) VALUES (?,?,?,?,?)",(n,numDocs+1,storyId,context['username'],questionData[n-1]))
                 n=n+1
         #Check if this request is to delete a question
