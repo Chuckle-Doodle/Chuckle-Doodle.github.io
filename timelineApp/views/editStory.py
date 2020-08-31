@@ -56,7 +56,7 @@ def edit_story():
 
     if (flask.request.method == 'POST'):
 
-        print(flask.request.form.items)
+        #print(flask.request.form.items)
 
         context['username'] = flask.session['username']
         #extract file objects for use later
@@ -80,11 +80,11 @@ def edit_story():
 
         numberQuestions = len(questions) 
    
-        print(questions)
+        #print(questions)
 
         if 'deletePdfForm' in flask.request.form:
-            print("Deleting document")
-            print(int(flask.request.form['deletePdfForm'][-1]))
+            #print("Deleting document")
+            #print(int(flask.request.form['deletePdfForm'][-1]))
             documentToDelete = int(flask.request.form['deletePdfForm'][-1])
             
             if documentToDelete == numDocs: #If the document is the last then no need to update ids
@@ -129,7 +129,7 @@ def edit_story():
 
                 
         elif 'submitPdfForm' in flask.request.form:
-            print("not working lmao")    
+               
             #Save the pdf 
             f = flask.request.files['submitPdfForm']
             filename = secure_filename(f.filename)
@@ -250,12 +250,6 @@ def edit_story():
         context['storyQuestions'].append(q['questiontext'])
         totalQuestions = totalQuestions + 1
         
-    #uniqueQuestions = math.ceil(totalQuestions / numDocs)
-    #count = 0
-    #while count < uniqueQuestions:
-     #   context['storyQuestions'].append(allQuestions[count])
-      #  count = count + 1
-
 
 
     #upon finishing, revert current working directory back to what it was initially
